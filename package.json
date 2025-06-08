@@ -14,7 +14,7 @@
     "test:watch": "vitest",
     "lint": "eslint . --ext .ts,.tsx",
     "format": "prettier -w .",
-    "server": "ts-node --esm server/index.ts",
+    "server": "ts-node-esm server/index.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run server\"",
     "postinstall": "npm rebuild rollup"
   },
