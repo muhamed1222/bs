@@ -4,7 +4,7 @@
 
 ## Run Locally
 
-**Prerequisites:** Node.js
+**Prerequisites:** Node.js (поддерживаются версии 16 и выше)
 
 1. Install dependencies:
    `npm install`
