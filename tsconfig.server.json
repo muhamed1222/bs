@@ -1,12 +1,18 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "ES2020",
+    "module": "ES2022",
     "moduleResolution": "node",
-    "target": "ES2020",
+    "target": "ES2022",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "dist/server"
+    "outDir": "dist/server",
+    "noEmit": false,
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": false,
+    "strict": false,
+    "noUnusedParameters": false,
+    "noUnusedLocals": false
   },
   "include": ["server/**/*"]
 }
