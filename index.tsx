@@ -18,9 +18,11 @@ if (savedTheme) {
   document.documentElement.setAttribute('data-theme', 'dark');
 }
 
-const rootElement = document.getElementById('root');
+let rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error('Could not find root element to mount to');
+  rootElement = document.createElement('div');
+  rootElement.id = 'root';
+  document.body.appendChild(rootElement);
 }
 
 const queryClient = new QueryClient();
