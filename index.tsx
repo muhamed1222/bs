@@ -6,7 +6,10 @@ import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './components/ToastProvider';
+import { setupDebug } from './utils/debug';
 import './index.css';
+
+setupDebug();
 
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
