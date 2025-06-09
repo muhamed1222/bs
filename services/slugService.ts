@@ -4,7 +4,6 @@ import { fetchJson } from './api';
 const checkResponse = z.object({ available: z.boolean() });
 const registerResponse = z.object({ success: z.boolean() });
 
-export async function checkSlugUnique(slug: string): Promise<{ available: boolean }> {
   return fetchJson(
     `/api/check-slug?slug=${encodeURIComponent(slug)}`,
     checkResponse
