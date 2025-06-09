@@ -52,6 +52,7 @@ const ProfileCustomizationPage: React.FC = () => {
     setProfile((p) => ({ ...p, blocks: p.blocks.filter((_, i) => i !== index) }));
   };
 
+  const updateBlock = (index: number, props: Partial<Block>) => {
     setProfile((p) => ({
       ...p,
       blocks: p.blocks.map((b, i) => (i === index ? { ...b, ...props } : b)),
@@ -69,7 +70,8 @@ const ProfileCustomizationPage: React.FC = () => {
   const handleSave = async () => {
     if (!slugValid) {
       setToast('Некорректный адрес профиля');
-      return;}
+      return;
+    }
     setSaving(true);
     try {
       await saveProfile(profile);
