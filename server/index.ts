@@ -142,6 +142,20 @@ app.get('/api/check-slug', (req, res) => {
   res.status(available ? 200 : 409).json({ available });
 });
 
+app.post('/api/register-slug', (req, res) => {
+  const slug = String(req.body.slug || '').toLowerCase();
+  if (!slug) {
+    res.status(400).json({ error: 'Missing slug' });
+    return;
+  }
+  if (RESERVED_SLUGS.has(slug) || usedSlugs.has(slug)) {
+    res.status(409).json({ success: false });
+    return;
+  }
+  usedSlugs.add(slug);
+  res.json({ success: true });
+});
+
 // GraphQL setup
 const typeDefs = gql`
   type Query {
