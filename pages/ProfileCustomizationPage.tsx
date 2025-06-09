@@ -69,8 +69,7 @@ const ProfileCustomizationPage: React.FC = () => {
   const handleSave = async () => {
     if (!slugValid) {
       setToast('Некорректный адрес профиля');
-      return;
-    }
+      return;}
     setSaving(true);
     try {
       await saveProfile(profile);

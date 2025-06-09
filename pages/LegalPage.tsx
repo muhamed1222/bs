@@ -143,7 +143,7 @@ const LegalPage: React.FC = () => {
 const filteredSections = SECTIONS.filter(
   (s) =>
     s.title.toLowerCase().includes(search.toLowerCase()) ||
-    (SECTION_CONTENT[s.id] as any)?.props?.children
+    (SECTION_CONTENT[s.id] as React.ReactElement)?.props?.children
       ?.toString()
       ?.toLowerCase()
       .includes(search.toLowerCase())
