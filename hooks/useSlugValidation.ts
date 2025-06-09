@@ -15,8 +15,8 @@ export function useSlugValidation(slug: string, reserved: string[] = []) {
     }
     let cancelled = false;
     checkSlugUnique(slug)
-      .then(r => {
-        if (!cancelled) setValid(r.unique);
+      .then((r) => {
+        if (!cancelled) setValid(r.available);
       })
       .catch(() => {
         if (!cancelled) setValid(false);
