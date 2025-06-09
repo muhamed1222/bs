@@ -8,10 +8,13 @@ import { RichTextEditor } from '../components/RichTextEditor';
 import { ProfileLayoutSelector } from '../components/ProfileLayoutSelector';
 import { Toast } from '../components/Toast';
 import { fetchProfile, saveProfile, ProfileData } from '../services/profileService';
+import { useSlugValidation } from '../hooks/useSlugValidation';
+import { registerSlug } from '../services/slugService';
 import { Button } from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 
+const RESERVED_SLUGS = ['admin', 'login', 'me', 'profile'];
 const BLOCK_TYPES = [
   { type: 'button', label: 'Кнопка', default: { text: 'Ссылка', url: '#', style: 'primary' } },
   { type: 'text', label: 'Текст', default: { text: 'Новый текст' } },
@@ -52,6 +55,10 @@ const ProfileCustomizationPage: React.FC = () => {
     setProfile((p) => ({ ...p, blocks: p.blocks.filter((_, i) => i !== index) }));
   };
 
+  const updateBlock = (
+    index: number,
+    props: Partial<{ text?: string; url?: string; style?: string }>
+  ) => {
     setProfile((p) => ({
       ...p,
       blocks: p.blocks.map((b, i) => (i === index ? { ...b, ...props } : b)),
@@ -69,7 +76,7 @@ const ProfileCustomizationPage: React.FC = () => {
   const handleSave = async () => {
     if (!slugValid) {
       setToast('Некорректный адрес профиля');
-      return;}
+      return; }
     setSaving(true);
     try {
       await saveProfile(profile);
@@ -174,7 +181,9 @@ const ProfileCustomizationPage: React.FC = () => {
         </aside>
         <main className="flex-1 bg-white rounded-xl border shadow p-6">
           <div className="overflow-hidden rounded-xl border mb-6">
-            {profile.cover && <img src={profile.cover} alt="cover" className="w-full h-32 object-cover" />}
+            {profile.cover && (
+              <img src={profile.cover} alt="cover" className="w-full h-32 object-cover" />
+            )}
             <div className="p-4 text-center relative">
               {profile.avatar && (
                 <img
