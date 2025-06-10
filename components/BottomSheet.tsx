@@ -1,3 +1,4 @@
+// Модальное окно снизу
 import React from 'react';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export const BottomSheet: React.FC<Props> = ({ open, onClose, children }) => {
+  // Модальное окно снизу
   if (!open) return null;
   return (
     <div className="fixed inset-0 bg-black/30 flex items-end md:hidden" onClick={onClose}>
@@ -19,3 +21,4 @@ export const BottomSheet: React.FC<Props> = ({ open, onClose, children }) => {
     </div>
   );
 };
+

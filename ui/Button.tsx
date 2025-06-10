@@ -6,6 +6,7 @@ export interface ButtonProps
 }
 
 export const Button: React.FC<ButtonProps> = ({
+  // Универсальная кнопка
   variant = 'primary',
   className = '',
   ...rest
@@ -19,3 +20,4 @@ export const Button: React.FC<ButtonProps> = ({
     <button className={`${base} ${variants[variant]} ${className}`} {...rest} />
   );
 };
+

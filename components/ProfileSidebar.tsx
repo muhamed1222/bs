@@ -2,6 +2,7 @@ import React from 'react';
 import { BasisBSolidIcon } from './icons/IconComponents';
 
 export const ProfileSidebar: React.FC = () => {
+  // Сайдбар публичного профиля
   return (
     <aside className="w-full md:max-w-[484px] md:flex-shrink-0 space-y-[36px] py-4 md:py-0">
       {/* Profile Image Section */}
@@ -49,3 +50,4 @@ export const ProfileSidebar: React.FC = () => {
     </aside>
   );
 };
+

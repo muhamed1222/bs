@@ -1,6 +1,8 @@
+// Живой предпросмотр
 import React, { useState } from 'react';
 
 export const LiveEditor: React.FC = () => {
+  // Живой предпросмотр
   const [title, setTitle] = useState('Заголовок профиля');
   const [color, setColor] = useState('#000000');
 
@@ -36,3 +38,4 @@ export const LiveEditor: React.FC = () => {
     </div>
   );
 };
+

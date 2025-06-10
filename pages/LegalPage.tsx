@@ -136,6 +136,7 @@ const SECTION_CONTENT: Record<string, React.ReactElement> = {
 };
 
 const LegalPage: React.FC = () => {
+  // Юридическая информация
   const [active, setActive] = useState(SECTIONS[0].id);
   const [search, setSearch] = useState("");
 
@@ -229,4 +230,6 @@ const filteredSections = SECTIONS.filter(
 };
 
 export default LegalPage;
+
+// Юридическая информация и политика конфиденциальности
 

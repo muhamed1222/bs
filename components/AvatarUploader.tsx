@@ -7,6 +7,7 @@ interface Props {
 }
 
 export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
+  // Компонент для загрузки и обрезки аватара
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
@@ -118,3 +119,4 @@ export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
     </div>
   );
 };
+

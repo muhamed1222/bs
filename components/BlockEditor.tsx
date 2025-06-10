@@ -1,3 +1,4 @@
+// Редактор блоков с перетаскиванием
 import React, { useState } from 'react';
 import {
   DndContext,
@@ -26,6 +27,7 @@ interface Block {
 }
 
 const DraggableBlock: React.FC<{ block: Block }> = ({ block }) => {
+  // Редактор блоков с перетаскиванием
   const {
     attributes,
     listeners,
@@ -61,6 +63,7 @@ const DraggableBlock: React.FC<{ block: Block }> = ({ block }) => {
   );
 };
 
+
 export const BlockEditor: React.FC = () => {
   const [blocks, setBlocks] = useState<Block[]>([
     { id: '1', content: 'Первый блок', icon: LinkIcon },
@@ -93,3 +96,4 @@ export const BlockEditor: React.FC = () => {
     </DndContext>
   );
 };
+

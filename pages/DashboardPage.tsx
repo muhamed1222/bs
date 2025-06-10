@@ -1,3 +1,4 @@
+// Панель управления
 import React, { useEffect } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Link } from 'react-router-dom';
@@ -8,6 +9,7 @@ import { Loader } from '../components/Loader';
 import { Onboarding } from '../components/Onboarding';
 
 const ProjectCardPlaceholder: React.FC<{
+  // Панель управления
   title: string;
   lastUpdated: string;
 }> = ({ title, lastUpdated }) => (
@@ -149,3 +151,4 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+

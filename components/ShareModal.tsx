@@ -1,3 +1,4 @@
+// Модальное окно поделиться
 import React, { useState } from 'react';
 import { useToast } from './ToastProvider';
 import QRCode from 'qrcode';
@@ -8,6 +9,7 @@ interface ShareModalProps {
 }
 
 export const ShareModal: React.FC<ShareModalProps> = ({ url, onClose }) => {
+  // Модальное окно поделиться
   const { showSuccess, showError } = useToast();
   const [qr, setQr] = useState<string | null>(null);
 
@@ -79,3 +81,4 @@ export const ShareModal: React.FC<ShareModalProps> = ({ url, onClose }) => {
     </div>
   );
 };
+

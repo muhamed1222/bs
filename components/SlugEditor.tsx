@@ -1,3 +1,4 @@
+// Редактирование адреса страницы
 import React from 'react';
 
 interface Props {
@@ -8,6 +9,7 @@ interface Props {
 }
 
 export const SlugEditor: React.FC<Props> = ({ value, onChange, valid, base = 'https://example.com/' }) => {
+  // Редактирование адреса страницы
   const copy = () => {
     navigator.clipboard.writeText(base + value);
   };
@@ -35,3 +37,4 @@ export const SlugEditor: React.FC<Props> = ({ value, onChange, valid, base = 'ht
     </div>
   );
 };
+

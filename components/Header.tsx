@@ -8,6 +8,7 @@ import {
 import { Tooltip } from './Tooltip';
 
 export const Header: React.FC = () => {
+  // Шапка сайта
   const [isDesktopViewActive, setIsDesktopViewActive] = React.useState(true);
 
   return (
@@ -84,3 +85,4 @@ export const Header: React.FC = () => {
     </header>
   );
 };
+

@@ -1,9 +1,11 @@
+// Статистика
 import React, { useState } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { isIncognito, setIncognito } from '../services/analytics';
 
 const StatCard: React.FC<{
+  // Статистика
   title: string;
   value: string;
   change?: string;
@@ -155,3 +157,4 @@ const AnalyticsPage: React.FC = () => {
 };
 
 export default AnalyticsPage;
+

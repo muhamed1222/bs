@@ -1,3 +1,4 @@
+// Редактор контента
 import React, { useState, useRef } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Tooltip } from '../components/Tooltip';
@@ -66,6 +67,7 @@ function useUndoRedo<T>(initial: T) {
 
 // --- Редактор страницы ---
 const EditorPage: React.FC = () => {
+  // Редактор контента
   const { showSuccess } = useToast();
   // --- blocks: { id, type, props }
   const {
@@ -483,3 +485,4 @@ const EditorPage: React.FC = () => {
 };
 
 export default EditorPage;
+

@@ -12,6 +12,7 @@ import {
 } from "../mock/home";
 
 const HomePage: React.FC = () => {
+  // Главная страница
   const [loading, setLoading] = useState(true);
   const [cases, setCases] = useState<HomeCase[]>([]);
   const [stats, setStats] = useState<HomeStats | null>(null);
@@ -391,3 +392,4 @@ const HomePage: React.FC = () => {
 };
 
 export default HomePage;
+

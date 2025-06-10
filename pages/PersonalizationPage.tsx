@@ -1,3 +1,4 @@
+// Быстрая персонализация
 import React, { useState } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { AvatarUploader } from '../components/AvatarUploader';
@@ -7,6 +8,7 @@ import { ProfileLayoutSelector } from '../components/ProfileLayoutSelector';
 import { RichTextEditor } from '../components/RichTextEditor';
 
 const PersonalizationPage: React.FC = () => {
+  // Быстрая персонализация
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
   const [slug, setSlug] = useState('');
@@ -92,3 +94,4 @@ const PersonalizationPage: React.FC = () => {
 };
 
 export default PersonalizationPage;
+

@@ -1,3 +1,4 @@
+// Провайдер уведомлений
 import React, { createContext, useContext, useState, useCallback } from 'react';
 
 export interface Toast {
@@ -15,6 +16,7 @@ interface ToastContextValue {
 const ToastContext = createContext<ToastContextValue | undefined>(undefined);
 
 export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // Провайдер уведомлений
   const [toasts, setToasts] = useState<Toast[]>([]);
 
   const remove = useCallback((id: number) => {
@@ -57,3 +59,4 @@ export function useToast() {
   if (!ctx) throw new Error('useToast must be inside ToastProvider');
   return ctx;
 }
+

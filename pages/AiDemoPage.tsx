@@ -1,3 +1,4 @@
+// Демонстрация ИИ
 import React, { useState, useCallback } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { useGenerateProfile } from '../hooks/useGenerateProfile';
@@ -18,6 +19,7 @@ type HistoryItem = {
 };
 
 const AiDemoPage: React.FC = () => {
+  // Демонстрация ИИ
   const { loading, data, error, run } = useGenerateProfile();
   const [input, setInput] = useState<GenerateInput>(initialInput);
   const [history, setHistory] = useState<HistoryItem[]>([]);
@@ -145,3 +147,4 @@ const AiDemoPage: React.FC = () => {
 };
 
 export default AiDemoPage;
+

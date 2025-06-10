@@ -34,6 +34,7 @@ interface ApiKey {
 }
 
 const LoadingSpinner: React.FC = () => (
+  // Настройки аккаунта
   <div className="flex justify-center items-center py-8">
     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
     <span className="ml-3 text-gray-600">Загрузка...</span>
@@ -579,3 +580,4 @@ const AccountSettingsPage: React.FC = () => {
 };
 
 export default AccountSettingsPage;
+
