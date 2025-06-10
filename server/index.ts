@@ -78,6 +78,7 @@ app.post('/oauth/token', (req, res, _next) => {
   oauth
     .token(request, response)
     .then(function (token: OAuth2Server.Token) {
+      console.log(token); // Use the variable if needed
       res.json(token);
     })
     .catch(function (err: OAuth2Server.OAuthError | Error) {
