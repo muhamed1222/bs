@@ -17,7 +17,6 @@ interface Props {
 const defaultProfile: UserProfile = { name: '', email: '', bio: '' };
 
 export const ProfileEditor: React.FC<Props> = ({
-  // Редактор профиля
   userId,
   onUnsavedChanges,
   onSaveSuccess,
@@ -92,6 +91,8 @@ export const ProfileEditor: React.FC<Props> = ({
       set({ ...state, [field]: e.target.value });
     };
 
+  // Исправленный обработчик публикации
+  const handlePublish = async () => {
     try {
       localStorage.setItem(`profile_${userId}`, JSON.stringify(state));
       await saveData('profiles', userId, state);
@@ -103,6 +104,13 @@ export const ProfileEditor: React.FC<Props> = ({
       onError?.(err);
     }
   };
+
+  const validName = isValidText(state.name, 50);
+  const validEmail = isValidEmail(state.email);
+  const validBio = isValidText(state.bio, 200);
+
+  // Можно публиковать, если все поля валидны и есть несохранённые изменения
+  const canPublish = validName && validEmail && validBio && !saved;
 
   const isFieldChanged = (field: keyof UserProfile) => {
     const raw = localStorage.getItem(`profile_${userId}`);
