@@ -46,7 +46,7 @@ const HomePage: React.FC = () => {
       <main className="space-y-20">
         {/* Hero Section */}
         <section className="py-20 flex flex-col items-center text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 via-white to-purple-50/30 rounded-3xl"></div>
+          <div className="absolute inset-0 bg-gradient-shift rounded-3xl"></div>
           <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
           
@@ -56,7 +56,7 @@ const HomePage: React.FC = () => {
               Новая эра цифровых портфолио
             </div>
             
-            <h1 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent leading-tight animate-fade-in-up">
+            <h1 className="text-5xl md:text-6xl font-black mb-6 bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent leading-tight animate-fade-in-up drop-shadow-lg">
               Basis — твой умный бенто‑конструктор для цифровых страниц
             </h1>
             
