@@ -37,21 +37,27 @@ export const ProfileEditor: React.FC<Props> = ({
   }, [saved, onUnsavedChanges]);
 
   useEffect(() => {
-    const draft = loadDraft();
-    if (draft) {
-      if (window.confirm('Найден черновик профиля. Восстановить?')) {
-        set(draft);
-      } else {
-        clearDraft();
+    const load = async () => {
+      const draft = loadDraft();
+      if (draft) {
+        if (window.confirm('Найден черновик профиля. Восстановить?')) {
+          set(draft);
+        } else {
+          clearDraft();
+        }
       }
-    }
-    // подгружаем сохранённый профиль из облака
-    loadData<UserProfile>('profiles', userId).then(data => {
-      if (data) {
-        localStorage.setItem(`profile_${userId}`, JSON.stringify(data));
-        set(data);
+      // подгружаем сохранённый профиль из облака
+      try {
+        const data = await loadData<UserProfile>('profiles', userId);
+        if (data) {
+          localStorage.setItem(`profile_${userId}`, JSON.stringify(data));
+          set(data);
+        }
+      } catch (err) {
+        onError?.(err);
       }
-    });
+    };
+    void load();
   }, []);
 
   useEffect(() => {
@@ -86,15 +92,9 @@ export const ProfileEditor: React.FC<Props> = ({
       set({ ...state, [field]: e.target.value });
     };
 
-  const validName = isValidText(state.name, 50);
-  const validEmail = isValidEmail(state.email);
-  const validBio = isValidText(state.bio, 200);
-  const canPublish = validName && validEmail && validBio;
-
-  const handlePublish = () => {
     try {
       localStorage.setItem(`profile_${userId}`, JSON.stringify(state));
-      void saveData('profiles', userId, state);
+      await saveData('profiles', userId, state);
       clearDraft();
       setToast('Профиль опубликован');
       onSaveSuccess?.();
@@ -115,11 +115,15 @@ export const ProfileEditor: React.FC<Props> = ({
       }
     }
     // fall back to cloud without blocking
-    loadData<UserProfile>('profiles', userId).then(d => {
-      if (d) {
-        localStorage.setItem(`profile_${userId}`, JSON.stringify(d));
-      }
-    });
+    loadData<UserProfile>('profiles', userId)
+      .then((d) => {
+        if (d) {
+          localStorage.setItem(`profile_${userId}`, JSON.stringify(d));
+        }
+      })
+      .catch(() => {
+        /* ignore */
+      });
     return false;
   };
 
