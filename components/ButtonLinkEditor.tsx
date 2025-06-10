@@ -47,7 +47,12 @@ export const ButtonLinkEditor = ({ value, url, onTextChange, onUrlChange }: Prop
         className="border px-2 py-1 rounded w-full mt-1"
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
-      <button type="button" className="px-2 py-1 bg-gray-200 rounded" onClick={() => setShowPicker(!showPicker)}>
+      <button
+        type="button"
+        className="px-2 py-1 bg-gray-200 rounded"
+        onClick={() => setShowPicker(!showPicker)}
+        aria-label="Выбрать эмодзи"
+      >
         😊
       </button>
       {showPicker && (

@@ -10,9 +10,10 @@ import { CroppedArea, getCroppedImg } from '../utils/cropImage'; // утилит
 
 interface Props {
   onChange?: (dataUrl: string | null) => void;
+  alt?: string;
 }
 
-export function AvatarUploader({ onChange }: Props) {
+export function AvatarUploader({ onChange, alt = 'Аватар пользователя' }: Props) {
   // Компонент для загрузки и обрезки аватара
   const [imageSrc, setImageSrc] = useState<string | null>(null); // исходное изображение
   const [crop, setCrop] = useState({ x: 0, y: 0 }); // текущая позиция кадра
@@ -96,7 +97,7 @@ export function AvatarUploader({ onChange }: Props) {
       >
         {avatar ? (
           // Превью уже сохранённого аватара
-          <img src={avatar} alt="avatar" className="w-full h-full object-cover" />
+          <img src={avatar} alt={alt} className="w-full h-full object-cover" />
         ) : (
           // Подсказка, если аватар ещё не выбран
           <span className="text-gray-500">Аватар</span>

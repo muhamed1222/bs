@@ -5,9 +5,10 @@ import { CroppedArea, getCroppedImg } from '../utils/cropImage';
 
 interface Props {
   onChange?: (dataUrl: string | null) => void;
+  alt?: string;
 }
 
-export const CoverUploader: React.FC<Props> = ({ onChange }) => {
+export const CoverUploader: React.FC<Props> = ({ onChange, alt = 'Обложка профиля' }) => {
   // Загрузка обложки
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
@@ -82,7 +83,7 @@ export const CoverUploader: React.FC<Props> = ({ onChange }) => {
         onDrop={onDrop}
       >
         {cover ? (
-          <img src={cover} alt="cover" className="w-full h-full object-cover" />
+          <img src={cover} alt={alt} className="w-full h-full object-cover" />
         ) : (
           <span className="text-gray-500">Обложка 16:9</span>
         )}

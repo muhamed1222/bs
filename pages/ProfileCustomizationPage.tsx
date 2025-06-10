@@ -105,8 +105,14 @@ const ProfileCustomizationPage: React.FC = () => {
     <StandardPageLayout title="Персонализация профиля">
       <div className="flex flex-col lg:flex-row gap-8">
         <aside className="w-full lg:w-1/3 space-y-5">
-          <AvatarUploader onChange={(avatar) => setProfile((p) => ({ ...p, avatar }))} />
-          <CoverUploader onChange={(cover) => setProfile((p) => ({ ...p, cover }))} />
+          <AvatarUploader
+            onChange={(avatar) => setProfile((p) => ({ ...p, avatar }))}
+            alt={`Аватар ${profile.slug || 'пользователя'}`}
+          />
+          <CoverUploader
+            onChange={(cover) => setProfile((p) => ({ ...p, cover }))}
+            alt={`Обложка ${profile.slug || 'пользователя'}`}
+          />
           <SlugEditor
             value={profile.slug}
             onChange={(slug) => setProfile((p) => ({ ...p, slug: slug.replace(/\s+/g, '-').toLowerCase() }))}
@@ -193,13 +199,17 @@ const ProfileCustomizationPage: React.FC = () => {
         <main className="flex-1 bg-white rounded-xl border shadow p-6">
           <div className="overflow-hidden rounded-xl border mb-6">
             {profile.cover && (
-              <img src={profile.cover} alt="cover" className="w-full h-32 object-cover" />
+              <img
+                src={profile.cover}
+                alt={`Обложка пользователя ${profile.slug}`}
+                className="w-full h-32 object-cover"
+              />
             )}
             <div className="p-4 text-center relative">
               {profile.avatar && (
                 <img
                   src={profile.avatar}
-                  alt="avatar"
+                  alt={`Аватар ${profile.slug}`}
                   className="w-24 h-24 rounded-full border-4 border-white shadow absolute left-1/2 -translate-x-1/2 -top-12 bg-white"
                 />
               )}
