@@ -306,3 +306,5 @@ const BillingPage: React.FC = () => {
 };
 
 export default BillingPage;
+
+// Управление тарифами и историей платежей

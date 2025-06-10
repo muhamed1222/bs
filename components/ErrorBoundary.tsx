@@ -27,3 +27,5 @@ export class ErrorBoundary extends React.Component<
     return this.props.children;
   }
 }
+
+// Класс-компонент перехватывает ошибки дочерних компонентов

@@ -42,3 +42,5 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>,
 );
+
+// Инициализация React-приложения и подключение провайдеров

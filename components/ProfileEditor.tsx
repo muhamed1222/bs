@@ -166,3 +166,5 @@ export const ProfileEditor: React.FC<Props> = ({
     </div>
   );
 };
+
+// Редактор профиля с черновиками и поддержкой отмены изменений

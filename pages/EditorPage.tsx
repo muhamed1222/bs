@@ -483,3 +483,5 @@ const EditorPage: React.FC = () => {
 };
 
 export default EditorPage;
+
+// Конструктор страниц с блоками контента

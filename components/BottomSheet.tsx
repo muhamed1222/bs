@@ -19,3 +19,5 @@ export const BottomSheet: React.FC<Props> = ({ open, onClose, children }) => {
     </div>
   );
 };
+
+// Модальное «дно» для мобильных экранов

@@ -13,3 +13,5 @@ export const Toast: React.FC<Props> = ({ message, onClose }) => (
 );
 
 export default Toast;
+
+// Всплывающее уведомление
