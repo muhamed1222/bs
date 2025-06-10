@@ -14,6 +14,7 @@ import { registerSlug } from '../services/slugService';
 import { Button } from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { isColorTooLight } from '../utils/validators';
 
 const RESERVED_SLUGS = ['admin', 'login', 'me', 'profile'];
 const BLOCK_TYPES = [
@@ -34,6 +35,7 @@ const ProfileCustomizationPage: React.FC = () => {
     blocks: [],
   });
   const slugValid = useSlugValidation(profile.slug, RESERVED_SLUGS);
+  const [lightColor, setLightColor] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
@@ -168,12 +170,19 @@ const ProfileCustomizationPage: React.FC = () => {
               type="color"
               className="w-12 h-8 border rounded"
               value={profile.color}
-              onChange={(e) => setProfile((p) => ({ ...p, color: e.target.value }))}
+              onChange={(e) => {
+                const val = e.target.value;
+                setProfile((p) => ({ ...p, color: val }));
+                setLightColor(isColorTooLight(val));
+              }}
             />
+            {lightColor && (
+              <p className="text-sm text-orange-600">Цвет слишком светлый</p>
+            )}
           </div>
           <Button
             onClick={handleSave}
-            disabled={saving || !slugValid}
+            disabled={saving || !slugValid || lightColor}
             aria-busy={saving}
             className="mt-6 px-5 py-3 w-full bg-indigo-600 text-white rounded font-bold flex items-center justify-center"
           >
