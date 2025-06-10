@@ -94,7 +94,7 @@ const PaymentHistoryRow = ({
   amount,
   status,
   invoiceId,
-  link,
+  invoiceLink,
 }: PaymentHistoryItem) => (
   <tr className="border-b border-gray-200 hover:bg-gray-50 text-sm">
     <td className="py-3 px-4 text-gray-700">{date}</td>
@@ -113,8 +113,8 @@ const PaymentHistoryRow = ({
       </span>
     </td>
     <td className="py-3 px-4">
-      {link ? (
-        <a href={link} className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
+      {invoiceLink ? (
+        <a href={invoiceLink} className="text-indigo-600 hover:underline" target="_blank" rel="noopener noreferrer">
           #{invoiceId}
         </a>
       ) : (
