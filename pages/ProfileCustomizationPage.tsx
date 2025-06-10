@@ -39,11 +39,19 @@ const ProfileCustomizationPage: React.FC = () => {
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    fetchProfile().then((data) => {
-      setProfile(data);
-      setLoading(false);
-    });
+    const load = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchProfile();
+        setProfile(data);
+      } catch (e) {
+        console.error(e);
+        setToast('Ошибка загрузки профиля');
+      } finally {
+        setLoading(false);
+      }
+    };
+    void load();
   }, []);
 
 
