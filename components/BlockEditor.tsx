@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { nanoid } from 'nanoid';
 import {
   DndContext,
   closestCenter,
@@ -69,6 +70,12 @@ export const BlockEditor: React.FC = () => {
     { id: '3', content: 'Третий блок', icon: ChatBubbleLeftEllipsisIcon },
   ]);
 
+  const addBlock = () =>
+    setBlocks((items) => [
+      ...items,
+      { id: nanoid(), content: `Новый блок ${items.length + 1}` },
+    ]);
+
   const sensors = useSensors(useSensor(PointerSensor));
 
   return (
@@ -81,7 +88,10 @@ export const BlockEditor: React.FC = () => {
           setBlocks((items) => {
             const oldIndex = items.findIndex((i) => i.id === active.id);
             const newIndex = items.findIndex((i) => i.id === over.id);
-            return arrayMove(items, oldIndex, newIndex);
+            if (oldIndex !== -1 && newIndex !== -1) {
+              return arrayMove(items, oldIndex, newIndex);
+            }
+            return items;
           });
         }
       }}
@@ -91,6 +101,13 @@ export const BlockEditor: React.FC = () => {
           <DraggableBlock key={block.id} block={block} />
         ))}
       </SortableContext>
+      <button
+        type="button"
+        onClick={addBlock}
+        className="mt-2 p-2 text-sm bg-blue-500 text-white rounded"
+      >
+        Добавить блок
+      </button>
     </DndContext>
   );
 };
