@@ -7,8 +7,22 @@ export const Comments: React.FC = () => {
 
   const submit = () => {
     if (text.trim()) {
-      comment(text.trim().slice(0, 140));
-      setText('');
+      try {
+        comment(text.trim().slice(0, 140));
+        setText('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const handleRemove = (id: number) => {
+    if (window.confirm('Удалить комментарий?')) {
+      try {
+        removeComment(id);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -27,14 +41,14 @@ export const Comments: React.FC = () => {
         </button>
       </div>
       <ul className="space-y-1 text-sm">
-        {data.comments.map((c) => (
-          <li key={c.id} className="flex justify-between bg-gray-100 p-1 rounded">
-            <span>{c.text}</span>
-            <button onClick={() => removeComment(c.id)} className="text-red-600 ml-2">
-              удалить
-            </button>
-          </li>
-        ))}
+          {data.comments.map((c) => (
+            <li key={c.id} className="flex justify-between bg-gray-100 p-1 rounded">
+              <span>{c.text}</span>
+              <button onClick={() => handleRemove(c.id)} className="text-red-600 ml-2">
+                удалить
+              </button>
+            </li>
+          ))}
       </ul>
     </div>
   );
