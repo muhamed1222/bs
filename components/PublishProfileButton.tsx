@@ -4,7 +4,7 @@ import { useToast } from './ToastProvider';
 
 interface Props {
   slug: string;
-  data: unknown;
+  data: Record<string, unknown>;
 }
 
 export const PublishProfileButton: React.FC<Props> = ({ slug, data }) => {
