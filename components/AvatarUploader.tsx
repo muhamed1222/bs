@@ -24,6 +24,10 @@ export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
       setError('Размер файла превышает 2MB');
       return;
     }
+    if (typeof FileReader === 'undefined') {
+      setError('FileReader не поддерживается в этом браузере');
+      return;
+    }
     const reader = new FileReader();
     reader.onload = () => {
       setImageSrc(reader.result as string);
@@ -55,10 +59,15 @@ export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
 
   const saveCrop = useCallback(async () => {
     if (imageSrc && croppedAreaPixels) {
-      const cropped = await getCroppedImg(imageSrc, croppedAreaPixels);
-      setAvatar(cropped);
-      onChange?.(cropped);
-      setImageSrc(null);
+      try {
+        const cropped = await getCroppedImg(imageSrc, croppedAreaPixels);
+        setAvatar(cropped);
+        onChange?.(cropped);
+        setImageSrc(null);
+      } catch (e) {
+        console.error(e);
+        setError('Не удалось обработать изображение');
+      }
     }
   }, [imageSrc, croppedAreaPixels, onChange]);
 
