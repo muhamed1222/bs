@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { checkSlugUnique } from '../services/slugService';
+import { checkSlug } from '../services/slugService';
 
 export function useSlugValidation(slug: string, reserved: string[] = []) {
   const [valid, setValid] = useState<boolean | null>(null);
@@ -14,9 +14,9 @@ export function useSlugValidation(slug: string, reserved: string[] = []) {
       return;
     }
     let cancelled = false;
-    checkSlugUnique(slug)
-      .then((r) => {
-        if (!cancelled) setValid(r.available);
+    checkSlug(slug)
+      .then(({ available }) => {
+        if (!cancelled) setValid(available);
       })
       .catch(() => {
         if (!cancelled) setValid(false);

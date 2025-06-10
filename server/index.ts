@@ -71,16 +71,18 @@ const oauth = new OAuth2Server({
   },
 });
 
-app.post('/oauth/token', (req, res, next) => {
+app.post('/oauth/token', (req, res, _next) => {
   const request = new OAuth2Server.Request(req);
   const response = new OAuth2Server.Response(res);
   oauth
     .token(request, response)
-    .then(function (token) {
+    .then(function (token: OAuth2Server.Token) {
       res.json(token);
     })
-    .catch(function (err) {
-      res.status(err.code || 500).json(err);
+    .catch(function (err: OAuth2Server.OAuthError | Error) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const status = (err as any).code || 500;
+      res.status(status).json(err);
     });
 });
 
@@ -89,7 +91,7 @@ const limiter = rateLimit({ windowMs: 15 * 60 * 1000, max: 100 });
 app.use('/api', limiter);
 
 // Sample REST endpoint
-app.get('/api/profile', (req, res) => {
+app.get('/api/profile', (_req, res) => {
   res.json({ id: 'user', name: 'Demo User' });
 });
 

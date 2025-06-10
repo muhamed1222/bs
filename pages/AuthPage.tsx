@@ -90,7 +90,7 @@ const AuthPage: React.FC = () => {
         setSuccessMsg('Письмо для восстановления отправлено на почту.');
       }
     } catch (err: unknown) {
-      setErrorMsg(message);
+      setErrorMsg(err instanceof Error ? err.message : 'Unknown error');
     }
   };
 
@@ -160,7 +160,7 @@ const AuthPage: React.FC = () => {
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
-                required={mode !== 'reset'}
+                required
                 value={fields.password}
                 onChange={handleChange}
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm pr-10"
