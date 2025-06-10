@@ -1,5 +1,7 @@
 // Публичный профиль
 
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { ProfileSidebar } from '../components/ProfileSidebar';
 import { ProjectShowcaseGrid } from '../components/ProjectShowcaseGrid';
 import { PublishProfileButton } from '../components/PublishProfileButton';
@@ -17,7 +19,6 @@ import {
   WindowFilesIcon,
 } from '../components/icons/IconComponents';
 import type { ShareActionItem } from '../types';
-import { fetchProfile } from '../services/profileService';
 
 // This component now represents Section 5: Public Page
 
@@ -123,6 +124,7 @@ const BottomRightShareBar: React.FC = () => {
 };
 
 const PublicProfilePage: React.FC = () => {
+  const { slug = '' } = useParams<{ slug: string }>();
   return (
     // main-content-area class gives the white bg and padding
     <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
