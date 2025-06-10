@@ -21,7 +21,7 @@ export const Comments: React.FC = () => {
   const handleRemove = (id: number) => {
     if (window.confirm('Удалить комментарий?')) {
       try {
-        removeComment(id);
+        removeComment(id.toString());
       } catch (e) {
         console.error(e);
       }
@@ -46,7 +46,7 @@ export const Comments: React.FC = () => {
           {data.comments.map((c) => (
             <li key={c.id} className="flex justify-between bg-gray-100 p-1 rounded">
               <span>{c.text}</span>
-              <button onClick={() => handleRemove(c.id)} className="text-red-600 ml-2">
+             <button onClick={() => handleRemove(Number(c.id))} className="text-red-600 ml-2">
                 удалить
               </button>
             </li>
