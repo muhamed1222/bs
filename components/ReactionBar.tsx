@@ -22,3 +22,4 @@ export const ReactionBar: React.FC = () => {
   );
 };
 
+// Простая панель реакций с подсчётом лайков

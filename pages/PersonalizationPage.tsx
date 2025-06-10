@@ -95,3 +95,4 @@ const PersonalizationPage: React.FC = () => {
 
 export default PersonalizationPage;
 
+// Минималистичная страница персонализации профиля

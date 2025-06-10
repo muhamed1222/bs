@@ -239,3 +239,4 @@ const ProfileCustomizationPage: React.FC = () => {
 
 export default ProfileCustomizationPage;
 
+// Расширенная настройка внешнего вида и содержимого профиля

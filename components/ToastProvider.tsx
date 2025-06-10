@@ -60,3 +60,4 @@ export function useToast() {
   return ctx;
 }
 
+// Провайдер toast-уведомлений

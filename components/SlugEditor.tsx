@@ -38,3 +38,4 @@ export const SlugEditor: React.FC<Props> = ({ value, onChange, valid, base = 'ht
   );
 };
 
+// Поле ввода адреса профиля с проверкой занятости

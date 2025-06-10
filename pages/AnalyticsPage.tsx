@@ -158,3 +158,4 @@ const AnalyticsPage: React.FC = () => {
 
 export default AnalyticsPage;
 
+// Аналитика посещений и активности пользователей

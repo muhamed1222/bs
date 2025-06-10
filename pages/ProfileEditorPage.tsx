@@ -158,3 +158,4 @@ const ProfileEditorPage: React.FC = () => {
 
 export default ProfileEditorPage;
 
+// Страница редактирования профиля с автосохранением

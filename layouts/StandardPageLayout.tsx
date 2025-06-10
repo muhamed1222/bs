@@ -39,3 +39,4 @@ const StandardPageLayout: React.FC<{
 
 export default StandardPageLayout;
 
+// Стандартный макет страницы с простым меню навигации

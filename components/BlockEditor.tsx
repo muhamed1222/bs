@@ -97,3 +97,4 @@ export const BlockEditor: React.FC = () => {
   );
 };
 
+// Простой редактор сортируемых блоков с поддержкой drag-and-drop

@@ -137,3 +137,4 @@ export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
   );
 };
 
+// Компонент для загрузки и обрезки аватара пользователя

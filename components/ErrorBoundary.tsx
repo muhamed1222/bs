@@ -29,3 +29,4 @@ export class ErrorBoundary extends React.Component<
   }
 }
 
+// Класс-компонент перехватывает ошибки дочерних компонентов

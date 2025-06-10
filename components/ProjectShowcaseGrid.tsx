@@ -137,3 +137,4 @@ export const ProjectShowcaseGrid: React.FC = () => {
   );
 };
 
+// Галерея проектов пользователя в стиле «bento»

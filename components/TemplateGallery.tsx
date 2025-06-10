@@ -36,3 +36,4 @@ export const TemplateGallery: React.FC<{
   );
 };
 
+// Галерея выбора шаблона профиля

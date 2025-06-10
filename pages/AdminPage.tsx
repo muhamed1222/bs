@@ -90,3 +90,4 @@ const AdminPage: React.FC = () => {
 
 export default AdminPage;
 
+// Панель администратора для служебных разделов

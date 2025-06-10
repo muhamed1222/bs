@@ -581,3 +581,4 @@ const AccountSettingsPage: React.FC = () => {
 
 export default AccountSettingsPage;
 
+// Страница управления учётной записью и безопасностью

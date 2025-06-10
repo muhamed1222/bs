@@ -45,3 +45,4 @@ export const ButtonLinkEditor: React.FC<Props> = ({ value, url, onTextChange, on
   );
 };
 
+// Форма для редактирования текста и ссылки кнопки с выбором эмодзи

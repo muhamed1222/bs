@@ -393,3 +393,4 @@ const HomePage: React.FC = () => {
 
 export default HomePage;
 
+// Главная страница лендинга, загружает данные и показывает блоки

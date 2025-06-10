@@ -12,3 +12,4 @@ const Spinner: React.FC<SpinnerProps> = ({ size = 'h-5 w-5', className = '' }) =
 
 export default Spinner;
 
+// Иконка загрузки, используется внутри кнопок и экранов

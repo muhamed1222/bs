@@ -143,3 +143,4 @@ const PublicProfilePage: React.FC = () => {
 
 export default PublicProfilePage;
 
+// Публичная страница пользователя с реакциями и комментариями
