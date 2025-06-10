@@ -10,9 +10,30 @@ interface Props {
 
 export const ButtonLinkEditor: React.FC<Props> = ({ value, url, onTextChange, onUrlChange }) => {
   const [showPicker, setShowPicker] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const isValidUrl = (val: string) => {
+    try {
+      // eslint-disable-next-line no-new
+      new URL(val);
+      return true;
+    } catch {
+      return false;
+    }
+  };
 
   const handleEmoji = (emojiData: EmojiClickData) => {
     onTextChange(value + emojiData.emoji);
+    setShowPicker(false);
+  };
+
+  const handleUrlChange = (val: string) => {
+    onUrlChange(val);
+    if (!val || isValidUrl(val)) {
+      setError(null);
+    } else {
+      setError('Некорректная ссылка');
+    }
   };
 
   return (
@@ -27,10 +48,11 @@ export const ButtonLinkEditor: React.FC<Props> = ({ value, url, onTextChange, on
       <input
         type="url"
         value={url}
-        onChange={(e) => onUrlChange(e.target.value)}
+        onChange={(e) => handleUrlChange(e.target.value)}
         placeholder="https://example.com"
         className="border px-2 py-1 rounded w-full mt-1"
       />
+      {error && <p className="text-red-500 text-sm">{error}</p>}
       <button type="button" className="px-2 py-1 bg-gray-200 rounded" onClick={() => setShowPicker(!showPicker)}>
         😊
       </button>
