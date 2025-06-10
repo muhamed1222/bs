@@ -18,7 +18,86 @@ import {
   GlobeAltIcon,
   WindowFilesIcon,
 } from '../components/icons/IconComponents';
-import type { ShareActionItem } from '../types';
+import type { ShareActionItem, BentoItem } from '../types';
+import { FigmaPlaceholderIcon } from '../components/icons/IconComponents';
+
+const profileName = 'Your name goes here';
+const profileBio =
+  "Hipster ipsum tattooed brunch I'm baby. Stumptown chicken I'm bruh big raw jomo. Hot fit literally kitsch fanny tilde celiac tote. Single-origin forage raw neutra kombucha.";
+
+const showcaseTop: BentoItem[] = [
+  {
+    id: 'proj1',
+    variant: 'medium_text_right_image',
+    gridClass: 'md:col-span-1',
+    icon: FigmaPlaceholderIcon,
+    iconBgClass: 'bg-[#3E3E3E]',
+    title: 'Link name goes here',
+    description: 'Description goes here',
+    imageUrl: 'https://placehold.co/155x147/A0A0A0/FFFFFF?text=Project1',
+    imageAlt: 'Project 1 placeholder',
+    customSize: 'Medium',
+  },
+  {
+    id: 'proj2',
+    variant: 'big_text_over_image',
+    gridClass: 'md:col-span-1 md:row-span-2',
+    icon: FigmaPlaceholderIcon,
+    iconBgClass: 'bg-[#3E3E3E]',
+    title: 'Link name goes here',
+    description: 'Description goes here',
+    imageUrl: 'https://placehold.co/362x192/C0C0C0/FFFFFF?text=Project2',
+    imageAlt: 'Project 2 placeholder',
+    customSize: 'Big',
+  },
+  {
+    id: 'proj3',
+    variant: 'big_text_over_image',
+    gridClass: 'md:col-span-1 md:row-span-2',
+    icon: FigmaPlaceholderIcon,
+    iconBgClass: 'bg-[#3E3E3E]',
+    title: 'Link name goes here',
+    description: 'Description goes here',
+    imageUrl: 'https://placehold.co/362x192/B0B0B0/FFFFFF?text=Project3',
+    imageAlt: 'Project 3 placeholder',
+    customSize: 'Big',
+  },
+];
+
+const showcaseBottom: BentoItem[] = [
+  {
+    id: 'proj4',
+    variant: 'smol_icon_text_vertical',
+    gridClass: 'md:col-span-1',
+    icon: FigmaPlaceholderIcon,
+    iconBgClass: 'bg-[#3E3E3E]',
+    title: 'Link name goes here',
+    description: 'Description goes here and this one is bit long',
+    customSize: 'Smol',
+  },
+  {
+    id: 'proj5',
+    variant: 'big_text_over_image',
+    gridClass: 'md:col-span-1 md:row-span-2',
+    icon: FigmaPlaceholderIcon,
+    iconBgClass: 'bg-[#3E3E3E]',
+    title: 'Link name goes here',
+    description: 'Description goes here',
+    imageUrl: 'https://placehold.co/362x192/D0D0D0/FFFFFF?text=Project5',
+    imageAlt: 'Project 5 placeholder',
+    customSize: 'Big',
+  },
+  {
+    id: 'proj6',
+    variant: 'smol_icon_text_vertical',
+    gridClass: 'md:col-span-1',
+    icon: FigmaPlaceholderIcon,
+    iconBgClass: 'bg-[#3E3E3E]',
+    title: 'Link name goes here',
+    description: 'Description goes here and this one is bit long',
+    customSize: 'Smol',
+  },
+];
 
 // This component now represents Section 5: Public Page
 
@@ -95,7 +174,12 @@ const BottomRightShareBar: React.FC = () => {
             style={{ transform: 'rotate(20deg)', filter: 'blur(10px)' }}
           ></div>
         </button>
-        {open && <ShareModal url={window.location.href} onClose={() => setOpen(false)} />}
+        {open && (
+          <ShareModal
+            url={window.location.href}
+            onClose={() => setOpen(false)}
+          />
+        )}
       </div>
       <div className="w-[2px] h-[16px] bg-[rgba(0,0,0,0.12)] rounded-full"></div>
       <div className="flex items-center gap-[4px]">
@@ -128,9 +212,12 @@ const PublicProfilePage: React.FC = () => {
   return (
     // main-content-area class gives the white bg and padding
     <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
-      <ProfileSidebar />
+      <ProfileSidebar name={profileName} bio={profileBio} />
       <div className="flex-1">
-        <ProjectShowcaseGrid />
+        <ProjectShowcaseGrid
+          topItems={showcaseTop}
+          bottomItems={showcaseBottom}
+        />
         <ReactionBar />
         <Comments />
       </div>
