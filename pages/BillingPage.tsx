@@ -10,7 +10,7 @@ import {
   Tariff,
   BillingInfo,
   PaymentHistoryItem,
-} from '../api/billing';
+} from '../mock/billing';
 import { Link } from 'react-router-dom';
 import useNotification from '../hooks/useNotification';
 import Spinner from '../ui/Spinner';

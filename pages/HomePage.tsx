@@ -9,7 +9,7 @@ import {
   type HomeCase,
   type HomeStats,
   type HomeReview,
-} from "../api/home";
+} from "../mock/home";
 
 const HomePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
