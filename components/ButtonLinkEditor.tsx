@@ -9,7 +9,7 @@ interface Props {
   onUrlChange: (val: string) => void;
 }
 
-export const ButtonLinkEditor: React.FC<Props> = ({ value, url, onTextChange, onUrlChange }) => {
+export const ButtonLinkEditor = ({ value, url, onTextChange, onUrlChange }: Props) => {
   // Редактор кнопки-ссылки
   const [showPicker, setShowPicker] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -43,14 +43,14 @@ export const ButtonLinkEditor: React.FC<Props> = ({ value, url, onTextChange, on
       <input
         type="text"
         value={value}
-        onChange={(e) => onTextChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => onTextChange(e.target.value)}
         placeholder="Текст кнопки"
         className="border px-2 py-1 rounded w-full"
       />
       <input
         type="url"
         value={url}
-        onChange={(e) => handleUrlChange(e.target.value)}
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleUrlChange(e.target.value)}
         placeholder="https://example.com"
         className="border px-2 py-1 rounded w-full mt-1"
       />
