@@ -47,3 +47,5 @@ export const PublishProfileButton: React.FC<Props> = ({ slug, data }) => {
     </div>
   );
 };
+
+// Кнопка публикации профиля с выбором статуса доступа

@@ -288,3 +288,5 @@ const AuthPage: React.FC = () => {
 };
 
 export default AuthPage;
+
+// Страница входа, регистрации и восстановления пароля

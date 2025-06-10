@@ -49,3 +49,5 @@ export const ProfileSidebar: React.FC = () => {
     </aside>
   );
 };
+
+// Сайдбар публичного профиля с аватаром и ссылками на соцсети

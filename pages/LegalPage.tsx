@@ -230,3 +230,5 @@ const filteredSections = SECTIONS.filter(
 
 export default LegalPage;
 
+// Юридическая информация и политика конфиденциальности
+

@@ -145,3 +145,5 @@ const AiDemoPage: React.FC = () => {
 };
 
 export default AiDemoPage;
+
+// Демонстрация генерации контента с помощью ИИ

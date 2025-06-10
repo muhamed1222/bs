@@ -61,6 +61,7 @@ const DraggableBlock: React.FC<{ block: Block }> = ({ block }) => {
   );
 };
 
+
 export const BlockEditor: React.FC = () => {
   const [blocks, setBlocks] = useState<Block[]>([
     { id: '1', content: 'Первый блок', icon: LinkIcon },
@@ -93,3 +94,5 @@ export const BlockEditor: React.FC = () => {
     </DndContext>
   );
 };
+
+// Простой редактор сортируемых блоков с поддержкой drag-and-drop

@@ -27,3 +27,5 @@ export const ProfileLayoutSelector: React.FC<Props> = ({ value, onChange }) => {
     </div>
   );
 };
+
+// Позволяет выбрать одну из нескольких схем размещения блоков профиля

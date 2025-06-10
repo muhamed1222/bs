@@ -149,3 +149,5 @@ const DashboardPage: React.FC = () => {
 };
 
 export default DashboardPage;
+
+// Центр управления проектами пользователя

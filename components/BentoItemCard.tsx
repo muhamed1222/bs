@@ -131,3 +131,5 @@ export const BentoItemCard: React.FC<{ item: BentoItem }> = ({ item }) => {
     </div>
   );
 };
+
+// Карточка элемента «bento», адаптируется под разные варианты дизайна
