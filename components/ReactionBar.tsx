@@ -2,14 +2,18 @@
 import React from 'react';
 import { useAnalytics } from '../hooks/useAnalytics';
 
-const EMOJIS = ['👍', '❤️', '😂'];
+interface Props {
+  emojis?: string[];
+}
 
-export const ReactionBar: React.FC = () => {
+const DEFAULT_EMOJIS = ['👍', '❤️', '😂'];
+
+export const ReactionBar: React.FC<Props> = ({ emojis = DEFAULT_EMOJIS }) => {
   // Панель реакций
   const { data, react } = useAnalytics();
   return (
     <div className="flex gap-2 mt-4">
-      {EMOJIS.map((e) => (
+      {emojis.map((e) => (
         <button
           key={e}
           onClick={() => react(e)}
