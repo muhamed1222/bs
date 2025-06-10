@@ -48,8 +48,8 @@ const PersonalizationPage: React.FC = () => {
     <StandardPageLayout title="Редактор персонализации">
       <div className="flex flex-col lg:flex-row gap-6">
         <aside className="w-full lg:w-1/3 space-y-4">
-          <AvatarUploader onChange={setAvatarPreview} />
-          <CoverUploader onChange={setCoverPreview} />
+          <AvatarUploader onChange={setAvatarPreview} alt="Предпросмотр аватара" />
+          <CoverUploader onChange={setCoverPreview} alt="Предпросмотр обложки" />
           <SlugEditor
             value={slug}
             onChange={(s) => setSlug(s.replace(/\s+/g, '-').toLowerCase())}
@@ -77,7 +77,7 @@ const PersonalizationPage: React.FC = () => {
             {coverPreview && (
               <img
                 src={coverPreview}
-                alt="cover"
+                alt="Предпросмотр обложки"
                 className="w-full h-32 object-cover"
               />
             )}
@@ -85,7 +85,7 @@ const PersonalizationPage: React.FC = () => {
               {avatarPreview && (
                 <img
                   src={avatarPreview}
-                  alt="avatar"
+                  alt="Предпросмотр аватара"
                   className="w-24 h-24 rounded-full -mt-12 border-4 border-white"
                 />
               )}
