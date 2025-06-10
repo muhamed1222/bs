@@ -60,13 +60,14 @@ const oauth = new OAuth2Server({
     async getAccessToken(accessToken: string) {
       return {
         accessToken,
-        client: { id: 'client' },
+        client: { id: 'client', grants: ['client_credentials'] }, // добавлено поле grants
         user: { id: 'user' },
         accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
       };
     },
-    verifyScope() {
-      return true;
+    verifyScope(token: any, scope: any) {
+      // Здесь можно реализовать свою логику проверки scope
+      return Promise.resolve(true); // Всегда разрешает, для примера
     },
   },
 });
