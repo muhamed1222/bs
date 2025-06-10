@@ -45,7 +45,6 @@ const HomePage: React.FC = () => {
     <StandardPageLayout title="Basis — твоя цифровая визитка нового поколения">
       <main className="space-y-20">
         {/* Hero Section */}
-        <section className="py-20 flex flex-col items-center text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-shift rounded-3xl"></div>
           <div className="absolute top-10 left-10 w-72 h-72 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-10 right-10 w-96 h-96 bg-gradient-to-r from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"></div>
