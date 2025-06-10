@@ -3,7 +3,15 @@ import jsPDF from 'jspdf';
 
 export async function exportProfileAsImage(element: HTMLElement): Promise<Blob> {
   const canvas = await html2canvas(element);
-  return new Promise((resolve) => canvas.toBlob((blob) => resolve(blob!), 'image/png'));
+  return new Promise((resolve, reject) => {
+    canvas.toBlob((blob: Blob | null) => {
+      if (blob) {
+        resolve(blob);
+      } else {
+        reject(new Error('Canvas is empty'));
+      }
+    }, 'image/png');
+  });
 }
 
 export async function exportProfileAsPDF(element: HTMLElement): Promise<Uint8Array> {
