@@ -19,16 +19,6 @@ import {
   GlobeAltIcon,
   WindowFilesIcon,
 } from '../components/icons/IconComponents';
-import type { ShareActionItem, BentoItem, SocialLink } from '../types';
-import { FigmaPlaceholderIcon } from '../components/icons/IconComponents';
-
-const defaultSocials: SocialLink[] = [
-  { id: 'twitter', href: '#', icon: SettingsAltIcon },
-  { id: 'linkedin', href: '#', icon: TargetIcon },
-  { id: 'github', href: '#', icon: ChatAltIcon },
-];
-
-const defaultTopProjects: BentoItem[] = [
   {
     id: 'proj1',
     variant: 'medium_text_right_image',
@@ -67,7 +57,6 @@ const defaultTopProjects: BentoItem[] = [
   },
 ];
 
-const defaultBottomProjects: BentoItem[] = [
   {
     id: 'proj4',
     variant: 'smol_icon_text_vertical',
@@ -216,20 +205,6 @@ const PublicProfilePage: React.FC = () => {
   return (
     // main-content-area class gives the white bg and padding
     <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
-      <ProfileSidebar
-        name={profile?.name}
-        bio={profile?.bio}
-        avatarUrl={profile?.avatar}
-        socials={profile?.socials || defaultSocials}
-        loading={loading}
-      />
-      <div className="flex-1">
-        <ProjectShowcaseGrid
-          top={profile?.projectsTop || defaultTopProjects}
-          bottom={profile?.projectsBottom || defaultBottomProjects}
-          loading={loading}
-        />
-        <ReactionBar emojis={['👍', '❤️', '😂']} />
         <Comments />
       </div>
       <BottomLeftSocialBar />
