@@ -22,3 +22,5 @@ export const Tooltip: React.FC<TooltipProps> = ({ text, children }) => {
     </span>
   );
 };
+
+// Компонент подсказки при наведении

@@ -118,3 +118,5 @@ export const CoverUploader: React.FC<Props> = ({ onChange }) => {
     </div>
   );
 };
+
+// Компонент позволяет загрузить и обрезать изображение обложки

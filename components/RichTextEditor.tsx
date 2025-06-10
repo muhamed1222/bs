@@ -15,3 +15,5 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange 
 );
 
 export default RichTextEditor;
+
+// Текстовый редактор для блоков с форматированием

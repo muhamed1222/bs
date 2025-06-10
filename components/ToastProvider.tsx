@@ -57,3 +57,5 @@ export function useToast() {
   if (!ctx) throw new Error('useToast must be inside ToastProvider');
   return ctx;
 }
+
+// Провайдер toast-уведомлений

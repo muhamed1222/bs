@@ -184,3 +184,5 @@ const SupportPage: React.FC = () => {
 };
 
 export default SupportPage;
+
+// Справочный центр со статьями и FAQ

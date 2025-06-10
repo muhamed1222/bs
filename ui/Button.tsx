@@ -19,3 +19,5 @@ export const Button: React.FC<ButtonProps> = ({
     <button className={`${base} ${variants[variant]} ${className}`} {...rest} />
   );
 };
+
+// Универсальная кнопка с вариантами оформления

@@ -79,3 +79,5 @@ export const ShareModal: React.FC<ShareModalProps> = ({ url, onClose }) => {
     </div>
   );
 };
+
+// Модальное окно для отправки ссылки и QR-кода профиля
