@@ -1,3 +1,4 @@
+// Глубокая кастомизация профиля
 import React, { useEffect, useState } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { AvatarUploader } from '../components/AvatarUploader';
@@ -23,6 +24,7 @@ const BLOCK_TYPES = [
 
 
 const ProfileCustomizationPage: React.FC = () => {
+  // Глубокая кастомизация профиля
   const [profile, setProfile] = useState<ProfileData>({
     avatar: null,
     cover: null,
@@ -237,4 +239,3 @@ const ProfileCustomizationPage: React.FC = () => {
 
 export default ProfileCustomizationPage;
 
-// Расширенная настройка внешнего вида и содержимого профиля

@@ -1,3 +1,4 @@
+// Страница авторизации
 import React, { useState, useCallback, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import StandardPageLayout from '../layouts/StandardPageLayout';
@@ -11,6 +12,7 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_MIN = 6;
 
 const AuthPage: React.FC = () => {
+  // Страница авторизации
   const location = useLocation();
   const navigate = useNavigate();
   const queryParams = new URLSearchParams(location.search);
@@ -289,4 +291,3 @@ const AuthPage: React.FC = () => {
 
 export default AuthPage;
 
-// Страница входа, регистрации и восстановления пароля

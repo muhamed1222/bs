@@ -1,7 +1,9 @@
+// Карточка Bento с разными вариантами
 import React from 'react';
 import { BentoItem } from '../types';
 
 export const BentoItemCard: React.FC<{ item: BentoItem }> = ({ item }) => {
+  // Карточка Bento с разными вариантами
   const baseCardClass =
     'group shadow-[0px_4px_12px_rgba(0,0,0,0.08)] rounded-[12px] border border-gray-200/50 transition-all duration-300 hover:shadow-[0px_8px_24px_rgba(0,0,0,0.12)] hover:border-gray-300/50 hover:-translate-y-1 backdrop-blur-sm';
   const paddingClass = 'p-[18px]';
@@ -132,4 +134,3 @@ export const BentoItemCard: React.FC<{ item: BentoItem }> = ({ item }) => {
   );
 };
 
-// Карточка элемента «bento», адаптируется под разные варианты дизайна

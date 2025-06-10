@@ -8,6 +8,7 @@ interface Props {
 }
 
 export const PublishProfileButton: React.FC<Props> = ({ slug, data }) => {
+  // Кнопка публикации профиля
   const { showError, showSuccess } = useToast();
   const [publishing, setPublishing] = useState(false);
   const [status, setStatus] = useState<'private' | 'public'>('private');
@@ -48,4 +49,3 @@ export const PublishProfileButton: React.FC<Props> = ({ slug, data }) => {
   );
 };
 
-// Кнопка публикации профиля с выбором статуса доступа

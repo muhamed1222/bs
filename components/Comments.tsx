@@ -1,7 +1,9 @@
+// Список комментариев
 import React, { useState } from 'react';
 import { useAnalytics } from '../hooks/useAnalytics';
 
 export const Comments: React.FC = () => {
+  // Список комментариев
   const { data, comment, removeComment } = useAnalytics();
   const [text, setText] = useState('');
 
@@ -40,4 +42,3 @@ export const Comments: React.FC = () => {
   );
 };
 
-// Комментарии посетителей с возможностью добавлять и удалять записи

@@ -1,3 +1,4 @@
+// Редактор блоков с перетаскиванием
 import React, { useState } from 'react';
 import {
   DndContext,
@@ -26,6 +27,7 @@ interface Block {
 }
 
 const DraggableBlock: React.FC<{ block: Block }> = ({ block }) => {
+  // Редактор блоков с перетаскиванием
   const {
     attributes,
     listeners,
@@ -95,4 +97,3 @@ export const BlockEditor: React.FC = () => {
   );
 };
 
-// Простой редактор сортируемых блоков с поддержкой drag-and-drop

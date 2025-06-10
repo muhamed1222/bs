@@ -1,3 +1,4 @@
+// Граница ошибок
 import React from 'react';
 
 interface State {
@@ -28,4 +29,3 @@ export class ErrorBoundary extends React.Component<
   }
 }
 
-// Класс-компонент перехватывает ошибки дочерних компонентов

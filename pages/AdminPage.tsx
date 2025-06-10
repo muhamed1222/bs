@@ -1,9 +1,11 @@
+// Админ-панель
 import React, { useEffect } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
 
 const AdminSectionLink: React.FC<{
+  // Админ-панель
   to: string;
   title: string;
   description: string;
@@ -88,4 +90,3 @@ const AdminPage: React.FC = () => {
 
 export default AdminPage;
 
-// Панель администратора для служебных разделов

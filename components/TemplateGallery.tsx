@@ -1,3 +1,4 @@
+// Галерея шаблонов
 import React from 'react';
 
 export interface Template {
@@ -13,6 +14,7 @@ const templates: Template[] = [
 ];
 
 export const TemplateGallery: React.FC<{
+  // Галерея шаблонов
   onSelect: (id: string) => void;
 }> = ({ onSelect }) => {
   return (
@@ -34,4 +36,3 @@ export const TemplateGallery: React.FC<{
   );
 };
 
-// Галерея выбора шаблона профиля

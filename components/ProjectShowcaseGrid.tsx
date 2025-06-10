@@ -1,3 +1,4 @@
+// Сетка проектов
 import React from 'react';
 import { BentoItem } from '../types';
 import { BentoItemCard } from './BentoItemCard';
@@ -79,6 +80,7 @@ const showcaseDataBottom: BentoItem[] = [
 ];
 
 export const ProjectShowcaseGrid: React.FC = () => {
+  // Сетка проектов
   // The design has an 820px wide area for projects.
   // Using a flexible grid that attempts to match the visual density.
   // Cards have fixed widths in the design (Smol: 175px, Medium/Big: 390px).
@@ -135,4 +137,3 @@ export const ProjectShowcaseGrid: React.FC = () => {
   );
 };
 
-// Галерея проектов пользователя в стиле «bento»
