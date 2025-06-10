@@ -1,5 +1,5 @@
 // Демонстрация ИИ
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { useGenerateProfile } from '../hooks/useGenerateProfile';
 import { Button } from '../ui/Button';
@@ -21,8 +21,22 @@ type HistoryItem = {
 const AiDemoPage: React.FC = () => {
   // Демонстрация ИИ
   const { loading, data, error, run } = useGenerateProfile();
-  const [input, setInput] = useState<GenerateInput>(initialInput);
+  const [input, setInput] = useState<GenerateInput>(() => {
+    const raw = localStorage.getItem('aiDemoDraft');
+    if (raw) {
+      try {
+        return JSON.parse(raw) as GenerateInput;
+      } catch {
+        /* ignore */
+      }
+    }
+    return initialInput;
+  });
   const [history, setHistory] = useState<HistoryItem[]>([]);
+
+  useEffect(() => {
+    localStorage.setItem('aiDemoDraft', JSON.stringify(input));
+  }, [input]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -66,6 +80,7 @@ const AiDemoPage: React.FC = () => {
               value={input.goals}
               onChange={handleChange}
               maxLength={120}
+              autoFocus
             />
           </div>
           <div>
