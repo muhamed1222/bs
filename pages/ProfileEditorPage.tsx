@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, unstable_usePrompt } from 'react-router-dom';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { ProfileEditor } from '../components/ProfileEditor';
 import useAuth from '../hooks/useAuth';
@@ -38,6 +38,12 @@ const ProfileEditorPage: React.FC = () => {
   const { showSuccess, showError } = useToast();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
+
+  unstable_usePrompt(
+    hasUnsavedChanges
+      ? 'У вас есть несохраненные изменения. Покинуть страницу?'
+      : false,
+  );
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {

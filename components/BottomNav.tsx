@@ -3,8 +3,13 @@
  import { BottomSheet } from './BottomSheet';
  import { Button } from '../ui/Button';
  
- export const BottomNav: React.FC = () => {
+export const BottomNav: React.FC = () => {
   const [open, setOpen] = useState(false);
+  const publish = () => {
+    if (window.confirm('Опубликовать текущий проект?')) {
+      alert('Проект опубликован');
+    }
+  };
 
   return (
     <nav className="md:hidden fixed bottom-0 inset-x-0 bg-white border-t border-gray-200 shadow z-40">
@@ -12,12 +17,15 @@
         <Link to="/" className="text-sm font-medium text-gray-700">
           Главная
         </Link>
+        <Link to="/editor" className="text-sm font-medium text-gray-700">
+          Добавить
+        </Link>
+        <button onClick={publish} className="text-sm font-medium text-gray-700">
+          Опубликовать
+        </button>
         <Button variant="secondary" onClick={() => setOpen(true)}>
           Меню
         </Button>
-        <Link to="/dashboard" className="text-sm font-medium text-gray-700">
-          Кабинет
-        </Link>
       </div>
       <BottomSheet open={open} onClose={() => setOpen(false)}>
         <ul className="space-y-2">
