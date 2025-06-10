@@ -1,11 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import express from 'express';
+import type { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
 import session from 'express-session';
 import { ApolloServer, gql } from 'apollo-server-express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import OAuth2Server from 'oauth2-server';
+
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+process.on('warning', (warning) => {
+  console.warn(warning.name, warning.message, warning.stack);
+});
 
 const app = express();
 app.use(express.json());
@@ -129,6 +140,20 @@ app.get('/api/check-slug', (req, res) => {
   }
   const available = !RESERVED_SLUGS.has(slug) && !usedSlugs.has(slug);
   res.status(available ? 200 : 409).json({ available });
+});
+
+app.post('/api/register-slug', (req, res) => {
+  const slug = String(req.body.slug || '').toLowerCase();
+  if (!slug) {
+    res.status(400).json({ error: 'Missing slug' });
+    return;
+  }
+  if (RESERVED_SLUGS.has(slug) || usedSlugs.has(slug)) {
+    res.status(409).json({ success: false });
+    return;
+  }
+  usedSlugs.add(slug);
+  res.json({ success: true });
 });
 
 // GraphQL setup
@@ -278,6 +303,11 @@ app.get('/api/billing', (_req, res) => {
     },
   ];
   res.json({ tariffs, billing, history });
+});
+
+app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
+  console.error('Express error:', err);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
 
 const PORT = process.env.PORT || 3001;

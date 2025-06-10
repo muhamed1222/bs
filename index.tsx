@@ -6,7 +6,10 @@ import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './components/ToastProvider';
+import { setupDebug } from './utils/debug';
 import './index.css';
+
+setupDebug();
 
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
@@ -15,9 +18,11 @@ if (savedTheme) {
   document.documentElement.setAttribute('data-theme', 'dark');
 }
 
-const rootElement = document.getElementById('root');
+let rootElement = document.getElementById('root');
 if (!rootElement) {
-  throw new Error('Could not find root element to mount to');
+  rootElement = document.createElement('div');
+  rootElement.id = 'root';
+  document.body.appendChild(rootElement);
 }
 
 const queryClient = new QueryClient();
