@@ -39,11 +39,10 @@ const ProfileEditorPage: React.FC = () => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
 
-  unstable_usePrompt(
-    hasUnsavedChanges
-      ? 'У вас есть несохраненные изменения. Покинуть страницу?'
-      : false,
-  );
+  unstable_usePrompt({
+    when: hasUnsavedChanges,
+    message: 'У вас есть несохраненные изменения. Покинуть страницу?',
+  });
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
