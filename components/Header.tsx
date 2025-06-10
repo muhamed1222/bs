@@ -1,21 +1,21 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react'; // библиотека React
+import { Link } from 'react-router-dom'; // ссылки между страницами
 import {
   BasisLogoParts,
   DesktopViewIcon,
   MobileViewIcon,
-} from './icons/IconComponents';
-import { Tooltip } from './Tooltip';
+} from './icons/IconComponents'; // набор иконок проекта
+import { Tooltip } from './Tooltip'; // компонент подсказки
 
 export const Header: React.FC = () => {
   // Шапка сайта
-  const [isDesktopViewActive, setIsDesktopViewActive] = React.useState(true);
+  const [isDesktopViewActive, setIsDesktopViewActive] = React.useState(true); // переключатель режима просмотра
 
   return (
     <header className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 py-3 shadow-sm">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[48px]">
-          {/* Left: Logo */}
+          {/* Логотип слева */}
           <Link
             to="/"
             className="flex items-center p-[6px] bg-gradient-to-r from-gray-50 to-white rounded-[16px] space-x-3 hover:shadow-md transition-all duration-300 border border-gray-100"
@@ -28,7 +28,7 @@ export const Header: React.FC = () => {
             </span>
           </Link>
 
-          {/* Center: View Icons */}
+          {/* Переключение режимов просмотра */}
           <div className="flex items-center space-x-1 bg-gray-100 rounded-[12px] p-[3px] shadow-inner">
             <Tooltip text="Десктопный режим">
               <button
@@ -61,7 +61,7 @@ export const Header: React.FC = () => {
             </Tooltip>
           </div>
 
-          {/* Right: Auth Buttons */}
+          {/* Кнопки входа и регистрации */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-[16px] p-[10px] flex items-center space-x-2 border border-gray-200 shadow-sm">
             <Tooltip text="Войти в аккаунт">
               <Link
