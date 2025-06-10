@@ -134,14 +134,14 @@ const ProfileCustomizationPage: React.FC = () => {
                             </div>
                             {block.type === 'button' && (
                               <ButtonLinkEditor
-                                value={block.text}
-                                url={block.url}
+                                value={block.text || ''}
+                                url={block.url || ''}
                                 onTextChange={(text) => updateBlock(i, { text })}
                                 onUrlChange={(url) => updateBlock(i, { url })}
                               />
                             )}
                             {block.type === 'text' && (
-                              <RichTextEditor value={block.text} onChange={(text) => updateBlock(i, { text })} />
+                              <RichTextEditor value={block.text || ''} onChange={(text) => updateBlock(i, { text })} />
                             )}
                             {block.type === 'divider' && <hr className="my-2 border-gray-300" />}
                           </div>
@@ -216,7 +216,7 @@ const ProfileCustomizationPage: React.FC = () => {
                         {block.text}
                       </a>
                     ) : block.type === 'text' ? (
-                      <div key={i} className="px-3 py-2 text-gray-800 text-left" dangerouslySetInnerHTML={{ __html: block.text }} />
+                      <div key={i} className="px-3 py-2 text-gray-800 text-left" dangerouslySetInnerHTML={{ __html: block.text || '' }} />
                     ) : block.type === 'divider' ? (
                       <hr key={i} className="border-gray-300 my-2" />
                     ) : null
