@@ -6,9 +6,10 @@ import {
   MobileViewIcon,
 } from './icons/IconComponents';
 import { Tooltip } from './Tooltip';
+import { useViewMode } from '../contexts/ViewModeContext';
 
 export const Header: React.FC = () => {
-  const [isDesktopViewActive, setIsDesktopViewActive] = React.useState(true);
+  const { isDesktopView, setIsDesktopView } = useViewMode();
 
   return (
     <header className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 py-3 shadow-sm">
@@ -17,6 +18,7 @@ export const Header: React.FC = () => {
           {/* Left: Logo */}
           <Link
             to="/"
+            aria-label="На главную"
             className="flex items-center p-[6px] bg-gradient-to-r from-gray-50 to-white rounded-[16px] space-x-3 hover:shadow-md transition-all duration-300 border border-gray-100"
           >
             <div className="flex items-center gap-[2px] px-[6px] py-[4px]">
@@ -33,10 +35,10 @@ export const Header: React.FC = () => {
               <button
                 id="view-toggle-desktop"
                 aria-label="Desktop view"
-                aria-pressed={isDesktopViewActive}
-                onClick={() => setIsDesktopViewActive(true)}
+                aria-pressed={isDesktopView}
+                onClick={() => setIsDesktopView(true)}
                 className={`p-[10px] rounded-[9px] transition-all duration-300 ${
-                  isDesktopViewActive
+                  isDesktopView
                     ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                     : 'text-gray-500 hover:bg-white/50 hover:text-gray-700'
                 }`}
@@ -47,10 +49,10 @@ export const Header: React.FC = () => {
             <Tooltip text="Мобильный режим">
               <button
                 aria-label="Mobile view"
-                aria-pressed={!isDesktopViewActive}
-                onClick={() => setIsDesktopViewActive(false)}
+                aria-pressed={!isDesktopView}
+                onClick={() => setIsDesktopView(false)}
                 className={`p-[10px] rounded-[9px] transition-all duration-300 ${
-                  !isDesktopViewActive
+                  !isDesktopView
                     ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
                     : 'text-gray-500 hover:bg-white/50 hover:text-gray-700'
                 }`}
@@ -65,6 +67,7 @@ export const Header: React.FC = () => {
             <Tooltip text="Войти в аккаунт">
               <Link
                 to="/auth?action=login"
+                aria-label="Войти в аккаунт"
                 className="px-[16px] py-[8px] text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-[10px] transition-all duration-300 leading-[20px] shadow-sm border border-gray-200 hover:shadow-md"
               >
                 Войти
@@ -73,6 +76,7 @@ export const Header: React.FC = () => {
             <Tooltip text="Создать новый аккаунт">
               <Link
                 to="/auth?action=signup"
+                aria-label="Создать аккаунт"
                 className="px-[16px] py-[8px] text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-[10px] transition-all duration-300 leading-[20px] shadow-md hover:shadow-lg"
               >
                 Регистрация
