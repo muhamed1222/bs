@@ -35,3 +35,18 @@ export interface UserProfile {
   email: string;
   bio: string;
 }
+
+export interface SocialLink {
+  id: string;
+  href: string;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+}
+
+export interface PublicProfileData {
+  name?: string;
+  bio?: string;
+  avatar?: string | null;
+  socials?: SocialLink[];
+  projectsTop?: BentoItem[];
+  projectsBottom?: BentoItem[];
+}

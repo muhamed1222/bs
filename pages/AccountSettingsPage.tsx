@@ -377,7 +377,15 @@ const AccountSettingsPage: React.FC = () => {
                   <label className="block text-sm font-medium text-gray-700 mb-2">Аватар</label>
                   <div className="flex items-center space-x-4">
                     <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center text-gray-500 overflow-hidden">
-                      {userData.avatar ? <img src={userData.avatar} alt="Avatar" className="w-full h-full object-cover" /> : 'Фото'}
+                      {userData.avatar ? (
+                        <img
+                          src={userData.avatar}
+                          alt="Аватар пользователя"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        'Фото'
+                      )}
                     </div>
                     <div>
                       <input

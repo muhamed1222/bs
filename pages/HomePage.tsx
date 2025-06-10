@@ -138,8 +138,8 @@ const HomePage: React.FC = () => {
                 </div>
               )}
             </div>
+
           </div>
-        </section>
 
         {/* How it works */}
         <section className="max-w-6xl mx-auto px-6">

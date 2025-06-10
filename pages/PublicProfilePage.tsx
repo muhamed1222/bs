@@ -8,6 +8,7 @@ import { PublishProfileButton } from '../components/PublishProfileButton';
 import { ReactionBar } from '../components/ReactionBar';
 import { Comments } from '../components/Comments';
 import { ShareModal } from '../components/ShareModal';
+import { usePublicProfile } from '../hooks/usePublicProfile';
 import {
   SettingsAltIcon,
   TargetIcon,
@@ -18,14 +19,6 @@ import {
   GlobeAltIcon,
   WindowFilesIcon,
 } from '../components/icons/IconComponents';
-import type { ShareActionItem, BentoItem } from '../types';
-import { FigmaPlaceholderIcon } from '../components/icons/IconComponents';
-
-const profileName = 'Your name goes here';
-const profileBio =
-  "Hipster ipsum tattooed brunch I'm baby. Stumptown chicken I'm bruh big raw jomo. Hot fit literally kitsch fanny tilde celiac tote. Single-origin forage raw neutra kombucha.";
-
-const showcaseTop: BentoItem[] = [
   {
     id: 'proj1',
     variant: 'medium_text_right_image',
@@ -64,7 +57,6 @@ const showcaseTop: BentoItem[] = [
   },
 ];
 
-const showcaseBottom: BentoItem[] = [
   {
     id: 'proj4',
     variant: 'smol_icon_text_vertical',
@@ -209,16 +201,10 @@ const BottomRightShareBar: React.FC = () => {
 
 const PublicProfilePage: React.FC = () => {
   const { slug = '' } = useParams<{ slug: string }>();
+  const { data: profile, loading } = usePublicProfile(slug);
   return (
     // main-content-area class gives the white bg and padding
     <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
-      <ProfileSidebar name={profileName} bio={profileBio} />
-      <div className="flex-1">
-        <ProjectShowcaseGrid
-          topItems={showcaseTop}
-          bottomItems={showcaseBottom}
-        />
-        <ReactionBar />
         <Comments />
       </div>
       <BottomLeftSocialBar />

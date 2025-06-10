@@ -1,6 +1,7 @@
 // Редактор кнопки-ссылки
 import React, { useState } from 'react';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
+import { isValidUrl } from '../utils/validators';
 
 interface Props {
   value: string;
@@ -14,15 +15,6 @@ export const ButtonLinkEditor = ({ value, url, onTextChange, onUrlChange }: Prop
   const [showPicker, setShowPicker] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const isValidUrl = (val: string) => {
-    try {
-      // eslint-disable-next-line no-new
-      new URL(val);
-      return true;
-    } catch {
-      return false;
-    }
-  };
 
   const handleEmoji = (emojiData: EmojiClickData) => {
     onTextChange(value + emojiData.emoji);
@@ -55,7 +47,12 @@ export const ButtonLinkEditor = ({ value, url, onTextChange, onUrlChange }: Prop
         className="border px-2 py-1 rounded w-full mt-1"
       />
       {error && <p className="text-red-500 text-sm">{error}</p>}
-      <button type="button" className="px-2 py-1 bg-gray-200 rounded" onClick={() => setShowPicker(!showPicker)}>
+      <button
+        type="button"
+        className="px-2 py-1 bg-gray-200 rounded"
+        onClick={() => setShowPicker(!showPicker)}
+        aria-label="Выбрать эмодзи"
+      >
         😊
       </button>
       {showPicker && (
