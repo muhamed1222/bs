@@ -1,5 +1,3 @@
-
-import React from 'react';
 interface Props {
   open: boolean;
   onClose: () => void;
@@ -7,6 +5,28 @@ interface Props {
 }
 
 export const BottomSheet: React.FC<Props> = ({ open, onClose, children }) => {
+  const [visible, setVisible] = useState(open);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+    } else {
+      const timer = setTimeout(() => setVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [open, onClose]);
+
+  if (!visible) return null;
+
   return (
     <div
       className={`fixed inset-0 bg-black/30 flex items-end md:hidden transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
