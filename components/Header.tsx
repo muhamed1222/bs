@@ -1,15 +1,21 @@
-import React from 'react'; // библиотека React
-import { Link } from 'react-router-dom'; // ссылки между страницами
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   BasisLogoParts,
   DesktopViewIcon,
   MobileViewIcon,
+} from './icons/IconComponents';
+import { Tooltip } from './Tooltip';
+import { useViewMode } from '../contexts/ViewModeContext';
+
+export const Header: React.FC = () => {
+  const { isDesktopView, setIsDesktopView } = useViewMode();
 
   return (
     <header className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 py-3 shadow-sm">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[48px]">
-          {/* Логотип слева */}
+          {/* Left: Logo */}
           <Link
             to="/"
             aria-label="На главную"
@@ -23,7 +29,7 @@ import {
             </span>
           </Link>
 
-          {/* Переключение режимов просмотра */}
+          {/* Center: View Icons */}
           <div className="flex items-center space-x-1 bg-gray-100 rounded-[12px] p-[3px] shadow-inner">
             <Tooltip text="Десктопный режим">
               <button
@@ -56,7 +62,7 @@ import {
             </Tooltip>
           </div>
 
-          {/* Кнопки входа и регистрации */}
+          {/* Right: Auth Buttons */}
           <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-[16px] p-[10px] flex items-center space-x-2 border border-gray-200 shadow-sm">
             <Tooltip text="Войти в аккаунт">
               <Link
