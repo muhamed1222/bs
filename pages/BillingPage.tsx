@@ -1,3 +1,4 @@
+// Платёжная страница
 import React, { useEffect, useState } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import {
@@ -124,6 +125,7 @@ const PaymentHistoryRow = ({
 );
 
 const BillingPage: React.FC = () => {
+  // Платёжная страница
   const [tariffs, setTariffs] = useState<Tariff[]>([]);
   const [billingInfo, setBillingInfo] = useState<BillingInfo | null>(null);
   const [history, setHistory] = useState<PaymentHistoryItem[]>([]);

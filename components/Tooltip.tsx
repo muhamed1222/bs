@@ -1,3 +1,4 @@
+// Подсказка
 import React, { useState } from 'react';
 
 interface TooltipProps {
@@ -6,6 +7,7 @@ interface TooltipProps {
 }
 
 export const Tooltip: React.FC<TooltipProps> = ({ text, children }) => {
+  // Подсказка
   const [visible, setVisible] = useState(false);
   return (
     <span

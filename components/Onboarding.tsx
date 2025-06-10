@@ -1,3 +1,4 @@
+// Экран онбординга
 import React, { useEffect, useState } from 'react';
 
 interface Step {
@@ -17,6 +18,7 @@ const steps: Step[] = [
 ];
 
 export const Onboarding: React.FC = () => {
+  // Экран онбординга
   const [index, setIndex] = useState(0);
 
   useEffect(() => {

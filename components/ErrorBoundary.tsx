@@ -1,3 +1,4 @@
+// Граница ошибок
 import React from 'react';
 
 interface State {

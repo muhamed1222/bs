@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const StandardPageLayout: React.FC<{
+  // Стандартный макет страницы
   title: string;
   children?: React.ReactNode;
 }> = ({ title, children }) => (

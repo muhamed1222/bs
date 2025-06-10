@@ -1,3 +1,4 @@
+// Выбор макета профиля
 import React from 'react';
 
 const layouts = [
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const ProfileLayoutSelector: React.FC<Props> = ({ value, onChange }) => {
+  // Выбор макета профиля
   return (
     <div className="flex gap-2">
       {layouts.map((l) => (

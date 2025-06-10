@@ -1,3 +1,4 @@
+// Публичный профиль
 
 import { ProfileSidebar } from '../components/ProfileSidebar';
 import { ProjectShowcaseGrid } from '../components/ProjectShowcaseGrid';
@@ -21,6 +22,7 @@ import { fetchProfile } from '../services/profileService';
 // This component now represents Section 5: Public Page
 
 const BottomLeftSocialBar: React.FC = () => {
+  // Публичный профиль
   return (
     <div className="absolute left-[52px] bottom-[28px] bg-[#EEEEEE] rounded-[10px] p-[4px] flex items-center gap-[4px] shadow-md z-10">
       {[SettingsAltIcon, TargetIcon, ChatAltIcon].map((Icon, index) => (

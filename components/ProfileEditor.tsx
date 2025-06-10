@@ -16,6 +16,7 @@ interface Props {
 const defaultProfile: UserProfile = { name: '', email: '', bio: '' };
 
 export const ProfileEditor: React.FC<Props> = ({
+  // Редактор профиля
   userId,
   onUnsavedChanges,
   onSaveSuccess,

@@ -6,6 +6,7 @@ interface RichTextEditorProps {
 }
 
 export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange }) => (
+  // Текстовый редактор
   <textarea
     className="w-full border rounded p-2"
     rows={6}

@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useRef } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import StandardPageLayout from '../layouts/StandardPageLayout';
-import { useAuth } from '../contexts/AuthContext';
-import Spinner from '../ui/Spinner';
+// Страница авторизации
+import React, { useState, useCallback, useRef } from 'react'; // React и хуки
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // работа с маршрутами
+import StandardPageLayout from '../layouts/StandardPageLayout'; // общий макет страниц
+import { useAuth } from '../contexts/AuthContext'; // контекст авторизации
+import Spinner from '../ui/Spinner'; // индикатор загрузки
 
 type AuthMode = 'login' | 'signup' | 'reset';
 type AuthStatus = 'idle' | 'loading' | 'success' | 'error';
@@ -11,27 +12,29 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PASSWORD_MIN = 6;
 
 const AuthPage: React.FC = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  // Страница авторизации
+  const location = useLocation(); // текущий URL
+  const navigate = useNavigate(); // навигация по страницам
   const queryParams = new URLSearchParams(location.search);
   const mode = (queryParams.get('action') as AuthMode) || 'login';
 
-  const { login, signup, resetPassword } = useAuth();
+  const { login, signup, resetPassword } = useAuth(); // функции из контекста
 
   const [fields, setFields] = useState({
     email: '',
     password: '',
     name: '',
     confirmPassword: '',
-  });
+  }); // значения полей формы
 
-  const [showPassword, setShowPassword] = useState(false);
-  const [status, setStatus] = useState<AuthStatus>('idle');
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
-  const [successMsg, setSuccessMsg] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false); // видимость пароля
+  const [status, setStatus] = useState<AuthStatus>('idle'); // состояние процесса
+  const [errorMsg, setErrorMsg] = useState<string | null>(null); // сообщение об ошибке
+  const [successMsg, setSuccessMsg] = useState<string | null>(null); // успешное сообщение
 
-  const emailRef = useRef<HTMLInputElement>(null);
+  const emailRef = useRef<HTMLInputElement>(null); // ссылка на поле email
 
+  // Сброс формы при смене режима
   React.useEffect(() => {
     setFields({ email: '', password: '', name: '', confirmPassword: '' });
     setStatus('idle');
@@ -40,6 +43,7 @@ const AuthPage: React.FC = () => {
     emailRef.current?.focus();
   }, [mode]);
 
+  // Изменение значений формы
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFields({ ...fields, [e.target.name]: e.target.value });
     setErrorMsg(null);
@@ -57,6 +61,7 @@ const AuthPage: React.FC = () => {
     return null;
   }, [fields, mode]);
 
+  // Отправка формы
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
@@ -89,6 +94,7 @@ const AuthPage: React.FC = () => {
     }
   };
 
+  // Показывать или скрывать пароль
   const toggleShowPassword = () => setShowPassword((s) => !s);
 
   return (

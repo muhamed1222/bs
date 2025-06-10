@@ -1,8 +1,10 @@
+// Поддержка пользователей
 import React from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Link } from 'react-router-dom';
 
 const SupportPage: React.FC = () => {
+  // Поддержка пользователей
   const faqItems = [
     {
       q: 'Как создать свою первую страницу?',

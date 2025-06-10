@@ -1,9 +1,11 @@
+// Панель реакций
 import React from 'react';
 import { useAnalytics } from '../hooks/useAnalytics';
 
 const EMOJIS = ['👍', '❤️', '😂'];
 
 export const ReactionBar: React.FC = () => {
+  // Панель реакций
   const { data, react } = useAnalytics();
   return (
     <div className="flex gap-2 mt-4">

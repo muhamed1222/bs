@@ -1,3 +1,4 @@
+// Редактор блоков с перетаскиванием
 import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import {
@@ -27,6 +28,7 @@ interface Block {
 }
 
 const DraggableBlock: React.FC<{ block: Block }> = ({ block }) => {
+  // Редактор блоков с перетаскиванием
   const {
     attributes,
     listeners,

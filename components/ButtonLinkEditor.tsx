@@ -1,3 +1,4 @@
+// Редактор кнопки-ссылки
 import React, { useState } from 'react';
 import EmojiPicker, { EmojiClickData } from 'emoji-picker-react';
 
@@ -9,6 +10,7 @@ interface Props {
 }
 
 export const ButtonLinkEditor: React.FC<Props> = ({ value, url, onTextChange, onUrlChange }) => {
+  // Редактор кнопки-ссылки
   const [showPicker, setShowPicker] = useState(false);
   const [error, setError] = useState<string | null>(null);
 

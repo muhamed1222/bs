@@ -1,3 +1,4 @@
+// Загрузка обложки
 import React, { useCallback, useRef, useState } from 'react';
 import Cropper from 'react-easy-crop';
 import { CroppedArea, getCroppedImg } from '../utils/cropImage';
@@ -7,6 +8,7 @@ interface Props {
 }
 
 export const CoverUploader: React.FC<Props> = ({ onChange }) => {
+  // Загрузка обложки
   const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
