@@ -1,12 +1,18 @@
-import React, { useCallback, useRef, useState } from 'react'; // базовые хуки React
-import Cropper from 'react-easy-crop'; // библиотека для кадрирования изображений
+import {
+  useCallback,
+  useRef,
+  useState,
+  type ChangeEvent,
+  type DragEvent,
+} from 'react';
+import Cropper from 'react-easy-crop';
 import { CroppedArea, getCroppedImg } from '../utils/cropImage'; // утилиты для получения обрезанного изображения
 
 interface Props {
   onChange?: (dataUrl: string | null) => void;
 }
 
-export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
+export function AvatarUploader({ onChange }: Props) {
   // Компонент для загрузки и обрезки аватара
   const [imageSrc, setImageSrc] = useState<string | null>(null); // исходное изображение
   const [crop, setCrop] = useState({ x: 0, y: 0 }); // текущая позиция кадра
@@ -37,14 +43,14 @@ export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
   }, []);
 
   // Пользователь выбрал файл через диалог
-  const onInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) onFile(file);
   };
 
   // Обрабатываем перетаскивание файла в область
   const onDrop = useCallback(
-    (e: React.DragEvent) => {
+    (e: DragEvent<HTMLDivElement>) => {
       e.preventDefault();
       const file = e.dataTransfer.files?.[0];
       if (file) onFile(file);
@@ -139,6 +145,6 @@ export const AvatarUploader: React.FC<Props> = ({ onChange }) => {
       {error && <div className="text-red-500 text-sm">{error}</div>}
     </div>
   );
-};
+}
 
 // Компонент для загрузки и обрезки аватара пользователя
