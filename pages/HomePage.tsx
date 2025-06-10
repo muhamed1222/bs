@@ -222,7 +222,7 @@ const HomePage: React.FC = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-3 gap-8">
-              {cases.slice(0, 3).map((c, index) => (
+              {cases.slice(0, 3).map((c) => (
                 <div key={c.id} className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-2">
                   <div className="relative overflow-hidden">
                     <img
