@@ -1,5 +1,5 @@
 // Админ-панель
-import React, { useEffect } from 'react';
+import React from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
@@ -22,7 +22,8 @@ const AdminSectionLink: React.FC<{
 );
 
 const AdminPage: React.FC = () => {
-
+  const { user } = useAuth();
+  const isStaff = user?.role === 'staff' || user?.role === 'owner';
 
   if (!isStaff) {
     return (

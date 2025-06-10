@@ -94,7 +94,7 @@ const AiDemoPage: React.FC = () => {
             {loading && <Spinner size="h-4 w-4" className="mr-2" />}
             {loading ? 'AI генерирует…' : 'Сгенерировать'}
           </Button>
-          {error && (
+          {Boolean(error) && (
             <div className="flex items-center gap-2 text-red-600 mt-2">
               <svg viewBox="0 0 20 20" fill="currentColor" className="w-5 h-5">
                 <path fillRule="evenodd" d="M18 10A8 8 0 11..." clipRule="evenodd" />

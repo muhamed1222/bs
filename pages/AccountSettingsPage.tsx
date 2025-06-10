@@ -108,7 +108,6 @@ const AccountSettingsPage: React.FC = () => {
     newPassword: '',
     confirmPassword: '',
   });
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -317,14 +316,7 @@ const AccountSettingsPage: React.FC = () => {
   }
 
   return (
-    <StandardPageLayout
-      title="Настройки аккаунта"
-      description="Управление профилем, безопасностью и настройками аккаунта"
-      breadcrumbs={[
-        { label: 'Главная', href: '/' },
-        { label: 'Настройки аккаунта', href: '/account/settings' },
-      ]}
-    >
+    <StandardPageLayout title="Настройки аккаунта">
       <div className="max-w-4xl mx-auto space-y-8">
         <SectionCard title="Основная информация" loading={saving.profile} error={errors.profile}>
           {success.profile && <SuccessMessage message={success.profile} />}
