@@ -5,6 +5,7 @@ import { useAutosave } from '../hooks/useAutosave';
 import { UserProfile } from '../types';
 import { Button } from '../ui/Button';
 import { Toast } from './Toast';
+import { isValidEmail, isValidText } from '../utils/validators';
 
 interface Props {
   userId: string;
@@ -85,6 +86,11 @@ export const ProfileEditor: React.FC<Props> = ({
       set({ ...state, [field]: e.target.value });
     };
 
+  const validName = isValidText(state.name, 50);
+  const validEmail = isValidEmail(state.email);
+  const validBio = isValidText(state.bio, 200);
+  const canPublish = validName && validEmail && validBio;
+
   const handlePublish = () => {
     try {
       localStorage.setItem(`profile_${userId}`, JSON.stringify(state));
@@ -126,7 +132,9 @@ export const ProfileEditor: React.FC<Props> = ({
         <Button onClick={redo} disabled={!canRedo}>
           Redo
         </Button>
-        <Button onClick={handlePublish}>Сохранить</Button>
+        <Button onClick={handlePublish} disabled={!canPublish}>
+          Сохранить
+        </Button>
         <span className="text-sm text-gray-600">
           {saved ? 'изменения сохранены' : 'есть несохранённые изменения'}
         </span>
@@ -137,30 +145,41 @@ export const ProfileEditor: React.FC<Props> = ({
         >
           Имя
           <input
-            className="border p-2 w-full"
+            className={`border p-2 w-full ${validName ? '' : 'border-red-500'}`}
             value={state.name}
             onChange={handleChange('name')}
+            maxLength={50}
           />
+          {!validName && (
+            <span className="text-red-600 text-sm">Введите имя</span>
+          )}
         </label>
         <label
           className={`block ${isFieldChanged('email') ? 'bg-yellow-100' : ''}`}
         >
           Email
           <input
-            className="border p-2 w-full"
+            className={`border p-2 w-full ${validEmail ? '' : 'border-red-500'}`}
             value={state.email}
             onChange={handleChange('email')}
           />
+          {!validEmail && (
+            <span className="text-red-600 text-sm">Некорректный email</span>
+          )}
         </label>
         <label
           className={`block ${isFieldChanged('bio') ? 'bg-yellow-100' : ''}`}
         >
           Биография
           <textarea
-            className="border p-2 w-full h-24"
+            className={`border p-2 w-full h-24 ${validBio ? '' : 'border-red-500'}`}
             value={state.bio}
             onChange={handleChange('bio')}
+            maxLength={200}
           />
+          {!validBio && (
+            <span className="text-red-600 text-sm">Заполните биографию</span>
+          )}
         </label>
       </div>
       {toast && <Toast message={toast} onClose={() => setToast(null)} />}

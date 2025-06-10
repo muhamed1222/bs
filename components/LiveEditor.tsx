@@ -1,10 +1,13 @@
 // Живой предпросмотр
 import React, { useState } from 'react';
+import { isColorTooLight, isValidText } from '../utils/validators';
 
 export const LiveEditor: React.FC = () => {
   // Живой предпросмотр
   const [title, setTitle] = useState('Заголовок профиля');
   const [color, setColor] = useState('#000000');
+  const titleValid = isValidText(title, 60);
+  const colorWarning = isColorTooLight(color);
 
   return (
     <div className="flex flex-col md:flex-row gap-4 h-full">
@@ -12,10 +15,14 @@ export const LiveEditor: React.FC = () => {
         <div>
           <label className="block text-sm font-semibold mb-1">Текст заголовка</label>
           <input
-            className="w-full p-2 border rounded"
+            className={`w-full p-2 border rounded ${titleValid ? '' : 'border-red-500'}`}
             value={title}
+            maxLength={60}
             onChange={(e) => setTitle(e.target.value)}
           />
+          {!titleValid && (
+            <p className="text-sm text-red-600">Введите заголовок</p>
+          )}
         </div>
         <div>
           <label className="block text-sm font-semibold mb-1">Цвет текста</label>
@@ -25,6 +32,9 @@ export const LiveEditor: React.FC = () => {
             value={color}
             onChange={(e) => setColor(e.target.value)}
           />
+          {colorWarning && (
+            <p className="text-sm text-orange-600">Слишком светлый цвет</p>
+          )}
         </div>
       </div>
       <div className="flex-1 flex items-center justify-center bg-gray-100 rounded">
