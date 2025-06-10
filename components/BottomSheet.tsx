@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 interface Props {
   open: boolean;
@@ -7,11 +7,35 @@ interface Props {
 }
 
 export const BottomSheet: React.FC<Props> = ({ open, onClose, children }) => {
-  if (!open) return null;
+  const [visible, setVisible] = useState(open);
+
+  useEffect(() => {
+    if (open) {
+      setVisible(true);
+    } else {
+      const timer = setTimeout(() => setVisible(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handleEsc);
+    return () => document.removeEventListener('keydown', handleEsc);
+  }, [open, onClose]);
+
+  if (!visible) return null;
+
   return (
-    <div className="fixed inset-0 bg-black/30 flex items-end md:hidden" onClick={onClose}>
+    <div
+      className={`fixed inset-0 bg-black/30 flex items-end md:hidden transition-opacity duration-300 ${open ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      onClick={onClose}
+    >
       <div
-        className="bg-white rounded-t-lg w-full p-4"
+        className={`bg-white rounded-t-lg w-full p-4 transition-transform duration-300 ${open ? 'translate-y-0' : 'translate-y-full'}`}
         onClick={(e) => e.stopPropagation()}
       >
         {children}
