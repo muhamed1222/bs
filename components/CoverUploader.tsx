@@ -57,10 +57,15 @@ export const CoverUploader: React.FC<Props> = ({ onChange }) => {
 
   const saveCrop = useCallback(async () => {
     if (imageSrc && croppedAreaPixels) {
-      const cropped = await getCroppedImg(imageSrc, croppedAreaPixels);
-      setCover(cropped);
-      onChange?.(cropped);
-      setImageSrc(null);
+      try {
+        const cropped = await getCroppedImg(imageSrc, croppedAreaPixels);
+        setCover(cropped);
+        onChange?.(cropped);
+        setImageSrc(null);
+      } catch (e) {
+        console.error(e);
+        setError('Не удалось обработать изображение');
+      }
     }
   }, [imageSrc, croppedAreaPixels, onChange]);
 

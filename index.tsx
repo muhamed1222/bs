@@ -7,6 +7,7 @@ import App from './App';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './components/ToastProvider';
+import { ViewModeProvider } from './contexts/ViewModeContext';
 import { setupDebug } from './utils/debug';
 import './index.css';
 
@@ -33,11 +34,13 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <ToastProvider>
-            <ErrorBoundary>
-              <App />
-            </ErrorBoundary>
-          </ToastProvider>
+          <ViewModeProvider>
+            <ToastProvider>
+              <ErrorBoundary>
+                <App />
+              </ErrorBoundary>
+            </ToastProvider>
+          </ViewModeProvider>
         </AuthProvider>
       </BrowserRouter>
     </QueryClientProvider>
