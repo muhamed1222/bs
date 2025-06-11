@@ -37,12 +37,15 @@ app.use(
 const RESERVED_SLUGS = new Set(['admin', 'login', 'me', 'profile']);
 const usedSlugs = new Set<string>();
 
+function isValidSlug(slug: string): boolean {
+  return /^[a-z0-9-]+$/.test(slug);
+}
+
 // Simple in-memory OAuth model
 const users: Record<string, { id: string; password: string }> = {
   user: { id: 'user', password: 'pass' },
   test: { id: 'test', password: 'testpass' },
 };
-
 
 const oauth = new OAuth2Server({
   model: {
@@ -324,11 +327,20 @@ app.get('/api/billing', (_req, res) => {
 
 app.get('/public-profile/:slug', async (req, res) => {
   const { slug } = req.params;
+  const data = await fetchPublicProfile(slug);
+  const html = ReactDOMServer.renderToString(
+    React.createElement(
+      StaticRouter,
+      { location: req.url },
+      React.createElement(PublicProfilePage)
+    )
   );
   res.set('Cache-Control', 'public, max-age=300');
-  res.send(`<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${
-    data?.name || 'Профиль'
-  }</title><link rel="stylesheet" href="/index.css" /></head><body><div id="root">${html}</div><script type="module" src="/index.tsx"></script></body></html>`);
+  res.send(
+    `<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${
+      data?.name || 'Профиль'
+    }</title><link rel="stylesheet" href="/index.css" /></head><body><div id="root">${html}</div><script type="module" src="/index.tsx"></script></body></html>`
+  );
 });
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {

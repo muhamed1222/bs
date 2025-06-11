@@ -9,11 +9,12 @@
 1. Install dependencies:
    `npm install`
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+3. (Optional) Set the `VITE_GA_ID` in `.env.local` for Google Analytics
+4. Run the app:
    `npm run dev`
-4. Запустите API сервер:
+5. Запустите API сервер:
    `npm run server`
-   
+
    Или используйте одну команду для одновременного запуска клиента и сервера:
    `npm run dev:all`
 
@@ -29,7 +30,6 @@ pages/           // страницы приложения
 layouts/         // компоненты раскладки
 routes/          // конфигурация маршрутов
 ```
-
 
 ## API сервер
 
@@ -66,4 +66,3 @@ npx eslint .
 ```
 npx prettier -w .
 ```
-
