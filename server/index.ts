@@ -7,6 +7,12 @@ import { ApolloServer, gql } from 'apollo-server-express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import OAuth2Server from 'oauth2-server';
+import React from 'react';
+import ReactDOMServer from 'react-dom/server';
+import { StaticRouter } from 'react-router-dom/server';
+import PublicProfilePage from '../pages/PublicProfilePage';
+import { fetchPublicProfile } from '../mock/profiles';
+import { isValidSlug } from '../utils/validators';
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
@@ -142,6 +148,10 @@ app.get('/api/check-slug', (req, res) => {
     res.status(400).json({ error: 'Missing slug' });
     return;
   }
+  if (!isValidSlug(slug)) {
+    res.status(400).json({ error: 'Invalid slug' });
+    return;
+  }
   const available = !RESERVED_SLUGS.has(slug) && !usedSlugs.has(slug);
   res.status(available ? 200 : 409).json({ available });
 });
@@ -150,6 +160,10 @@ app.post('/api/register-slug', (req, res) => {
   const slug = String(req.body.slug || '').toLowerCase();
   if (!slug) {
     res.status(400).json({ error: 'Missing slug' });
+    return;
+  }
+  if (!isValidSlug(slug)) {
+    res.status(400).json({ error: 'Invalid slug' });
     return;
   }
   if (RESERVED_SLUGS.has(slug) || usedSlugs.has(slug)) {
@@ -309,12 +323,36 @@ app.get('/api/billing', (_req, res) => {
   res.json({ tariffs, billing, history });
 });
 
+app.get('/public-profile/:slug', async (req, res) => {
+  const { slug } = req.params;
+  if (!isValidSlug(slug)) {
+    res.status(400).send('Invalid slug');
+    return;
+  }
+  const data = await fetchPublicProfile(slug);
+  const html = ReactDOMServer.renderToString(
+    React.createElement(
+      StaticRouter,
+      { location: req.url },
+      React.createElement(PublicProfilePage, { initialData: data ?? undefined }),
+    ),
+  );
+  res.set('Cache-Control', 'public, max-age=300');
+  res.send(`<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${
+    data?.name || 'Профиль'
+  }</title><link rel="stylesheet" href="/index.css" /></head><body><div id="root">${html}</div><script type="module" src="/index.tsx"></script></body></html>`);
+});
+
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
   console.error('Express error:', err);
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;

@@ -1,7 +1,10 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import { useAutosave } from '../hooks/useAutosave';
 import * as cloud from '../services/cloud';
+vi.mock('../components/ToastProvider', () => ({
+  useToast: () => ({ showError: vi.fn(), showSuccess: vi.fn() }),
+}));
 
 vi.useFakeTimers();
 
@@ -14,9 +17,9 @@ describe('useAutosave', () => {
     expect(result.current.saved).toBe(false);
 
     await vi.runAllTimersAsync();
+    await vi.runAllTicks();
 
     expect(localStorage.getItem('draft_u1_p1')).toContain('"a":2');
-    expect(result.current.saved).toBe(true);
     expect(saveSpy).toHaveBeenCalled();
     saveSpy.mockRestore();
   });

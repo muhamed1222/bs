@@ -15,6 +15,7 @@ import { Button } from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
 import { isColorTooLight } from '../utils/validators';
+import { sanitize } from '../utils/sanitize';
 
 const RESERVED_SLUGS = ['admin', 'login', 'me', 'profile'];
 const BLOCK_TYPES = [
@@ -243,7 +244,11 @@ const ProfileCustomizationPage: React.FC = () => {
                         {block.text}
                       </a>
                     ) : block.type === 'text' ? (
-                      <div key={i} className="px-3 py-2 text-gray-800 text-left" dangerouslySetInnerHTML={{ __html: block.text || '' }} />
+                      <div
+                        key={i}
+                        className="px-3 py-2 text-gray-800 text-left"
+                        dangerouslySetInnerHTML={{ __html: sanitize(block.text || '') }}
+                      />
                     ) : block.type === 'divider' ? (
                       <hr key={i} className="border-gray-300 my-2" />
                     ) : null
