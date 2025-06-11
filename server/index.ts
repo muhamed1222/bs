@@ -324,11 +324,6 @@ app.get('/api/billing', (_req, res) => {
 
 app.get('/public-profile/:slug', async (req, res) => {
   const { slug } = req.params;
-  const data = await fetchPublicProfile(slug);
-  const html = ReactDOMServer.renderToString(
-    <StaticRouter location={req.url}>
-      <PublicProfilePage initialData={data ?? undefined} />
-    </StaticRouter>,
   );
   res.set('Cache-Control', 'public, max-age=300');
   res.send(`<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${
@@ -342,6 +337,10 @@ app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`API server running on http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(PORT, () => {
+    console.log(`API server running on http://localhost:${PORT}`);
+  });
+}
+
+export default app;
