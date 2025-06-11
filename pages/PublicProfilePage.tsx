@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { ProfileSidebar } from '../components/ProfileSidebar';
 import { ProjectShowcaseGrid } from '../components/ProjectShowcaseGrid';
 import { PublishProfileButton } from '../components/PublishProfileButton';
@@ -218,9 +219,22 @@ export interface PublicProfilePageProps {
 const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ initialData }) => {
   const { slug = '' } = useParams<{ slug: string }>();
   const { data: profile, loading } = usePublicProfile(slug, initialData);
+  const title = profile?.seoTitle || profile?.name || 'Профиль';
+  const description = profile?.seoDescription || profile?.bio || '';
+  const keywords = profile?.seoKeywords || profile?.name || '';
+  const ogImage = profile?.ogImage || profile?.avatar || '';
   return (
     // main-content-area class gives the white bg and padding
-    <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
+    <>
+      <Helmet>
+        <title>{title}</title>
+        {description && <meta name="description" content={description} />}
+        {keywords && <meta name="keywords" content={keywords} />}
+        <meta property="og:title" content={title} />
+        {description && <meta property="og:description" content={description} />}
+        {ogImage && <meta property="og:image" content={ogImage} />}
+      </Helmet>
+      <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
       <ProfileSidebar
         name={profile?.name}
         bio={profile?.bio}
@@ -242,7 +256,8 @@ const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ initialData }) =>
       <div className="absolute top-4 right-4">
         <PublishProfileButton slug={slug} data={{}} />
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

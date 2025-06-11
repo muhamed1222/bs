@@ -9,11 +9,12 @@
 1. Install dependencies:
    `npm install`
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
+3. (Optional) Set the `VITE_GA_ID` in `.env.local` for Google Analytics
+4. Run the app:
    `npm run dev`
-4. Запустите API сервер:
+5. Запустите API сервер:
    `npm run server`
-   
+
    Или используйте одну команду для одновременного запуска клиента и сервера:
    `npm run dev:all`
 
@@ -29,7 +30,6 @@ pages/           // страницы приложения
 layouts/         // компоненты раскладки
 routes/          // конфигурация маршрутов
 ```
-
 
 ## API сервер
 
@@ -66,15 +66,3 @@ npx eslint .
 ```
 npx prettier -w .
 ```
-
-
-## Деплой на Vercel
-
-1. Установите [Vercel CLI](https://vercel.com/docs/cli):
-   ```bash
-   npm install -g vercel
-   ```
-2. Выполните команду `vercel` и следуйте инструкциям для создания проекта.
-3. При первом деплое Vercel выполнит `npm run build` и разместит содержимое каталога `dist`.
-4. Все запросы к API (`/api`, `/oauth`, `/graphql`, `/docs`, `/public-profile/:slug`) будут обрабатываться сервером Express из папки `server` благодаря файлу `api/index.ts` и настройкам из `vercel.json`.
-

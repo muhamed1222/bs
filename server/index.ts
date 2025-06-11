@@ -10,8 +10,9 @@ import OAuth2Server from 'oauth2-server';
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
+import { HelmetProvider } from 'react-helmet-async';
 import PublicProfilePage from '../pages/PublicProfilePage';
-import { fetchPublicProfile } from '../mock/profiles';
+import { fetchPublicProfile, getPublicProfileSlugs } from '../mock/profiles';
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
@@ -37,12 +38,15 @@ app.use(
 const RESERVED_SLUGS = new Set(['admin', 'login', 'me', 'profile']);
 const usedSlugs = new Set<string>();
 
+function isValidSlug(slug: string): boolean {
+  return /^[a-z0-9-]+$/.test(slug);
+}
+
 // Simple in-memory OAuth model
 const users: Record<string, { id: string; password: string }> = {
   user: { id: 'user', password: 'pass' },
   test: { id: 'test', password: 'testpass' },
 };
-
 
 const oauth = new OAuth2Server({
   model: {
@@ -322,13 +326,39 @@ app.get('/api/billing', (_req, res) => {
   res.json({ tariffs, billing, history });
 });
 
+app.get('/sitemap.xml', (req, res) => {
+  const baseUrl = `${req.protocol}://${req.get('host')}`;
+  const slugs = new Set([...getPublicProfileSlugs(), ...usedSlugs]);
+  const urls = Array.from(slugs)
+    .map((slug) => `<url><loc>${baseUrl}/public-profile/${slug}</loc></url>`)
+    .join('');
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls}</urlset>`;
+  res.type('application/xml').send(xml);
+});
+
 app.get('/public-profile/:slug', async (req, res) => {
   const { slug } = req.params;
+  const data = await fetchPublicProfile(slug);
+  const helmetContext: { helmet?: any } = {};
+  const html = ReactDOMServer.renderToString(
+    React.createElement(
+      HelmetProvider,
+      { context: helmetContext },
+      React.createElement(
+        StaticRouter,
+        { location: req.url },
+        React.createElement(PublicProfilePage, { initialData: data })
+      )
+    )
   );
+  const { helmet } = helmetContext;
   res.set('Cache-Control', 'public, max-age=300');
-  res.send(`<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${
-    data?.name || 'Профиль'
-  }</title><link rel="stylesheet" href="/index.css" /></head><body><div id="root">${html}</div><script type="module" src="/index.tsx"></script></body></html>`);
+  res.send(
+    `<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>${
+      helmet?.title.toString() || `<title>${data?.name || 'Профиль'}</title>`
+    }${helmet?.meta.toString() || ''}<link rel="stylesheet" href="/index.css" /></head><body><div id="root">${html}</div><script type="module" src="/index.tsx"></script></body></html>`
+  );
 });
 
 app.use((err: unknown, _req: Request, res: Response, _next: NextFunction) => {
