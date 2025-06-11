@@ -67,3 +67,14 @@ npx eslint .
 npx prettier -w .
 ```
 
+
+## Деплой на Vercel
+
+1. Установите [Vercel CLI](https://vercel.com/docs/cli):
+   ```bash
+   npm install -g vercel
+   ```
+2. Выполните команду `vercel` и следуйте инструкциям для создания проекта.
+3. При первом деплое Vercel выполнит `npm run build` и разместит содержимое каталога `dist`.
+4. Все запросы к API (`/api`, `/oauth`, `/graphql`, `/docs`, `/public-profile/:slug`) будут обрабатываться сервером Express из папки `server` благодаря файлу `api/index.ts` и настройкам из `vercel.json`.
+
