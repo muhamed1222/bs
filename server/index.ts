@@ -12,6 +12,7 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import PublicProfilePage from '../pages/PublicProfilePage';
 import { fetchPublicProfile } from '../mock/profiles';
+import { isValidSlug } from '../utils/validators';
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
@@ -147,6 +148,10 @@ app.get('/api/check-slug', (req, res) => {
     res.status(400).json({ error: 'Missing slug' });
     return;
   }
+  if (!isValidSlug(slug)) {
+    res.status(400).json({ error: 'Invalid slug' });
+    return;
+  }
   const available = !RESERVED_SLUGS.has(slug) && !usedSlugs.has(slug);
   res.status(available ? 200 : 409).json({ available });
 });
@@ -155,6 +160,10 @@ app.post('/api/register-slug', (req, res) => {
   const slug = String(req.body.slug || '').toLowerCase();
   if (!slug) {
     res.status(400).json({ error: 'Missing slug' });
+    return;
+  }
+  if (!isValidSlug(slug)) {
+    res.status(400).json({ error: 'Invalid slug' });
     return;
   }
   if (RESERVED_SLUGS.has(slug) || usedSlugs.has(slug)) {
@@ -316,6 +325,10 @@ app.get('/api/billing', (_req, res) => {
 
 app.get('/public-profile/:slug', async (req, res) => {
   const { slug } = req.params;
+  if (!isValidSlug(slug)) {
+    res.status(400).send('Invalid slug');
+    return;
+  }
   const data = await fetchPublicProfile(slug);
   const html = ReactDOMServer.renderToString(
     <StaticRouter location={req.url}>
