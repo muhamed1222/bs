@@ -5,13 +5,16 @@ import '@testing-library/jest-dom';
 import { MemoryRouter } from 'react-router-dom';
 import App from '../App';
 import { ViewModeProvider } from '../contexts/ViewModeContext';
+import { I18nProvider } from '../contexts/I18nContext';
 
 describe('App', () => {
   it('renders without crashing', () => {
     render(
       <MemoryRouter>
         <ViewModeProvider>
-          <App />
+          <I18nProvider>
+            <App />
+          </I18nProvider>
         </ViewModeProvider>
       </MemoryRouter>
     );
