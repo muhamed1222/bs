@@ -9,6 +9,7 @@ import { ReactionBar } from '../components/ReactionBar';
 import { Comments } from '../components/Comments';
 import { ShareModal } from '../components/ShareModal';
 import { usePublicProfile } from '../hooks/usePublicProfile';
+import type { PublicProfileData } from '../types';
 import {
   SettingsAltIcon,
   TargetIcon,
@@ -210,9 +211,13 @@ const BottomRightShareBar: React.FC = () => {
   );
 };
 
-const PublicProfilePage: React.FC = () => {
+export interface PublicProfilePageProps {
+  initialData?: PublicProfileData;
+}
+
+const PublicProfilePage: React.FC<PublicProfilePageProps> = ({ initialData }) => {
   const { slug = '' } = useParams<{ slug: string }>();
-  const { data: profile, loading } = usePublicProfile(slug);
+  const { data: profile, loading } = usePublicProfile(slug, initialData);
   return (
     // main-content-area class gives the white bg and padding
     <div className="main-content-area relative flex flex-col md:flex-row gap-[80px]">
