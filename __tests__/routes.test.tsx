@@ -4,13 +4,16 @@ import { describe, it, expect } from 'vitest';
 import '@testing-library/jest-dom';
 import App from '../App';
 import { ViewModeProvider } from '../contexts/ViewModeContext';
+import { I18nProvider } from '../contexts/I18nContext';
 
 describe('routes configuration', () => {
   it('renders 404 page for unknown routes', () => {
     render(
       <MemoryRouter initialEntries={['/unknown']}>
         <ViewModeProvider>
-          <App />
+          <I18nProvider>
+            <App />
+          </I18nProvider>
         </ViewModeProvider>
       </MemoryRouter>
     );
