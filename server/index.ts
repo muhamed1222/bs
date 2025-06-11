@@ -12,7 +12,6 @@ import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import PublicProfilePage from '../pages/PublicProfilePage';
 import { fetchPublicProfile } from '../mock/profiles';
-import { isValidSlug } from '../utils/validators';
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
@@ -325,17 +324,6 @@ app.get('/api/billing', (_req, res) => {
 
 app.get('/public-profile/:slug', async (req, res) => {
   const { slug } = req.params;
-  if (!isValidSlug(slug)) {
-    res.status(400).send('Invalid slug');
-    return;
-  }
-  const data = await fetchPublicProfile(slug);
-  const html = ReactDOMServer.renderToString(
-    React.createElement(
-      StaticRouter,
-      { location: req.url },
-      React.createElement(PublicProfilePage, { initialData: data ?? undefined }),
-    ),
   );
   res.set('Cache-Control', 'public, max-age=300');
   res.send(`<!doctype html><html lang="ru"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>${
