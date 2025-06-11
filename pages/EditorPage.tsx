@@ -1,5 +1,7 @@
 // Редактор контента
 import React, { useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useI18n } from '../contexts/I18nContext';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Tooltip } from '../components/Tooltip';
 import { Onboarding } from '../components/Onboarding';
@@ -121,6 +123,8 @@ function useUndoRedo<T>(initial: T) {
 const EditorPage: React.FC = () => {
   // Редактор контента
   const { showSuccess } = useToast();
+  const { t } = useI18n();
+  const location = useLocation<{ newProject?: boolean }>();
   // --- blocks: { id, type, props }
   const {
     state: blocks,
@@ -137,6 +141,15 @@ const EditorPage: React.FC = () => {
     'public'
   );
   const nextId = useRef(1);
+
+  React.useEffect(() => {
+    if (blocks.length === 0 && location.state?.newProject) {
+      setBlocks([
+        { id: 'b1', type: 'text', props: { text: 'Привет! Я...', color: '#333', bg: '#fff', font: 'sans-serif' } },
+      ]);
+      nextId.current = 2;
+    }
+  }, []);
 
   // --- Добавить блок
   const addBlock = (type: BlockType) => {
@@ -225,7 +238,7 @@ const EditorPage: React.FC = () => {
               Слои (порядок блоков)
             </h3>
             {blocks.length === 0 ? (
-              <p className="text-xs text-gray-400">Нет блоков</p>
+              <p className="text-xs text-gray-400">{t('noBlocks')}</p>
             ) : (
               <ul className="space-y-1">
                 {blocks.map((b, i) => (
@@ -350,7 +363,7 @@ const EditorPage: React.FC = () => {
           <div className="flex-1 p-6 overflow-auto bg-gray-100 rounded-b-lg min-h-[320px]">
             {blocks.length === 0 ? (
               <div className="text-center text-gray-400 py-20">
-                <p>Добавь блок для начала работы</p>
+                <p>{t('addBlock')}</p>
               </div>
             ) : (
               <div className="space-y-4">

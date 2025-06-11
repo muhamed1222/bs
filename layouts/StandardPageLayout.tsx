@@ -1,4 +1,5 @@
 import React from 'react';
+import { LanguageSwitcher } from '../components/LanguageSwitcher';
 import { Link } from 'react-router-dom';
 
 export interface Breadcrumb {
@@ -23,6 +24,9 @@ const StandardPageLayout: React.FC<StandardPageLayoutProps> = ({
   children,
 }) => (
   <div className="main-content-area">
+    <div className="flex justify-end mb-2">
+      <LanguageSwitcher />
+    </div>
     {breadcrumbs && (
       <nav className="text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
         {breadcrumbs.map((crumb, idx) => (
