@@ -1,5 +1,6 @@
 // Быстрая персонализация
 import React, { useState } from 'react';
+import { sanitize } from '../utils/sanitize';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { AvatarUploader } from '../components/AvatarUploader';
 import { CoverUploader } from '../components/CoverUploader';
@@ -95,7 +96,7 @@ const PersonalizationPage: React.FC = () => {
                     key={i}
                     href="#"
                     className="px-4 py-2 bg-blue-500 text-white rounded inline-block"
-                    dangerouslySetInnerHTML={{ __html: val }}
+                    dangerouslySetInnerHTML={{ __html: sanitize(val) }}
                   />
                 ))}
               </div>
