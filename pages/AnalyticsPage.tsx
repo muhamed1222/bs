@@ -3,44 +3,8 @@ import React, { useState } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { useAnalytics } from '../hooks/useAnalytics';
 import { isIncognito, setIncognito } from '../services/analytics';
-
-const StatCard: React.FC<{
-  // Статистика
-  title: string;
-  value: string;
-  change?: string;
-  changeType?: 'positive' | 'negative';
-}> = ({ title, value, change, changeType }) => (
-  <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-    <h4 className="text-sm font-medium text-gray-500 uppercase tracking-wider">
-      {title}
-    </h4>
-    <p className="text-3xl font-bold text-gray-900 mt-1">{value}</p>
-    {change && (
-      <p
-        className={`text-xs mt-1 ${changeType === 'positive' ? 'text-green-600' : 'text-red-600'}`}
-      >
-        {changeType === 'positive' ? '↑' : '↓'} {change} с прошлого периода
-      </p>
-    )}
-  </div>
-);
-
-const ChartPlaceholder: React.FC<{ title: string; height?: string }> = ({
-  title,
-  height = 'h-64',
-}) => (
-  <div
-    className={`bg-white border border-gray-200 rounded-lg shadow-sm p-6 ${height} flex flex-col`}
-  >
-    <h4 className="text-md font-semibold text-gray-700 font-pragmatica mb-2">
-      {title}
-    </h4>
-    <div className="flex-grow bg-gray-100 rounded flex items-center justify-center">
-      <p className="text-gray-400 text-sm">(Placeholder for {title} Chart)</p>
-    </div>
-  </div>
-);
+import StatCard from '../components/analytics/StatCard';
+import ChartPlaceholder from '../components/analytics/ChartPlaceholder';
 
 const AnalyticsPage: React.FC = () => {
   const { data } = useAnalytics();
