@@ -3,14 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import useAuth from '../hooks/useAuth';
 import useNotification from '../hooks/useNotification';
-import LoadingSpinner from '../components/account/LoadingSpinner';
-import ErrorMessage from '../components/account/ErrorMessage';
-import SuccessMessage from '../components/account/SuccessMessage';
-import BasicInfoSection from '../components/account/BasicInfoSection';
-import SecuritySection from '../components/account/SecuritySection';
-import SubscriptionSection from '../components/account/SubscriptionSection';
-import ActivityHistorySection from '../components/account/ActivityHistorySection';
-import ApiIntegrationsSection from '../components/account/ApiIntegrationsSection';
 
 interface UserData {
   id: string;
