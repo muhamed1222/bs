@@ -6,9 +6,6 @@ import { fetchJson } from '../services/api';
 import { z } from 'zod';
 import { Loader } from '../components/Loader';
 import { Onboarding } from '../components/Onboarding';
-import DashboardTopBar from '../components/dashboard/DashboardTopBar';
-import ProjectsSection from '../components/dashboard/ProjectsSection';
-import QuickLinksSection from '../components/dashboard/QuickLinksSection';
 
 const DashboardPage: React.FC = () => {
   const schema = z.array(
