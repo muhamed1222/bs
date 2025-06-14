@@ -4,6 +4,10 @@ import StandardPageLayout from '../layouts/StandardPageLayout';
 import useAuth from '../hooks/useAuth';
 import useNotification from '../hooks/useNotification';
 import Spinner from '../ui/Spinner';
+import LoadingSpinner from '../components/account/LoadingSpinner';
+import ErrorMessage from '../components/account/ErrorMessage';
+import SuccessMessage from '../components/account/SuccessMessage';
+import SectionCard from '../components/account/SectionCard';
 
 interface UserData {
   id: string;
@@ -32,58 +36,6 @@ interface ApiKey {
   created: string;
   lastUsed?: string;
 }
-
-const LoadingSpinner: React.FC = () => (
-  // Настройки аккаунта
-  <div className="flex justify-center items-center py-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
-    <span className="ml-3 text-gray-600">Загрузка...</span>
-  </div>
-);
-
-const ErrorMessage: React.FC<{ message: string; onRetry?: () => void }> = ({
-  message,
-  onRetry,
-}) => (
-  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-    <div className="flex items-center">
-      <span className="text-red-500 text-xl mr-3">⚠️</span>
-      <div>
-        <p className="text-red-700">{message}</p>
-        {onRetry && (
-          <button
-            onClick={onRetry}
-            className="mt-2 text-sm text-red-600 hover:text-red-800 underline"
-          >
-            Попробовать снова
-          </button>
-        )}
-      </div>
-    </div>
-  </div>
-);
-
-const SuccessMessage: React.FC<{ message: string }> = ({ message }) => (
-  <div className="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
-    <div className="flex items-center">
-      <span className="text-green-500 text-xl mr-3">✅</span>
-      <p className="text-green-700">{message}</p>
-    </div>
-  </div>
-);
-
-const SectionCard: React.FC<{
-  title: string;
-  children: React.ReactNode;
-  loading?: boolean;
-  error?: string;
-  onRetry?: () => void;
-}> = ({ title, children, loading, error, onRetry }) => (
-  <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
-    <h3 className="text-xl font-semibold text-gray-800 mb-4">{title}</h3>
-    {loading ? <LoadingSpinner /> : error ? <ErrorMessage message={error} onRetry={onRetry} /> : children}
-  </div>
-);
 
 const AccountSettingsPage: React.FC = () => {
   const navigate = useNavigate();

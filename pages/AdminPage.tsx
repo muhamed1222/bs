@@ -3,23 +3,7 @@ import React from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Link } from 'react-router-dom';
 import useAuth from '../hooks/useAuth';
-
-const AdminSectionLink: React.FC<{
-  // Админ-панель
-  to: string;
-  title: string;
-  description: string;
-}> = ({ to, title, description }) => (
-  <Link
-    to={to}
-    className="block bg-white p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow"
-  >
-    <h3 className="text-lg font-semibold font-pragmatica text-indigo-700 mb-1">
-      {title}
-    </h3>
-    <p className="text-sm text-gray-600">{description}</p>
-  </Link>
-);
+import AdminSectionLink from '../components/admin/AdminSectionLink';
 
 const AdminPage: React.FC = () => {
   const { user } = useAuth();
