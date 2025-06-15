@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
 import type { AuthSession } from './types';
-import { users } from './userStore';
+import { users, addUser, authenticate } from './userStore';
 
 const RESERVED_SLUGS = new Set(['admin', 'login', 'me', 'profile']);
 export const usedSlugs = new Set<string>();
@@ -38,7 +38,7 @@ export function initRest(app: import('express').Express) {
       res.status(409).json({ error: 'User already exists' });
       return;
     }
-    users[email] = { id: email, password };
+    addUser(email, password);
     const user = { id: email, email, role: 'owner' };
     (req.session as AuthSession).user = user;
     res.status(201).json(user);
@@ -46,8 +46,8 @@ export function initRest(app: import('express').Express) {
 
   router.post('/login', (req, res) => {
     const { email, password } = req.body || {};
-    const record = users[email];
-    if (record && record.password === password) {
+    const record = authenticate(email, password);
+    if (record) {
       const user = { id: record.id, email, role: 'owner' };
       (req.session as AuthSession).user = user;
       res.json(user);

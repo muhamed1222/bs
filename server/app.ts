@@ -1,9 +1,9 @@
 import express from 'express';
-import session from 'express-session';
 import { initRest } from './rest';
 import { oauthRouter } from './oauth';
 import { initGraphQL } from './graphql';
 import { initSSR } from './ssr';
+import { initSession } from './sessionStore';
 
 export const app = express();
 
@@ -18,13 +18,7 @@ process.on('warning', (warning) => {
 });
 
 app.use(express.json());
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET || 'keyboard cat',
-    resave: false,
-    saveUninitialized: false,
-  })
-);
+await initSession(app);
 
 app.use(oauthRouter);
 initRest(app);
