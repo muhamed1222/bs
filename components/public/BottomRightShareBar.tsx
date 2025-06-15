@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ShareModal from '../ShareModal';
+import { ShareModal } from '../ShareModal';
 import {
   LinkIcon,
   PhotoIcon,
