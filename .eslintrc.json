@@ -14,7 +14,9 @@
     "sourceType": "module"
   },
   "settings": {
-    "react": { "version": "detect" }
+    "react": {
+      "version": "detect"
+    }
   },
   "rules": {
     "react/no-unescaped-entities": "off",
