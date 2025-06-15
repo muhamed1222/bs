@@ -3,6 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import useAuth from '../hooks/useAuth';
 import useNotification from '../hooks/useNotification';
+import LoadingSpinner from '../components/account/LoadingSpinner';
+import ErrorMessage from '../components/account/ErrorMessage';
+import BasicInfoSection from '../components/account/BasicInfoSection';
+import SecuritySection from '../components/account/SecuritySection';
+import SubscriptionSection from '../components/account/SubscriptionSection';
+import ActivityHistorySection from '../components/account/ActivityHistorySection';
+import ApiIntegrationsSection from '../components/account/ApiIntegrationsSection';
 
 interface UserData {
   id: string;
@@ -267,7 +274,7 @@ const AccountSettingsPage: React.FC = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         <BasicInfoSection
           profileForm={profileForm}
-          setProfileForm={(v) => setProfileForm(v)}
+          setProfileForm={setProfileForm}
           userAvatar={userData.avatar}
           saving={{ profile: saving.profile, avatar: saving.avatar }}
           success={success.profile}
@@ -277,7 +284,7 @@ const AccountSettingsPage: React.FC = () => {
         />
         <SecuritySection
           passwordForm={passwordForm}
-          setPasswordForm={(v) => setPasswordForm(v)}
+          setPasswordForm={setPasswordForm}
           twoFactorEnabled={userData.twoFactorEnabled}
           saving={{ password: saving.password, twoFactor: saving.twoFactor }}
           success={success.password}
@@ -296,7 +303,9 @@ const AccountSettingsPage: React.FC = () => {
         />
         <ApiIntegrationsSection
           apiKeys={apiKeys}
-          onRemove={(id) => setApiKeys((prev) => prev.filter((k) => k.id !== id))}
+          onRemove={(id: string) =>
+            setApiKeys((prev) => prev.filter((k) => k.id !== id))
+          }
           onGenerate={generateApiKey}
           generating={saving.apiKey}
         />
