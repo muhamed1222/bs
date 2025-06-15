@@ -1,19 +1,11 @@
 import express from 'express';
 import session from 'express-session';
-import { RedisStore } from 'connect-redis';
-import { createClient } from 'redis';
 import { initRest } from './rest';
 import { oauthRouter } from './oauth';
 import { initGraphQL } from './graphql';
 import { initSSR } from './ssr';
 
 export const app = express();
-
-const redisClient = createClient({ url: process.env.REDIS_URL || 'redis://localhost:6379' });
-if (process.env.NODE_ENV !== 'test') {
-  redisClient.connect().catch((err) => console.error('Redis connect error', err));
-}
-const redisStore = new RedisStore({ client: redisClient });
 
 process.on('uncaughtException', (err) => {
   console.error('Uncaught Exception:', err);
@@ -28,7 +20,6 @@ process.on('warning', (warning) => {
 app.use(express.json());
 app.use(
   session({
-    store: redisStore,
     secret: process.env.SESSION_SECRET || 'keyboard cat',
     resave: false,
     saveUninitialized: false,
