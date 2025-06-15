@@ -14,10 +14,11 @@ describe('useAutosave', () => {
     const { result, rerender } = renderHook(({ state }) => useAutosave('u1', 'p1', state), { initialProps: { state: { a: 1 } } });
 
     rerender({ state: { a: 2 } });
+    await act(async () => {
+      await vi.runAllTimersAsync();
+      await vi.runAllTicks();
+    });
     expect(result.current.saved).toBe(false);
-
-    await vi.runAllTimersAsync();
-    await vi.runAllTicks();
 
     expect(localStorage.getItem('draft_u1_p1')).toContain('"a":2');
     expect(saveSpy).toHaveBeenCalled();
@@ -29,7 +30,9 @@ describe('useAutosave', () => {
     const { result, rerender } = renderHook(({ state }) => useAutosave('u1', 'p2', state), { initialProps: { state: { a: 1 } } });
 
     rerender({ state: { a: 3 } });
-    await vi.runAllTimersAsync();
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
 
     expect(result.current.saved).toBe(false);
     setItem.mockRestore();

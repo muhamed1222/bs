@@ -1,4 +1,3 @@
-/* eslint-disable */
 import express from 'express';
 import type { Request, Response, NextFunction } from 'express';
 import rateLimit from 'express-rate-limit';
@@ -7,6 +6,12 @@ import { ApolloServer, gql } from 'apollo-server-express';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import OAuth2Server from 'oauth2-server';
+import type { HelmetServerState } from 'react-helmet-async';
+import type { Session } from 'express-session';
+
+interface AuthSession extends Session {
+  user?: { id: string; email?: string; role: string };
+}
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
@@ -56,7 +61,11 @@ const oauth = new OAuth2Server({
       }
       return null;
     },
-    async saveToken(token: any, client: any, user: any) {
+    async saveToken(
+      token: OAuth2Server.Token,
+      client: OAuth2Server.Client,
+      user: OAuth2Server.User
+    ) {
       return { ...token, client, user };
     },
     async getUser(username: string, password: string) {
@@ -74,7 +83,7 @@ const oauth = new OAuth2Server({
         accessTokenExpiresAt: new Date(Date.now() + 60 * 60 * 1000),
       };
     },
-    verifyScope(token: any, scope: any) {
+    verifyScope(token: OAuth2Server.Token, scope: OAuth2Server.Scope) {
       // Здесь можно реализовать свою логику проверки scope
       return Promise.resolve(true); // Всегда разрешает, для примера
     },
@@ -91,8 +100,7 @@ app.post('/oauth/token', (req, res, _next) => {
       res.json(token);
     })
     .catch(function (err: OAuth2Server.OAuthError | Error) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const status = (err as any).code || 500;
+      const status = err instanceof OAuth2Server.OAuthError ? err.code : 500;
       res.status(status).json(err);
     });
 });
@@ -107,7 +115,7 @@ app.get('/api/profile', (_req, res) => {
 });
 
 app.get('/api/me', (req, res) => {
-  const user = (req as any).session.user;
+  const user = (req.session as AuthSession).user;
   if (user) {
     res.json(user);
   } else {
@@ -128,7 +136,7 @@ app.post('/api/signup', (req, res) => {
   }
   users[email] = { id: email, password };
   const user = { id: email, email, role: 'owner' };
-  (req as any).session.user = user;
+  (req.session as AuthSession).user = user;
   res.status(201).json(user);
 });
 
@@ -137,7 +145,7 @@ app.post('/api/login', (req, res) => {
   const record = users[email];
   if (record && record.password === password) {
     const user = { id: record.id, email, role: 'owner' };
-    (req as any).session.user = user;
+    (req.session as AuthSession).user = user;
     res.json(user);
   } else {
     res.status(401).json({ error: 'Invalid credentials' });
@@ -350,7 +358,7 @@ app.get('/sitemap.xml', (req, res) => {
 app.get('/public-profile/:slug', async (req, res) => {
   const { slug } = req.params;
   const data = await fetchPublicProfile(slug);
-  const helmetContext: { helmet?: any } = {};
+  const helmetContext: { helmet?: HelmetServerState } = {};
   const html = ReactDOMServer.renderToString(
     React.createElement(
       HelmetProvider,
