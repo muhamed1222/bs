@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import OAuth2Server from 'oauth2-server';
-import { users } from './userStore';
+import { authenticate } from './userStore';
 
 const oauth = new OAuth2Server({
   model: {
@@ -14,8 +14,8 @@ const oauth = new OAuth2Server({
       return { ...token, client, user } as OAuth2Server.Token;
     },
     async getUser(username: string, password: string) {
-      const record = users[username];
-      if (record && record.password === password) {
+      const record = authenticate(username, password);
+      if (record) {
         return { id: record.id } as OAuth2Server.User;
       }
       return null;
