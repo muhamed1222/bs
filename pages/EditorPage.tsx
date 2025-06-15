@@ -1,5 +1,7 @@
 // Редактор контента
 import React, { useState, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
+import { useI18n } from '../contexts/I18nContext';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Tooltip } from '../components/Tooltip';
 import { Onboarding } from '../components/Onboarding';
@@ -7,7 +9,7 @@ import { useToast } from '../components/ToastProvider';
 import Spinner from '../ui/Spinner';
 
 // --- Базовые типы блоков ---
-const BLOCK_TYPES = [
+const BLOCK_TYPES: { type: BlockType; label: string }[] = [
   { type: 'text', label: 'Текст' },
   { type: 'image', label: 'Изображение' },
   { type: 'button', label: 'Кнопка' },
@@ -25,11 +27,63 @@ const DEFAULT_BLOCK_PROPS = {
   map: { address: '' },
 };
 
-interface Block {
+type BlockType = keyof typeof DEFAULT_BLOCK_PROPS;
+
+interface TextBlock {
   id: string;
-  type: string;
-  props: Record<string, unknown>;
+  type: 'text';
+  props: {
+    text: string;
+    color: string;
+    bg: string;
+    font: string;
+  };
 }
+
+interface ImageBlock {
+  id: string;
+  type: 'image';
+  props: {
+    src: string;
+    alt: string;
+  };
+}
+
+interface ButtonBlock {
+  id: string;
+  type: 'button';
+  props: {
+    text: string;
+    color: string;
+    bg: string;
+  };
+}
+
+interface VideoBlock {
+  id: string;
+  type: 'video';
+  props: {
+    url: string;
+  };
+}
+
+interface FormBlock {
+  id: string;
+  type: 'form';
+  props: {
+    fields: string[];
+  };
+}
+
+interface MapBlock {
+  id: string;
+  type: 'map';
+  props: {
+    address: string;
+  };
+}
+
+type Block = TextBlock | ImageBlock | ButtonBlock | VideoBlock | FormBlock | MapBlock;
 
 // --- Undo/Redo стэк ---
 function useUndoRedo<T>(initial: T) {
@@ -69,6 +123,8 @@ function useUndoRedo<T>(initial: T) {
 const EditorPage: React.FC = () => {
   // Редактор контента
   const { showSuccess } = useToast();
+  const { t } = useI18n();
+  const location = useLocation<{ newProject?: boolean }>();
   // --- blocks: { id, type, props }
   const {
     state: blocks,
@@ -86,12 +142,21 @@ const EditorPage: React.FC = () => {
   );
   const nextId = useRef(1);
 
+  React.useEffect(() => {
+    if (blocks.length === 0 && location.state?.newProject) {
+      setBlocks([
+        { id: 'b1', type: 'text', props: { text: 'Привет! Я...', color: '#333', bg: '#fff', font: 'sans-serif' } },
+      ]);
+      nextId.current = 2;
+    }
+  }, []);
+
   // --- Добавить блок
-  const addBlock = (type: string) => {
+  const addBlock = (type: BlockType) => {
     const id = `b${nextId.current++}`;
     setBlocks([
       ...blocks,
-      { id, type, props: { ...DEFAULT_BLOCK_PROPS[type] } },
+      { id, type, props: { ...DEFAULT_BLOCK_PROPS[type] } } as Block,
     ]);
     setSelectedId(id);
   };
@@ -100,7 +165,7 @@ const EditorPage: React.FC = () => {
   const updateBlock = (id: string, newProps: Record<string, unknown>) => {
     setBlocks(
       blocks.map((b) =>
-        b.id === id ? { ...b, props: { ...b.props, ...newProps } } : b
+        b.id === id ? ({ ...b, props: { ...b.props, ...newProps } } as Block) : b
       )
     );
   };
@@ -173,7 +238,7 @@ const EditorPage: React.FC = () => {
               Слои (порядок блоков)
             </h3>
             {blocks.length === 0 ? (
-              <p className="text-xs text-gray-400">Нет блоков</p>
+              <p className="text-xs text-gray-400">{t('noBlocks')}</p>
             ) : (
               <ul className="space-y-1">
                 {blocks.map((b, i) => (
@@ -298,7 +363,7 @@ const EditorPage: React.FC = () => {
           <div className="flex-1 p-6 overflow-auto bg-gray-100 rounded-b-lg min-h-[320px]">
             {blocks.length === 0 ? (
               <div className="text-center text-gray-400 py-20">
-                <p>Добавь блок для начала работы</p>
+                <p>{t('addBlock')}</p>
               </div>
             ) : (
               <div className="space-y-4">

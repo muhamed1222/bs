@@ -1,5 +1,5 @@
 // Модальное окно поделиться
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from './ToastProvider';
 import QRCode from 'qrcode';
 
@@ -12,6 +12,18 @@ export const ShareModal: React.FC<ShareModalProps> = ({ url, onClose }) => {
   // Модальное окно поделиться
   const { showSuccess, showError } = useToast();
   const [qr, setQr] = useState<string | null>(null);
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    document.addEventListener('keydown', handler);
+    document.body.classList.add('overflow-hidden');
+    return () => {
+      document.removeEventListener('keydown', handler);
+      document.body.classList.remove('overflow-hidden');
+    };
+  }, [onClose]);
 
   const copy = async () => {
     try {
@@ -45,8 +57,14 @@ export const ShareModal: React.FC<ShareModalProps> = ({ url, onClose }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-      <div className="bg-white p-4 rounded shadow w-80 space-y-2">
+    <div
+      className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
+      role="dialog"
+      aria-modal="true"
+      tabIndex={-1}
+      onClick={onClose}
+    >
+      <div className="bg-white p-4 rounded shadow w-80 space-y-2" onClick={(e) => e.stopPropagation()}>
         <h2 className="font-semibold text-lg">Поделиться</h2>
         <button className="w-full bg-gray-100 p-2 rounded" onClick={copy}>
           Копировать ссылку
@@ -54,7 +72,7 @@ export const ShareModal: React.FC<ShareModalProps> = ({ url, onClose }) => {
         <button className="w-full bg-gray-100 p-2 rounded" onClick={makeQr}>
           QR-код
         </button>
-        {qr && <img src={qr} alt="QR" className="mx-auto" />}
+        {qr && <img src={qr} alt={`QR код для ${url}`} className="mx-auto" />}
         <a
           href={`https://t.me/share/url?url=${encodeURIComponent(url)}`}
           target="_blank"

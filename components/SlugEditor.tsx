@@ -22,6 +22,7 @@ export const SlugEditor: React.FC<Props> = ({ value, onChange, valid, base = 'ht
         onChange={(e) => onChange(e.target.value)}
         className="border px-2 py-1 rounded w-full"
         placeholder="Адрес"
+        autoFocus
       />
       <div className="flex items-center gap-2 text-sm">
         <span>{base + value}</span>

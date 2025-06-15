@@ -11,7 +11,7 @@ export class ErrorBoundary extends React.Component<
 > {
   state: State = { hasError: false };
 
-  static getDerivedStateFromError(error: unknown) {
+  static getDerivedStateFromError(_error: unknown) {
     // потенциально здесь можно отправить ошибку на сервер аналитики
     return { hasError: true };
   }
@@ -21,19 +21,19 @@ export class ErrorBoundary extends React.Component<
   }
 
   handleReset = () => {
-    this.setState({ hasError: false });
+    window.location.reload();
   };
 
   render() {
     if (this.state.hasError) {
       return (
         <div className="p-4 bg-red-200 text-red-800">
-          <p>Что-то пошло не так.</p>
+          <p>Произошла непредвиденная ошибка. Перезагрузите страницу.</p>
           <button
             onClick={this.handleReset}
             className="mt-2 text-sm underline text-blue-600 hover:text-blue-800"
           >
-            Попробовать снова
+            Перезагрузить страницу
           </button>
         </div>
       );

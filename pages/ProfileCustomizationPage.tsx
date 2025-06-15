@@ -14,6 +14,8 @@ import { registerSlug } from '../services/slugService';
 import { Button } from '../ui/Button';
 import Spinner from '../ui/Spinner';
 import { DragDropContext, Droppable, Draggable, DropResult } from 'react-beautiful-dnd';
+import { isColorTooLight } from '../utils/validators';
+import { sanitize } from '../utils/sanitize';
 
 const RESERVED_SLUGS = ['admin', 'login', 'me', 'profile'];
 const BLOCK_TYPES = [
@@ -34,16 +36,25 @@ const ProfileCustomizationPage: React.FC = () => {
     blocks: [],
   });
   const slugValid = useSlugValidation(profile.slug, RESERVED_SLUGS);
+  const [lightColor, setLightColor] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
-    fetchProfile().then((data) => {
-      setProfile(data);
-      setLoading(false);
-    });
+    const load = async () => {
+      setLoading(true);
+      try {
+        const data = await fetchProfile();
+        setProfile(data);
+      } catch (e) {
+        console.error(e);
+        setToast('Ошибка загрузки профиля');
+      } finally {
+        setLoading(false);
+      }
+    };
+    void load();
   }, []);
 
 
@@ -103,8 +114,14 @@ const ProfileCustomizationPage: React.FC = () => {
     <StandardPageLayout title="Персонализация профиля">
       <div className="flex flex-col lg:flex-row gap-8">
         <aside className="w-full lg:w-1/3 space-y-5">
-          <AvatarUploader onChange={(avatar) => setProfile((p) => ({ ...p, avatar }))} />
-          <CoverUploader onChange={(cover) => setProfile((p) => ({ ...p, cover }))} />
+          <AvatarUploader
+            onChange={(avatar) => setProfile((p) => ({ ...p, avatar }))}
+            alt={`Аватар ${profile.slug || 'пользователя'}`}
+          />
+          <CoverUploader
+            onChange={(cover) => setProfile((p) => ({ ...p, cover }))}
+            alt={`Обложка ${profile.slug || 'пользователя'}`}
+          />
           <SlugEditor
             value={profile.slug}
             onChange={(slug) => setProfile((p) => ({ ...p, slug: slug.replace(/\s+/g, '-').toLowerCase() }))}
@@ -134,14 +151,14 @@ const ProfileCustomizationPage: React.FC = () => {
                             </div>
                             {block.type === 'button' && (
                               <ButtonLinkEditor
-                                value={block.text}
-                                url={block.url}
+                                value={block.text || ''}
+                                url={block.url || ''}
                                 onTextChange={(text) => updateBlock(i, { text })}
                                 onUrlChange={(url) => updateBlock(i, { url })}
                               />
                             )}
                             {block.type === 'text' && (
-                              <RichTextEditor value={block.text} onChange={(text) => updateBlock(i, { text })} />
+                              <RichTextEditor value={block.text || ''} onChange={(text) => updateBlock(i, { text })} />
                             )}
                             {block.type === 'divider' && <hr className="my-2 border-gray-300" />}
                           </div>
@@ -168,12 +185,19 @@ const ProfileCustomizationPage: React.FC = () => {
               type="color"
               className="w-12 h-8 border rounded"
               value={profile.color}
-              onChange={(e) => setProfile((p) => ({ ...p, color: e.target.value }))}
+              onChange={(e) => {
+                const val = e.target.value;
+                setProfile((p) => ({ ...p, color: val }));
+                setLightColor(isColorTooLight(val));
+              }}
             />
+            {lightColor && (
+              <p className="text-sm text-orange-600">Цвет слишком светлый</p>
+            )}
           </div>
           <Button
             onClick={handleSave}
-            disabled={saving || !slugValid}
+            disabled={saving || !slugValid || lightColor}
             aria-busy={saving}
             className="mt-6 px-5 py-3 w-full bg-indigo-600 text-white rounded font-bold flex items-center justify-center"
           >
@@ -184,13 +208,17 @@ const ProfileCustomizationPage: React.FC = () => {
         <main className="flex-1 bg-white rounded-xl border shadow p-6">
           <div className="overflow-hidden rounded-xl border mb-6">
             {profile.cover && (
-              <img src={profile.cover} alt="cover" className="w-full h-32 object-cover" />
+              <img
+                src={profile.cover}
+                alt={`Обложка пользователя ${profile.slug}`}
+                className="w-full h-32 object-cover"
+              />
             )}
             <div className="p-4 text-center relative">
               {profile.avatar && (
                 <img
                   src={profile.avatar}
-                  alt="avatar"
+                  alt={`Аватар ${profile.slug}`}
                   className="w-24 h-24 rounded-full border-4 border-white shadow absolute left-1/2 -translate-x-1/2 -top-12 bg-white"
                 />
               )}
@@ -216,7 +244,11 @@ const ProfileCustomizationPage: React.FC = () => {
                         {block.text}
                       </a>
                     ) : block.type === 'text' ? (
-                      <div key={i} className="px-3 py-2 text-gray-800 text-left" dangerouslySetInnerHTML={{ __html: block.text }} />
+                      <div
+                        key={i}
+                        className="px-3 py-2 text-gray-800 text-left"
+                        dangerouslySetInnerHTML={{ __html: sanitize(block.text || '') }}
+                      />
                     ) : block.type === 'divider' ? (
                       <hr key={i} className="border-gray-300 my-2" />
                     ) : null

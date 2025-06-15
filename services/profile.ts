@@ -10,7 +10,7 @@ export async function checkSlugUnique(slug: string) {
   return res.available;
 }
 
-export async function publishProfile(slug: string, data: unknown) {
+export async function publishProfile(slug: string, data: Record<string, unknown>) {
   const url = `/api/publish/${encodeURIComponent(slug)}`;
   await fetchJson(url, z.any(), { method: 'POST', body: data });
 }

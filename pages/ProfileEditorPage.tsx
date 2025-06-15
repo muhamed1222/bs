@@ -1,35 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, unstable_usePrompt } from 'react-router-dom';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { ProfileEditor } from '../components/ProfileEditor';
 import useAuth from '../hooks/useAuth';
 import { useToast } from '../components/ToastProvider';
-
-const LoadingSpinner: React.FC = () => (
-  // Страница редактирования профиля
-  <div className="flex justify-center items-center min-h-[400px]">
-    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
-    <span className="ml-3 text-gray-600">Загрузка...</span>
-  </div>
-);
-
-const ErrorMessage: React.FC<{ message: string; onRetry?: () => void }> = ({
-  message,
-  onRetry,
-}) => (
-  <div className="flex flex-col items-center justify-center min-h-[400px] bg-red-50 rounded-lg p-8">
-    <div className="text-red-600 text-xl mb-4">⚠️ Ошибка</div>
-    <p className="text-gray-700 text-center mb-4">{message}</p>
-    {onRetry && (
-      <button
-        onClick={onRetry}
-        className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
-      >
-        Попробовать снова
-      </button>
-    )}
-  </div>
-);
+import LoadingSpinner from '../components/account/LoadingSpinner';
+import ErrorMessage from '../components/account/ErrorMessage';
 
 const ProfileEditorPage: React.FC = () => {
   const navigate = useNavigate();
@@ -38,6 +14,11 @@ const ProfileEditorPage: React.FC = () => {
   const { showSuccess, showError } = useToast();
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [editorKey, setEditorKey] = useState(0);
+
+  unstable_usePrompt({
+    when: hasUnsavedChanges,
+    message: 'У вас есть несохраненные изменения. Покинуть страницу?',
+  });
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {

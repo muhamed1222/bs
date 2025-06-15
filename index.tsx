@@ -8,6 +8,7 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { AuthProvider } from './contexts/AuthContext';
 import { ToastProvider } from './components/ToastProvider';
 import { ViewModeProvider } from './contexts/ViewModeContext';
+import { I18nProvider } from './contexts/I18nContext';
 import { setupDebug } from './utils/debug';
 import './index.css';
 
@@ -35,11 +36,13 @@ root.render(
       <BrowserRouter>
         <AuthProvider>
           <ViewModeProvider>
-            <ToastProvider>
-              <ErrorBoundary>
-                <App />
-              </ErrorBoundary>
-            </ToastProvider>
+            <I18nProvider>
+              <ToastProvider>
+                <ErrorBoundary>
+                  <App />
+                </ErrorBoundary>
+              </ToastProvider>
+            </I18nProvider>
           </ViewModeProvider>
         </AuthProvider>
       </BrowserRouter>

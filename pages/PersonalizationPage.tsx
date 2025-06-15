@@ -1,11 +1,15 @@
 // Быстрая персонализация
 import React, { useState } from 'react';
+import { sanitize } from '../utils/sanitize';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { AvatarUploader } from '../components/AvatarUploader';
 import { CoverUploader } from '../components/CoverUploader';
 import { SlugEditor } from '../components/SlugEditor';
 import { ProfileLayoutSelector } from '../components/ProfileLayoutSelector';
 import { RichTextEditor } from '../components/RichTextEditor';
+import { useSlugValidation } from '../hooks/useSlugValidation';
+
+const RESERVED_SLUGS = ['admin', 'login', 'me', 'profile'];
 
 const PersonalizationPage: React.FC = () => {
   // Быстрая персонализация
@@ -45,6 +49,14 @@ const PersonalizationPage: React.FC = () => {
     <StandardPageLayout title="Редактор персонализации">
       <div className="flex flex-col lg:flex-row gap-6">
         <aside className="w-full lg:w-1/3 space-y-4">
+          <AvatarUploader onChange={setAvatarPreview} alt="Предпросмотр аватара" />
+          <CoverUploader onChange={setCoverPreview} alt="Предпросмотр обложки" />
+          <SlugEditor
+            value={slug}
+            onChange={(s) => setSlug(s.replace(/\s+/g, '-').toLowerCase())}
+            valid={slugValid}
+            base="https://basis.app/"
+          />
           <div className="space-y-4">
             {blocks.map((val, i) => (
               <div key={i}>
@@ -56,14 +68,17 @@ const PersonalizationPage: React.FC = () => {
               </div>
             ))}
           </div>
-          <ProfileLayoutSelector value={layout} onChange={setLayout} />
+          <ProfileLayoutSelector
+            value={layout}
+            onChange={(v) => setLayout(v as 'feed' | 'grid' | 'cards')}
+          />
         </aside>
         <main className="flex-1">
           <div className="border rounded overflow-hidden">
             {coverPreview && (
               <img
                 src={coverPreview}
-                alt="cover"
+                alt="Предпросмотр обложки"
                 className="w-full h-32 object-cover"
               />
             )}
@@ -71,7 +86,7 @@ const PersonalizationPage: React.FC = () => {
               {avatarPreview && (
                 <img
                   src={avatarPreview}
-                  alt="avatar"
+                  alt="Предпросмотр аватара"
                   className="w-24 h-24 rounded-full -mt-12 border-4 border-white"
                 />
               )}
@@ -81,7 +96,7 @@ const PersonalizationPage: React.FC = () => {
                     key={i}
                     href="#"
                     className="px-4 py-2 bg-blue-500 text-white rounded inline-block"
-                    dangerouslySetInnerHTML={{ __html: val }}
+                    dangerouslySetInnerHTML={{ __html: sanitize(val) }}
                   />
                 ))}
               </div>
