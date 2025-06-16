@@ -80,7 +80,6 @@ import { useViewMode } from '../contexts/ViewModeContext';
           </div>
         </div>
       </div>
-    </>
   );
 };
 
