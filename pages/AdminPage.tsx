@@ -2,12 +2,12 @@
 import React from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { Link } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import AdminSectionLink from '../components/admin/AdminSectionLink';
 
 const AdminPage: React.FC = () => {
   const { user } = useAuth();
-  const isStaff = user?.role === 'staff' || user?.role === 'owner';
+  const isStaff = user?.role !== 'user';
 
   if (!isStaff) {
     return (

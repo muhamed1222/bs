@@ -1,25 +1,48 @@
-export type ToastType = 'success' | 'error' | 'warning';
+import { toast } from 'react-toastify';
+import { logService } from '../services/logging/LogService';
 
-let handler: (type: ToastType, message: string) => void = () => {};
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
-export function setToastHandler(
-  fn: (type: ToastType, message: string) => void
-) {
-  handler = fn;
+type ToastHandler = (type: ToastType, message: string) => void;
+
+let toastHandler: ToastHandler | null = null;
+
+export const setToastHandler = (handler: ToastHandler) => {
+  toastHandler = handler;
+};
+
+export function showError(message: string): void {
+  logService.error(message);
+  if (toastHandler) {
+    toastHandler('error', message);
+  } else {
+    toast.error(message);
+  }
 }
 
-function emit(type: ToastType, message: string) {
-  handler(type, message);
+export function showSuccess(message: string): void {
+  logService.info(message);
+  if (toastHandler) {
+    toastHandler('success', message);
+  } else {
+    toast.success(message);
+  }
 }
 
-export function showSuccess(message: string) {
-  emit('success', message);
+export function showWarning(message: string): void {
+  logService.warn(message);
+  if (toastHandler) {
+    toastHandler('warning', message);
+  } else {
+    toast.warning(message);
+  }
 }
 
-export function showError(message: string) {
-  emit('error', message);
-}
-
-export function showWarning(message: string) {
-  emit('warning', message);
+export function showInfo(message: string): void {
+  logService.info(message);
+  if (toastHandler) {
+    toastHandler('info', message);
+  } else {
+    toast.info(message);
+  }
 }

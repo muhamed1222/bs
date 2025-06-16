@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { checkSlugUnique, publishProfile } from '../services/profile';
+import { checkSlugAvailability } from '../services/slugService';
+import { publishProfile } from '../services/profile';
 import { useToast } from './ToastProvider';
 
 interface Props {
@@ -17,8 +18,8 @@ export const PublishProfileButton: React.FC<Props> = ({ slug, data }) => {
     if (!window.confirm('Опубликовать профиль?')) return;
     setPublishing(true);
     try {
-      const unique = await checkSlugUnique(slug);
-      if (!unique) throw new Error('Слаг занят');
+      const available = await checkSlugAvailability(slug);
+      if (!available) throw new Error('Слаг занят');
       await publishProfile(slug, { ...data, status });
       showSuccess('Профиль опубликован');
     } catch (e) {

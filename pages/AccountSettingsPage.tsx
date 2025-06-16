@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import StandardPageLayout from '../layouts/StandardPageLayout';
-import useAuth from '../hooks/useAuth';
+import { useAuth } from '../hooks/useAuth';
 import useNotification from '../hooks/useNotification';
 import LoadingSpinner from '../components/account/LoadingSpinner';
 import ErrorMessage from '../components/account/ErrorMessage';
@@ -76,7 +76,7 @@ const AccountSettingsPage: React.FC = () => {
     }
   }, [user]);
 
-  const loadUserData = async () => {
+  const loadUserData = async (): Promise<void> => {
     try {
       setLoading(true);
       const [userResponse, activityResponse, apiKeysResponse] = await Promise.all([
@@ -110,7 +110,7 @@ const AccountSettingsPage: React.FC = () => {
     }
   };
 
-  const handleSaveProfile = async (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setSaving({ ...saving, profile: true });
     setErrors({ ...errors, profile: '' });
@@ -150,7 +150,7 @@ const AccountSettingsPage: React.FC = () => {
     }
   };
 
-  const handleChangePassword = async (e: React.FormEvent) => {
+  const handleChangePassword = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     setSaving({ ...saving, password: true });
     setErrors({ ...errors, password: '' });
@@ -190,7 +190,7 @@ const AccountSettingsPage: React.FC = () => {
     }
   };
 
-  const handleAvatarUpload = async (file: File) => {
+  const handleAvatarUpload = async (file: File): Promise<void> => {
     setSaving({ ...saving, avatar: true });
     try {
       const formData = new FormData();
@@ -213,7 +213,7 @@ const AccountSettingsPage: React.FC = () => {
     }
   };
 
-  const toggle2FA = async () => {
+  const toggle2FA = async (): Promise<void> => {
     setSaving({ ...saving, twoFactor: true });
     try {
       const response = await fetch('/api/user/2fa/toggle', {
@@ -232,7 +232,7 @@ const AccountSettingsPage: React.FC = () => {
     }
   };
 
-  const generateApiKey = async () => {
+  const generateApiKey = async (): Promise<void> => {
     setSaving({ ...saving, apiKey: true });
     try {
       const response = await fetch('/api/user/api-keys', {
@@ -250,6 +250,24 @@ const AccountSettingsPage: React.FC = () => {
       showNotification('Ошибка создания API ключа', 'error');
     } finally {
       setSaving({ ...saving, apiKey: false });
+    }
+  };
+
+  const revokeApiKey = async (keyId: string): Promise<void> => {
+    setSaving({ ...saving, [keyId]: true });
+    try {
+      const response = await fetch(`/api/user/api-keys/${keyId}`, {
+        method: 'DELETE',
+      });
+
+      if (!response.ok) throw new Error('Ошибка отзыва API ключа');
+
+      setApiKeys((prev) => prev.filter((key) => key.id !== keyId));
+      showNotification('API ключ отозван', 'success');
+    } catch (error) {
+      showNotification('Ошибка отзыва API ключа', 'error');
+    } finally {
+      setSaving({ ...saving, [keyId]: false });
     }
   };
 

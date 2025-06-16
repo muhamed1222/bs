@@ -158,6 +158,78 @@ export function initRest(app: import('express').Express) {
     res.json({ tariffs, billing, history });
   });
 
+  // Эндпоинты для работы с блоками
+  router.get('/blocks', (_req, res) => {
+    // Временные данные для демонстрации
+    const blocks = [
+      {
+        id: '1',
+        type: 'text',
+        content: 'Привет! Это мой первый блок',
+        style: {
+          backgroundColor: '#ffffff',
+          textColor: '#333333',
+          borderRadius: '8px',
+          padding: '16px',
+          margin: '8px'
+        },
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: '2',
+        type: 'image',
+        content: 'https://picsum.photos/400/300',
+        style: {
+          borderRadius: '12px',
+          margin: '16px'
+        },
+        createdAt: new Date(),
+        updatedAt: new Date()
+      },
+      {
+        id: '3',
+        type: 'button',
+        content: 'Нажми меня',
+        style: {
+          backgroundColor: '#4f46e5',
+          textColor: '#ffffff',
+          borderRadius: '6px',
+          padding: '12px 24px',
+          margin: '8px'
+        },
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }
+    ];
+    res.json(blocks);
+  });
+
+  router.post('/blocks', (req, res) => {
+    const block = {
+      id: Date.now().toString(),
+      ...req.body,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+    res.status(201).json(block);
+  });
+
+  router.patch('/blocks/:id', (req, res) => {
+    const { id } = req.params;
+    const block = {
+      id,
+      ...req.body,
+      updatedAt: new Date()
+    };
+    res.json(block);
+  });
+
+  router.delete('/blocks/:id', (req, res) => {
+    const { id } = req.params;
+    res.status(204).send();
+  });
+
   app.use('/api', router);
   app.post('/webhook/event', (req, res) => {
     console.log('Received event', req.body);

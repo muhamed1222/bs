@@ -10,6 +10,7 @@ export interface BentoItem {
   gridClass?: string; // Tailwind classes for grid spanning
 
   // Content fields
+  // eslint-disable-next-line no-undef
   icon?: React.FC<React.SVGProps<SVGSVGElement>>;
   iconBgClass?: string; // e.g. "bg-gray-800" for icon background
   title?: string;
@@ -39,7 +40,7 @@ export interface UserProfile {
 export interface SocialLink {
   id: string;
   href: string;
-  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }
 
 export interface PublicProfileData {
