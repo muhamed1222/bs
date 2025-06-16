@@ -1,16 +1,23 @@
+import { api } from './api';
 import { z } from 'zod';
-import { fetchJson } from './api';
 
-export const SlugCheckResponse = z.object({ available: z.boolean() });
+const ProfileSchema = z.object({
+  id: z.string(),
+  username: z.string(),
+  bio: z.string().optional(),
+  avatar: z.string().optional(),
+  socialLinks: z.array(z.object({
+    platform: z.string(),
+    url: z.string().url()
+  })).optional()
+});
 
-export async function checkSlugUnique(slug: string) {
-  // Placeholder API call
-  const url = `/api/check-slug?slug=${encodeURIComponent(slug)}`;
-  const res = await fetchJson(url, SlugCheckResponse);
-  return res.available;
+export type Profile = z.infer<typeof ProfileSchema>;
+
+export async function getProfile(username: string): Promise<Profile> {
+  return api.get(`/api/profiles/${username}`, ProfileSchema);
 }
 
-export async function publishProfile(slug: string, data: Record<string, unknown>) {
-  const url = `/api/publish/${encodeURIComponent(slug)}`;
-  await fetchJson(url, z.any(), { method: 'POST', body: data });
+export async function updateProfile(data: Partial<Profile>): Promise<Profile> {
+  return api.put('/api/profiles/me', data, ProfileSchema);
 }

@@ -1,26 +1,52 @@
 import { useState, useCallback } from 'react';
-import { useToast } from '../components/ToastProvider';
+import { logService } from '../services/logging/LogService';
 
-export interface AsyncState<T> {
+interface AsyncState<T> {
+  data: T | null;
   loading: boolean;
-  data?: T;
-  error?: unknown;
+  error: Error | null;
 }
 
-export function useAsync<T>(asyncFn: () => Promise<T>) {
-  const [state, setState] = useState<AsyncState<T>>({ loading: false });
-  const { showError } = useToast();
+interface UseAsyncOptions {
+  onSuccess?: (data: any) => void;
+  onError?: (error: Error) => void;
+  logPrefix?: string;
+}
 
-  const run = useCallback(async () => {
-    setState({ loading: true });
+export function useAsync<T>(options: UseAsyncOptions = {}) {
+  const [state, setState] = useState<AsyncState<T>>({
+    data: null,
+    loading: false,
+    error: null
+  });
+
+  const execute = useCallback(async (promise: Promise<T>) => {
+    const { onSuccess, onError, logPrefix = 'useAsync' } = options;
+
+    setState(prev => ({ ...prev, loading: true, error: null }));
+
     try {
-      const data = await asyncFn();
-      setState({ loading: false, data });
+      const data = await promise;
+      setState({ data, loading: false, error: null });
+      onSuccess?.(data);
+      logService.info(`${logPrefix}: Operation completed successfully`, { data });
+      return data;
     } catch (error) {
-      setState({ loading: false, error });
-      showError('Ошибка');
+      const err = error instanceof Error ? error : new Error('Unknown error');
+      setState({ data: null, loading: false, error: err });
+      onError?.(err);
+      logService.error(`${logPrefix}: Operation failed`, err);
+      throw err;
     }
-  }, [asyncFn]);
+  }, [options]);
 
-  return { ...state, run };
+  const reset = useCallback(() => {
+    setState({ data: null, loading: false, error: null });
+  }, []);
+
+  return {
+    ...state,
+    execute,
+    reset
+  };
 }

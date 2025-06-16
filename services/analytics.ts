@@ -30,7 +30,7 @@ function load(): AnalyticsData {
   }
 }
 
-async function syncFromCloud() {
+async function syncFromCloud(): Promise<void> {
   try {
     const data = await loadData<AnalyticsData>('analytics', 'default');
     if (data) {
@@ -41,7 +41,7 @@ async function syncFromCloud() {
   }
 }
 
-async function syncToCloud(data: AnalyticsData) {
+async function syncToCloud(data: AnalyticsData): Promise<void> {
   try {
     await saveData('analytics', 'default', data);
   } catch (e) {
@@ -49,7 +49,7 @@ async function syncToCloud(data: AnalyticsData) {
   }
 }
 
-function save(data: AnalyticsData) {
+function save(data: AnalyticsData): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -57,11 +57,11 @@ export function isIncognito(): boolean {
   return localStorage.getItem(INCOGNITO_KEY) === '1';
 }
 
-export function setIncognito(value: boolean) {
+export function setIncognito(value: boolean): void {
   localStorage.setItem(INCOGNITO_KEY, value ? '1' : '0');
 }
 
-export function recordView() {
+export function recordView(): void {
   if (isIncognito()) return;
   const data = load();
   data.views += 1;
@@ -73,7 +73,7 @@ export function recordView() {
   void syncToCloud(data);
 }
 
-export function recordLinkClick(id: string) {
+export function recordLinkClick(id: string): void {
   if (isIncognito()) return;
   const data = load();
   data.linkClicks[id] = (data.linkClicks[id] || 0) + 1;
@@ -81,7 +81,7 @@ export function recordLinkClick(id: string) {
   void syncToCloud(data);
 }
 
-export function recordReaction(emoji: string) {
+export function recordReaction(emoji: string): void {
   if (isIncognito()) return;
   const data = load();
   data.reactions[emoji] = (data.reactions[emoji] || 0) + 1;
@@ -89,7 +89,7 @@ export function recordReaction(emoji: string) {
   void syncToCloud(data);
 }
 
-export function addComment(text: string) {
+export function addComment(text: string): void {
   if (isIncognito()) return;
   const data = load();
   data.comments.push({
@@ -101,7 +101,7 @@ export function addComment(text: string) {
   void syncToCloud(data);
 }
 
-export function deleteComment(id: string) {
+export function deleteComment(id: string): void {
   const data = load();
   data.comments = data.comments.filter((c) => c.id !== id);
   save(data);
@@ -112,9 +112,9 @@ export function getAnalytics(): AnalyticsData {
   return load();
 }
 
-export function clearAnalytics() {
+export function clearAnalytics(): void {
   localStorage.removeItem(STORAGE_KEY);
 }
 
 // Initial load from cloud
-syncFromCloud();
+void syncFromCloud();

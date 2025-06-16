@@ -1,6 +1,7 @@
 import type { RouteObject } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import StandardPageLayout from '../layouts/StandardPageLayout';
+import { ProtectedRoute } from '../components/ProtectedRoute';
 import HomePage from '../pages/HomePage';
 import AuthPage from '../pages/AuthPage';
 import DashboardPage from '../pages/DashboardPage';
@@ -20,14 +21,56 @@ export const routes: RouteObject[] = [
     children: [
       { index: true, element: <HomePage /> },
       { path: 'auth', element: <AuthPage /> },
-      { path: 'dashboard', element: <DashboardPage /> },
-      { path: 'editor', element: <EditorPage /> },
+      { 
+        path: 'dashboard', 
+        element: (
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'editor', 
+        element: (
+          <ProtectedRoute>
+            <EditorPage />
+          </ProtectedRoute>
+        ) 
+      },
       { path: 'public-profile/:slug', element: <PublicProfilePage /> },
-      { path: 'account', element: <AccountSettingsPage /> },
-      { path: 'billing', element: <BillingPage /> },
-      { path: 'analytics', element: <AnalyticsPage /> },
+      { 
+        path: 'account', 
+        element: (
+          <ProtectedRoute>
+            <AccountSettingsPage />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'billing', 
+        element: (
+          <ProtectedRoute>
+            <BillingPage />
+          </ProtectedRoute>
+        ) 
+      },
+      { 
+        path: 'analytics', 
+        element: (
+          <ProtectedRoute>
+            <AnalyticsPage />
+          </ProtectedRoute>
+        ) 
+      },
       { path: 'support', element: <SupportPage /> },
-      { path: 'admin', element: <AdminPage /> },
+      { 
+        path: 'admin', 
+        element: (
+          <ProtectedRoute requiredRole="admin">
+            <AdminPage />
+          </ProtectedRoute>
+        ) 
+      },
       { path: 'legal', element: <LegalPage /> },
       { path: '*', element: <StandardPageLayout title="404 - Page Not Found" /> },
     ],

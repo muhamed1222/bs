@@ -1,32 +1,27 @@
-import { useCallback, useState } from 'react';
-import { useAuth as useAuthContext } from '../contexts/AuthContext';
-import * as auth from '../services/auth';
+import { useEffect, useState } from 'react';
+import { AuthService, AuthState, User } from '../services/auth/types';
+import { AuthServiceImpl } from '../services/auth/AuthServiceImpl';
 
-export function useAuth() {
-  const ctx = useAuthContext();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+const authService: AuthService = new AuthServiceImpl();
 
-  const refreshUser = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      const u = await auth.getCurrentUser();
-      ctx.updateUser(u);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Unknown error');
-    } finally {
-      setLoading(false);
-    }
-  }, [ctx]);
+export const useAuth = () => {
+  const [state, setState] = useState<AuthState>({
+    isAuthenticated: authService.isAuthenticated(),
+    user: authService.getUser(),
+    loading: false,
+    error: null
+  });
+
+  useEffect(() => {
+    const unsubscribe = authService.subscribe(setState);
+    return () => unsubscribe();
+  }, []);
 
   return {
-    ...ctx,
-    loading,
-    error,
-    isAuthenticated: Boolean(ctx.user),
-    refreshUser,
+    ...state,
+    login: authService.login.bind(authService),
+    logout: authService.logout.bind(authService),
+    hasRole: authService.hasRole.bind(authService),
+    hasPermission: authService.hasPermission.bind(authService)
   };
-}
-
-export default useAuth;
+};
