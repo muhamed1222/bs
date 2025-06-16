@@ -10,17 +10,6 @@ import { useViewMode } from '../contexts/ViewModeContext';
 
 export const Header: React.FC = () => {
   const { isDesktopView, setIsDesktopView } = useViewMode();
-
-  const handleDesktopView = (): void => {
-    setIsDesktopView(true);
-  };
-
-  const handleMobileView = (): void => {
-    setIsDesktopView(false);
-  };
-
-  return (
-    <header className="bg-white border-b border-gray-200">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[48px]">
           {/* Left: Logo */}
@@ -44,7 +33,6 @@ export const Header: React.FC = () => {
                 id="view-toggle-desktop"
                 aria-label="Desktop view"
                 aria-pressed={isDesktopView}
-                onClick={handleDesktopView}
                 className={`p-[10px] rounded-[9px] transition-all duration-300 ${
                   isDesktopView
                     ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
@@ -58,7 +46,6 @@ export const Header: React.FC = () => {
               <button
                 aria-label="Mobile view"
                 aria-pressed={!isDesktopView}
-                onClick={handleMobileView}
                 className={`p-[10px] rounded-[9px] transition-all duration-300 ${
                   !isDesktopView
                     ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
