@@ -1,17 +1,17 @@
-import { useQuery, UseQueryOptions } from '@tanstack/react-query';
-import type { ZodSchema } from 'zod';
-import { fetchJson, ApiOptions } from '../services/api';
+import { useQuery } from '@tanstack/react-query';
+import { api } from '../services/api';
+import { z } from 'zod';
 
-export function useApiQuery<T>(
-  key: string | unknown[],
-  url: string,
-  schema: ZodSchema<T>,
-  options?: ApiOptions,
-  queryOptions?: Omit<UseQueryOptions<T>, 'queryKey' | 'queryFn'>
-) {
-  return useQuery<T>({
-    queryKey: Array.isArray(key) ? key : [key],
-    queryFn: () => fetchJson(url, schema, options),
-    ...(queryOptions || {}),
+interface UseApiQueryOptions<T> {
+  url: string;
+  schema: z.ZodType<T>;
+  enabled?: boolean;
+}
+
+export function useApiQuery<T>({ url, schema, enabled = true }: UseApiQueryOptions<T>) {
+  return useQuery({
+    queryKey: [url],
+    queryFn: () => api.get(url, schema),
+    enabled
   });
 }

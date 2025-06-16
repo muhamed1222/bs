@@ -1,47 +1,81 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { logService } from './logging/LogService';
+
+interface ImportMetaEnv {
+  readonly VITE_SUPABASE_URL: string;
+  readonly VITE_SUPABASE_ANON_KEY: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 let client: SupabaseClient | undefined;
 
-export function getClient() {
-  if (client) return client;
-  const url = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-  const key = import.meta.env.VITE_SUPABASE_KEY || process.env.SUPABASE_KEY;
-  if (url && key) {
-    client = createClient(url, key);
+export function getClient(): SupabaseClient | undefined {
+  if (!client && supabaseUrl && supabaseAnonKey) {
+    client = createClient(supabaseUrl, supabaseAnonKey);
+    logService.info('Supabase client initialized');
   }
   return client;
 }
 
-export async function saveData(table: string, id: string, data: unknown) {
+export async function saveData(table: string, id: string, data: unknown): Promise<void> {
   const supabase = getClient();
-  if (supabase) {
-    await supabase.from(table).upsert({ id, data }).throwOnError();
-  } else {
-    localStorage.setItem(`${table}_${id}`, JSON.stringify(data));
+  if (!supabase) {
+    throw new Error('Supabase client not initialized');
   }
+
+  const { error } = await supabase
+    .from(table)
+    .upsert({ id, data });
+
+  if (error) {
+    logService.error('Error saving data to Supabase', { errorMessage: error.message });
+    throw error;
+  }
+
+  logService.info('Data saved successfully', { table, id });
 }
 
-export async function loadData<T>(table: string, id: string): Promise<T | undefined> {
+export async function loadData<T>(table: string, id: string): Promise<T | null> {
   const supabase = getClient();
-  if (supabase) {
-    const { data, error } = await supabase
-      .from(table)
-      .select('data')
-      .eq('id', id)
-      .single();
-    if (error) throw error;
-    return data?.data as T | undefined;
-  } else {
-    const raw = localStorage.getItem(`${table}_${id}`);
-    return raw ? (JSON.parse(raw) as T) : undefined;
+  if (!supabase) {
+    throw new Error('Supabase client not initialized');
   }
+
+  const { data, error } = await supabase
+    .from(table)
+    .select('data')
+    .eq('id', id)
+    .single();
+
+  if (error) {
+    logService.error('Error loading data from Supabase', { errorMessage: error.message });
+    throw error;
+  }
+
+  return data?.data as T ?? null;
 }
 
-export async function deleteData(table: string, id: string) {
+export async function deleteData(table: string, id: string): Promise<void> {
   const supabase = getClient();
-  if (supabase) {
-    await supabase.from(table).delete().eq('id', id).throwOnError();
-  } else {
-    localStorage.removeItem(`${table}_${id}`);
+  if (!supabase) {
+    throw new Error('Supabase client not initialized');
   }
+
+  const { error } = await supabase
+    .from(table)
+    .delete()
+    .eq('id', id);
+
+  if (error) {
+    logService.error('Error deleting data from Supabase', { errorMessage: error.message });
+    throw error;
+  }
+
+  logService.info('Data deleted successfully', { table, id });
 }

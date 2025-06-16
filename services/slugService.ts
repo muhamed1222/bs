@@ -1,20 +1,17 @@
+import { api } from './api';
 import { z } from 'zod';
-import { fetchJson } from './api';
 
-const checkResponse = z.object({ available: z.boolean() });
-const registerResponse = z.object({ success: z.boolean() });
+const SlugCheckResponse = z.object({
+  available: z.boolean(),
+  suggestions: z.array(z.string()).optional(),
+});
 
-export async function checkSlug(slug: string): Promise<{ available: boolean }> {
-  return fetchJson(
-    `/api/check-slug?slug=${encodeURIComponent(slug)}`,
-    checkResponse,
-  );
+export async function checkSlugAvailability(slug: string): Promise<boolean> {
+  const response = await api.get('/api/slug/check', SlugCheckResponse);
+  return response.available;
 }
 
-export async function registerSlug(slug: string): Promise<{ success: boolean }> {
-  return fetchJson(
-    '/api/register-slug',
-    registerResponse,
-    { method: 'POST', body: { slug } },
-  );
+export async function generateSlug(text: string): Promise<string> {
+  const response = await api.post('/api/slug/generate', { text }, z.object({ slug: z.string() }));
+  return response.slug;
 }

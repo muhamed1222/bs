@@ -1,48 +1,80 @@
+import { z, type ZodSchema } from 'zod';
+import { showError } from '../utils/toast';
+
 export interface ApiOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   body?: unknown;
   headers?: Record<string, string>;
 }
 
-import { ZodSchema } from 'zod';
-import { showError } from '../utils/toast';
-
 export function handleApiError(error: unknown) {
   const msg = error instanceof Error ? error.message : 'Неизвестная ошибка';
   showError(msg);
 }
 
-export async function fetchJson<T>(
-  url: string,
-  schema: ZodSchema<T>,
-  options: ApiOptions = {}
-): Promise<T> {
-  const { method = 'GET', body, headers } = options;
-  try {
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...(headers || {}),
-      },
-      body: body ? JSON.stringify(body) : undefined,
-    });
-    if (!response.ok) {
-      let message = `HTTP error ${response.status}`;
-      try {
-        const err = await response.json();
-        message = err.error || message;
-      } catch {
-        /* ignore */
+const API_BASE_URL = '/api';
+
+class ApiService {
+  private async fetchJson<T>(url: string, options: globalThis.RequestInit = {}): Promise<T> {
+    try {
+      const response = await fetch(`${API_BASE_URL}${url}`, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      const error = new Error(message);
-      handleApiError(error);
+
+      return response.json();
+    } catch (error) {
+      showError('Произошла ошибка при выполнении запроса');
       throw error;
     }
-    const json = await response.json();
-    return schema.parse(json);
-  } catch (error) {
-    handleApiError(error);
-    throw error;
+  }
+
+  public async get<T>(url: string, schema?: ZodSchema<T>): Promise<T> {
+    const data = await this.fetchJson<T>(url);
+    if (schema) {
+      return schema.parse(data);
+    }
+    return data;
+  }
+
+  public async post<T>(url: string, data: unknown, schema?: ZodSchema<T>): Promise<T> {
+    const response = await this.fetchJson<T>(url, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+    if (schema) {
+      return schema.parse(response);
+    }
+    return response;
+  }
+
+  public async put<T>(url: string, data: unknown, schema?: ZodSchema<T>): Promise<T> {
+    const response = await this.fetchJson<T>(url, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+    if (schema) {
+      return schema.parse(response);
+    }
+    return response;
+  }
+
+  public async delete<T>(url: string, schema?: ZodSchema<T>): Promise<T> {
+    const response = await this.fetchJson<T>(url, {
+      method: 'DELETE',
+    });
+    if (schema) {
+      return schema.parse(response);
+    }
+    return response;
   }
 }
+
+export const api = new ApiService();

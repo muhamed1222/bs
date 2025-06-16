@@ -2,7 +2,7 @@
 import React, { useEffect } from 'react';
 import StandardPageLayout from '../layouts/StandardPageLayout';
 import { useAsync } from '../hooks/useAsync';
-import { fetchJson } from '../services/api';
+import { api } from '../services/api';
 import { z } from 'zod';
 import { Loader } from '../components/Loader';
 import { Onboarding } from '../components/Onboarding';
@@ -10,24 +10,25 @@ import DashboardTopBar from '../components/dashboard/DashboardTopBar';
 import ProjectsSection from '../components/dashboard/ProjectsSection';
 import QuickLinksSection from '../components/dashboard/QuickLinksSection';
 
-const DashboardPage: React.FC = () => {
-  const schema = z.array(
-    z.object({
-      id: z.string(),
-      title: z.string(),
-      lastUpdated: z.string(),
-    })
-  );
+const ProjectSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  description: z.string().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string()
+});
 
+const ProjectsSchema = z.array(ProjectSchema);
+
+const DashboardPage: React.FC = () => {
   const {
     data: projects,
     loading,
-    run,
-  } = useAsync(() => fetchJson('/api/projects', schema));
+    error
+  } = useAsync(() => api.get('/api/projects', ProjectsSchema));
 
-  useEffect(() => {
-    run();
-  }, [run]);
+  if (loading) return <div>Загрузка...</div>;
+  if (error) return <div>Ошибка: {error.message}</div>;
 
   return (
     <StandardPageLayout title="3. Dashboard">

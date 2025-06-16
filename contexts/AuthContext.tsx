@@ -1,53 +1,55 @@
 import React, { createContext, useContext, useState } from 'react';
-import * as auth from '../services/auth';
-
-export type UserRole = 'owner' | 'editor' | 'staff';
-
-export interface User {
-  id: string;
-  email: string;
-  role: UserRole;
-}
+import { login, signup, resetPassword, logout, getUser } from '../services/auth';
+import { User } from '../services/auth/types';
 
 export interface AuthContextValue {
-  user?: User;
+  user: User | null;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string, name?: string) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
-  updateUser: (user?: User) => void;
+  updateUser: (user: User | null) => void;
   logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<User | null>(getUser());
 
-  const login = async (email: string, password: string) => {
-    const u = await auth.login(email, password);
+  const handleLogin = async (email: string, password: string) => {
+    const u = await login(email, password);
     setUser(u);
   };
 
-  const signup = async (email: string, password: string, name?: string) => {
-    const u = await auth.signup(email, password, name);
+  const handleSignup = async (email: string, password: string, name?: string) => {
+    const u = await signup(email, password, name);
     setUser(u);
   };
 
-  const resetPassword = async (email: string) => {
-    await auth.resetPassword(email);
+  const handleResetPassword = async (email: string) => {
+    await resetPassword(email);
   };
 
-  const updateUser = (newUser?: User) => {
+  const handleUpdateUser = (newUser: User | null) => {
     setUser(newUser);
   };
 
-  const logout = async () => {
-    await auth.logout();
-    setUser(undefined);
+  const handleLogout = async () => {
+    await logout();
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, resetPassword, updateUser, logout }}>
+    <AuthContext.Provider 
+      value={{ 
+        user, 
+        login: handleLogin, 
+        signup: handleSignup, 
+        resetPassword: handleResetPassword, 
+        updateUser: handleUpdateUser, 
+        logout: handleLogout 
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
