@@ -8,11 +8,11 @@ import {
 import { Tooltip } from './Tooltip';
 import { useViewMode } from '../contexts/ViewModeContext';
 
-export const Header: React.FC = () => {
+export const : React.FC = () => {
   const { isDesktopView, setIsDesktopView } = useViewMode();
 
   return (
-    <header className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 py-3 shadow-sm">
+    < className="bg-white/95 backdrop-blur-md border-b border-gray-200/50 py-3 shadow-sm">
       <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-[48px]">
           {/* Left: Logo */}
@@ -85,7 +85,7 @@ export const Header: React.FC = () => {
           </div>
         </div>
       </div>
-    </header>
+    </>
   );
 };
 
