@@ -1,82 +1,119 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { Skeleton } from "../../components/Skeleton";
-import { type HomeCase } from "../../mock/home";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { typography, spacing, borderRadius, shadows } from '../../styles/typography';
 
-interface ExamplesSectionProps {
-  cases: HomeCase[];
-  loading: boolean;
-}
+const examples = [
+  {
+    title: 'Портфолио дизайнера',
+    description: 'Современный дизайн с акцентом на визуальные работы',
+    image: '/examples/designer-preview.jpg',
+    author: 'Анна Петрова',
+    gradient: 'from-blue-500 to-indigo-500',
+  },
+  {
+    title: 'Страница фотографа',
+    description: 'Минималистичный стиль с галереей работ',
+    image: '/examples/photographer-preview.jpg',
+    author: 'Иван Смирнов',
+    gradient: 'from-purple-500 to-pink-500',
+  },
+  {
+    title: 'Портфолио разработчика',
+    description: 'Технический дизайн с акцентом на проекты',
+    image: '/examples/developer-preview.jpg',
+    author: 'Михаил Иванов',
+    gradient: 'from-orange-500 to-red-500',
+  },
+];
 
-const ExamplesSection: React.FC<ExamplesSectionProps> = ({ cases, loading }) => (
-  <section className="max-w-7xl mx-auto px-6">
-    <div className="text-center mb-20">
-      <h2 className="text-5xl md:text-6xl font-black mb-6 text-gray-900">Примеры страниц пользователей</h2>
-      <p className="text-xl md:text-2xl text-gray-600 font-light">Вдохновляйтесь работами нашего сообщества</p>
-    </div>
-
-    {loading ? (
-      <div className="grid md:grid-cols-3 gap-8">
-        {[1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-96 rounded-3xl" />
-        ))}
-      </div>
-    ) : cases.length === 0 ? (
-      <div className="text-center text-gray-500 py-20">
-        <div className="w-32 h-32 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-          </svg>
-        </div>
-        <p className="text-2xl font-semibold">Нет кейсов — стань первым!</p>
-      </div>
-    ) : (
-      <div className="grid md:grid-cols-3 gap-8">
-        {cases.slice(0, 3).map((c) => (
-          <div
-            key={c.id}
-            className="group bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-3xl transition-all duration-500 hover:-translate-y-2 border border-gray-100"
+export const ExamplesSection: React.FC = () => {
+  return (
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
+            style={typography.h2}
           >
-            <div className="relative overflow-hidden">
-              <img
-                src={c.preview}
-                alt={`Превью страницы ${c.title}`}
-                className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            </div>
-            <div className="p-8">
-              <h3 className="text-xl font-bold mb-3 text-gray-900 group-hover:text-blue-600 transition-colors">{c.title}</h3>
-              <p className="text-gray-600 mb-6 leading-relaxed">{c.desc}</p>
-              <Link
-                to={`/profile/${c.username}`}
-                className="inline-flex items-center text-blue-600 hover:text-blue-700 font-semibold group-hover:translate-x-2 transition-transform duration-300"
+            Примеры портфолио
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-xl text-gray-600 max-w-3xl mx-auto"
+            style={typography.body}
+          >
+            Вдохновляйтесь работами других пользователей
+          </motion.p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-8">
+          {examples.map((example, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              className="group"
+            >
+              <div
+                className="relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+                style={{ borderRadius: borderRadius.lg, boxShadow: shadows.md }}
               >
-                Посмотреть
-                <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </Link>
-            </div>
-          </div>
-        ))}
-      </div>
-    )}
+                <div className="aspect-w-16 aspect-h-9">
+                  <img
+                    src={example.image}
+                    alt={example.title}
+                    className="object-cover w-full h-full transform group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <div className="p-6">
+                  <div
+                    className={`inline-block px-3 py-1 rounded-full bg-gradient-to-r ${example.gradient} text-white text-sm font-medium mb-4`}
+                    style={{ borderRadius: borderRadius.full }}
+                  >
+                    {example.author}
+                  </div>
+                  <h3
+                    className="text-xl font-bold text-gray-900 mb-2"
+                    style={typography.h3}
+                  >
+                    {example.title}
+                  </h3>
+                  <p
+                    className="text-gray-600"
+                    style={typography.body}
+                  >
+                    {example.description}
+                  </p>
+                </div>
+              </div>
+            </motion.div>
+          ))}
+        </div>
 
-    {cases.length > 3 && (
-      <div className="text-center mt-16">
-        <Link
-          to="/cases"
-          className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold rounded-2xl shadow-xl hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300"
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+          className="text-center mt-16"
         >
-          Больше примеров
-          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-          </svg>
-        </Link>
+          <button
+            className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
+            style={{ ...typography.button, borderRadius: borderRadius.md }}
+          >
+            Смотреть все примеры
+          </button>
+        </motion.div>
       </div>
-    )}
-  </section>
-);
-
-export default ExamplesSection;
+    </section>
+  );
+};

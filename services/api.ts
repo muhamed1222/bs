@@ -1,4 +1,4 @@
-import { z, type ZodSchema } from 'zod';
+import { z } from 'zod';
 import { showError } from '../utils/toast';
 
 export interface ApiOptions {
@@ -12,12 +12,13 @@ export function handleApiError(error: unknown) {
   showError(msg);
 }
 
-const API_BASE_URL = '/api';
+const API_BASE_URL = typeof window !== 'undefined' ? window.location.origin : '';
 
-class ApiService {
+export class ApiService {
   private async fetchJson<T>(url: string, options: globalThis.RequestInit = {}): Promise<T> {
     try {
-      const response = await fetch(`${API_BASE_URL}${url}`, {
+      const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+      const response = await fetch(fullUrl, {
         ...options,
         headers: {
           'Content-Type': 'application/json',
@@ -29,52 +30,43 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      return response.json();
+      const data = await response.json();
+      return data;
     } catch (error) {
-      showError('Произошла ошибка при выполнении запроса');
+      console.error('Произошла ошибка при выполнении запроса', error);
       throw error;
     }
   }
 
-  public async get<T>(url: string, schema?: ZodSchema<T>): Promise<T> {
-    const data = await this.fetchJson<T>(url);
-    if (schema) {
-      return schema.parse(data);
-    }
-    return data;
+  async get<T>(url: string, schema: z.ZodType<T>): Promise<T> {
+    const data = await this.fetchJson<unknown>(url);
+    return schema.parse(data);
   }
 
-  public async post<T>(url: string, data: unknown, schema?: ZodSchema<T>): Promise<T> {
-    const response = await this.fetchJson<T>(url, {
+  async post<T>(url: string, body: unknown, schema: z.ZodType<T>): Promise<T> {
+    const data = await this.fetchJson<unknown>(url, {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(body),
     });
-    if (schema) {
-      return schema.parse(response);
-    }
-    return response;
+    return schema.parse(data);
   }
 
-  public async put<T>(url: string, data: unknown, schema?: ZodSchema<T>): Promise<T> {
-    const response = await this.fetchJson<T>(url, {
+  async put<T>(url: string, body: unknown, schema: z.ZodType<T>): Promise<T> {
+    const data = await this.fetchJson<unknown>(url, {
       method: 'PUT',
-      body: JSON.stringify(data),
+      body: JSON.stringify(body),
     });
-    if (schema) {
-      return schema.parse(response);
-    }
-    return response;
+    return schema.parse(data);
   }
 
-  public async delete<T>(url: string, schema?: ZodSchema<T>): Promise<T> {
-    const response = await this.fetchJson<T>(url, {
+  async delete<T>(url: string, schema: z.ZodType<T>): Promise<T> {
+    const data = await this.fetchJson<unknown>(url, {
       method: 'DELETE',
     });
-    if (schema) {
-      return schema.parse(response);
-    }
-    return response;
+    return schema.parse(data);
   }
 }
 
 export const api = new ApiService();
+
+globalThis.API_BASE_URL = 'http://localhost';

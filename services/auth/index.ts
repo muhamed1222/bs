@@ -3,8 +3,8 @@ import { User, AuthResponse } from './types';
 
 const authService = AuthServiceImpl.getInstance();
 
-export async function login(email: string, password: string): Promise<User> {
-  return authService.login(email, password);
+export async function login(credentials: { email: string; password: string }): Promise<User> {
+  return authService.login(credentials);
 }
 
 export async function signup(email: string, password: string, name?: string): Promise<User> {

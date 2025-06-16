@@ -28,8 +28,9 @@ export interface AuthService {
   getUser(): User | null;
   hasRole(role: string): boolean;
   hasPermission(permission: string): boolean;
-  login(credentials: { email: string; password: string }): Promise<void>;
+  login(credentials: { email: string; password: string }): Promise<User>;
   logout(): Promise<void>;
   refreshToken(): Promise<void>;
+  updateUser(user: User): Promise<void>;
   subscribe(listener: (state: AuthState) => void): () => void;
 } 

@@ -21,3 +21,7 @@ export async function getProfile(username: string): Promise<Profile> {
 export async function updateProfile(data: Partial<Profile>): Promise<Profile> {
   return api.put('/api/profiles/me', data, ProfileSchema);
 }
+
+export async function publishProfile(slug: string, data: Record<string, unknown>): Promise<void> {
+  await api.post(`/api/profile/${slug}`, data, z.object({ success: z.boolean() }));
+}

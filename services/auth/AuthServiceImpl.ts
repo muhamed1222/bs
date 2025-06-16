@@ -1,12 +1,21 @@
 import { api } from '../api';
 import { showError } from '../../utils/toast';
-import { User, AuthResponse, UserSchema, AuthResponseSchema } from './types';
+import { User, AuthResponse, UserSchema, AuthResponseSchema, AuthService, AuthState } from './types';
 
-export class AuthServiceImpl {
+export class AuthServiceImpl implements AuthService {
   private static instance: AuthServiceImpl;
   private currentUser: User | null = null;
   private token: string | null = null;
   private refreshTokenValue: string | null = null;
+
+  private state: AuthState = {
+    isAuthenticated: false,
+    user: null,
+    loading: false,
+    error: null,
+  };
+
+  private listeners: ((state: AuthState) => void)[] = [];
 
   private constructor() {
     // Инициализация из localStorage
@@ -32,49 +41,71 @@ export class AuthServiceImpl {
     return AuthServiceImpl.instance;
   }
 
-  public async login(email: string, password: string): Promise<User> {
+  public async login(credentials: { email: string; password: string }): Promise<User> {
     try {
-      const response = await api.post<AuthResponse>('/auth/login', { email, password }, AuthResponseSchema);
-      this.setAuth(response);
+      this.setState({ loading: true, error: null });
+      const response = await api.post<AuthResponse>('/auth/login', credentials);
+      this.setState({
+        isAuthenticated: true,
+        user: response.user,
+        loading: false,
+      });
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('refreshToken', response.refreshToken);
       return response.user;
     } catch (error) {
-      showError('Ошибка при входе в систему');
+      this.setState({
+        loading: false,
+        error: error instanceof Error ? error : new Error('Login failed'),
+      });
       throw error;
     }
   }
 
   public async logout(): Promise<void> {
     try {
-      if (this.token) {
-        await api.post('/auth/logout', { refreshToken: this.refreshTokenValue });
-      }
+      this.setState({ loading: true, error: null });
+      await api.post('/auth/logout', {});
+      this.setState({
+        isAuthenticated: false,
+        user: null,
+        loading: false,
+      });
+      localStorage.removeItem('token');
+      localStorage.removeItem('refreshToken');
     } catch (error) {
-      console.error('Ошибка при выходе:', error);
-    } finally {
-      this.clearAuth();
+      this.setState({
+        loading: false,
+        error: error instanceof Error ? error : new Error('Logout failed'),
+      });
+      throw error;
     }
   }
 
   public async refreshToken(): Promise<void> {
-    if (!this.refreshTokenValue) {
-      throw new Error('Нет токена для обновления');
-    }
-
     try {
-      const response = await api.post<AuthResponse>('/auth/refresh', { refreshToken: this.refreshTokenValue }, AuthResponseSchema);
-      this.setAuth(response);
+      const refreshToken = localStorage.getItem('refreshToken');
+      if (!refreshToken) throw new Error('No refresh token');
+
+      const response = await api.post<AuthResponse>('/auth/refresh', { refreshToken });
+      localStorage.setItem('token', response.token);
+      localStorage.setItem('refreshToken', response.refreshToken);
     } catch (error) {
-      this.clearAuth();
+      this.setState({
+        isAuthenticated: false,
+        user: null,
+        error: error instanceof Error ? error : new Error('Token refresh failed'),
+      });
       throw error;
     }
   }
 
   public getUser(): User | null {
-    return this.currentUser;
+    return this.state.user;
   }
 
   public isAuthenticated(): boolean {
-    return !!this.token;
+    return this.state.isAuthenticated;
   }
 
   public getToken(): string | null {
@@ -99,5 +130,43 @@ export class AuthServiceImpl {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
+  }
+
+  async updateUser(user: User): Promise<void> {
+    try {
+      this.setState({ loading: true, error: null });
+      const response = await api.put<User>('/user/profile', user);
+      this.setState({
+        user: response,
+        loading: false,
+      });
+    } catch (error) {
+      this.setState({
+        loading: false,
+        error: error instanceof Error ? error : new Error('Update failed'),
+      });
+      throw error;
+    }
+  }
+
+  subscribe(listener: (state: AuthState) => void): () => void {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+
+  private setState(newState: Partial<AuthState>): void {
+    this.state = { ...this.state, ...newState };
+    this.listeners.forEach((listener) => listener(this.state));
+  }
+
+  hasRole(role: string): boolean {
+    return this.state.user?.role === role;
+  }
+
+  hasPermission(permission: string): boolean {
+    // TODO: Implement permission checking
+    return true;
   }
 } 
