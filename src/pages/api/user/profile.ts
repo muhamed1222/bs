@@ -1,44 +1,61 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { UserService } from '@/features/auth/services/userService';
-import { getSession } from 'next-auth/react';
+import { withAuth, AuthenticatedRequest } from '@/shared/middleware/auth';
+import { UserService } from '@/shared/services/userService';
+import { CacheService } from '@/shared/services/cacheService';
 
 export default async function handler(
-  req: NextApiRequest,
+  req: AuthenticatedRequest,
   res: NextApiResponse
 ) {
-  const session = await getSession({ req });
+  if (req.method === 'GET') {
+    return withAuth(req, res, async () => {
+      const cacheService = CacheService.getInstance();
+      const userService = UserService.getInstance();
 
-  if (!session) {
-    return res.status(401).json({ error: 'Unauthorized' });
-  }
-
-  const userId = session.user.id;
-
-  switch (req.method) {
-    case 'GET':
-      try {
-        const user = await UserService.getUserById(userId);
-        if (!user) {
-          return res.status(404).json({ error: 'User not found' });
-        }
-        return res.status(200).json(user);
-      } catch (error) {
-        console.error('Error in GET /api/user/profile:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+      // Пробуем получить данные из кеша
+      const cachedProfile = await cacheService.getProfile(req.user!.id);
+      if (cachedProfile) {
+        return res.status(200).json(cachedProfile);
       }
 
-    case 'PUT':
-      try {
-        const updates = req.body;
-        const updatedUser = await UserService.updateUser(userId, updates);
-        return res.status(200).json(updatedUser);
-      } catch (error) {
-        console.error('Error in PUT /api/user/profile:', error);
-        return res.status(500).json({ error: 'Internal server error' });
+      // Если нет в кеше, получаем из базы
+      const user = await userService.getUserById(req.user!.id);
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
       }
 
-    default:
-      res.setHeader('Allow', ['GET', 'PUT']);
-      return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+      const { password, ...userWithoutPassword } = user;
+
+      // Сохраняем в кеш
+      await cacheService.setProfile(req.user!.id, userWithoutPassword);
+
+      return res.status(200).json(userWithoutPassword);
+    });
   }
+
+  if (req.method === 'PUT') {
+    return withAuth(req, res, async () => {
+      const { name, password } = req.body;
+      const userService = UserService.getInstance();
+      const cacheService = CacheService.getInstance();
+
+      try {
+        const updatedUser = await userService.updateUser(req.user!.id, {
+          name,
+          password,
+        });
+
+        const { password: _, ...userWithoutPassword } = updatedUser;
+
+        // Инвалидируем кеш
+        await cacheService.invalidateProfile(req.user!.id);
+
+        return res.status(200).json(userWithoutPassword);
+      } catch (error) {
+        return res.status(400).json({ error: 'Failed to update user' });
+      }
+    });
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
 } 
