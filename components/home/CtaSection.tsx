@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const CtaSection: React.FC = () => (
   <section className="relative py-24 overflow-hidden">
-    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-blue-800 rounded-3xl"></div>
+    <div className="absolute inset-0 bg-gradient-to-r from-blue-700 via-purple-600 to-blue-800 rounded-3xl"></div>
     <div className="absolute inset-0 bg-black/10 rounded-3xl"></div>
     <div className="absolute top-10 left-10 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
     <div className="absolute bottom-10 right-10 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>

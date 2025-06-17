@@ -1,8 +1,11 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
 import { Header } from '../components/Header';
 
-const MainLayout: React.FC = () => {
+interface MainLayoutProps {
+  children: React.ReactNode;
+}
+
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 p-[8px] flex flex-col items-center overflow-x-hidden">
       <div className="fixed top-[8px] left-[8px] right-[8px] z-50">
@@ -12,7 +15,7 @@ const MainLayout: React.FC = () => {
       </div>
       <div className="w-full max-w-[1440px] flex flex-col pt-[72px]">
         <main className="flex-1 flex flex-col">
-          <Outlet />
+          {children}
         </main>
       </div>
     </div>

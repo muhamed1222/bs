@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { AuthService, AuthState, User } from '../services/auth/types';
 import { AuthServiceImpl } from '../services/auth/AuthServiceImpl';
 
-const authService: AuthService = new AuthServiceImpl();
+const authService: AuthService = AuthServiceImpl.getInstance();
 
 export const useAuth = () => {
   const [state, setState] = useState<AuthState>({
@@ -25,3 +25,5 @@ export const useAuth = () => {
     hasPermission: authService.hasPermission.bind(authService)
   };
 };
+
+export default useAuth;

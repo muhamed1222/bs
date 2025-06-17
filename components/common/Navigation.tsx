@@ -35,7 +35,7 @@ const Navigation: React.FC = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-black bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            <span className="text-2xl font-black bg-gradient-to-r from-blue-700 to-purple-600 bg-clip-text text-transparent">
               Basis
             </span>
           </Link>
@@ -67,7 +67,7 @@ const Navigation: React.FC = () => {
             </Link>
             <Link
               to="/signup"
-              className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+              className="px-4 py-2 bg-gradient-to-r from-blue-700 to-purple-600 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
             >
               Создать страницу
             </Link>
@@ -136,7 +136,7 @@ const Navigation: React.FC = () => {
               </Link>
               <Link
                 to="/signup"
-                className="block px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-center"
+                className="block px-4 py-2 bg-gradient-to-r from-blue-700 to-purple-600 text-white text-sm font-medium rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 text-center"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Создать страницу

@@ -27,7 +27,7 @@ const FloatingCTA: React.FC = () => {
           isHovered
             ? 'scale-105 shadow-xl'
             : 'scale-100'
-        } bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold`}
+        } bg-gradient-to-r from-blue-700 to-purple-600 text-white font-bold`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
