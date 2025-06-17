@@ -1,31 +1,43 @@
+'use client';
+
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-interface ViewModeContextValue {
-  isDesktopView: boolean;
-  setIsDesktopView: (desktop: boolean) => void;
+type ViewMode = 'edit' | 'preview' | 'live';
+
+interface ViewModeContextType {
+  viewMode: ViewMode;
+  setViewMode: (mode: ViewMode) => void;
 }
 
-const ViewModeContext = createContext<ViewModeContextValue | undefined>(undefined);
+const ViewModeContext = createContext<ViewModeContextType | undefined>(undefined);
 
-export const ViewModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const getIsDesktop = () => (typeof window === 'undefined' ? true : window.innerWidth >= 1024);
-  const [isDesktopView, setIsDesktopView] = useState<boolean>(getIsDesktop);
+export function ViewModeProvider({ children }: { children: React.ReactNode }) {
+  const [viewMode, setViewMode] = useState<ViewMode>('edit');
 
   useEffect(() => {
-    const handleResize = () => setIsDesktopView(getIsDesktop());
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+    // Восстанавливаем режим просмотра из localStorage при монтировании
+    const savedMode = localStorage.getItem('viewMode') as ViewMode;
+    if (savedMode) {
+      setViewMode(savedMode);
+    }
   }, []);
 
+  const handleSetViewMode = (mode: ViewMode) => {
+    setViewMode(mode);
+    localStorage.setItem('viewMode', mode);
+  };
+
   return (
-    <ViewModeContext.Provider value={{ isDesktopView, setIsDesktopView }}>
+    <ViewModeContext.Provider value={{ viewMode, setViewMode: handleSetViewMode }}>
       {children}
     </ViewModeContext.Provider>
   );
-};
+}
 
-export const useViewMode = () => {
-  const ctx = useContext(ViewModeContext);
-  if (!ctx) throw new Error('useViewMode must be used within ViewModeProvider');
-  return ctx;
-};
+export function useViewMode() {
+  const context = useContext(ViewModeContext);
+  if (context === undefined) {
+    throw new Error('useViewMode must be used within ViewModeProvider');
+  }
+  return context;
+}

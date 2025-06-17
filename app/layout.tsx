@@ -1,15 +1,18 @@
 import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import './globals.css'
+import dynamic from 'next/dynamic'
+import FloatingCTA from '@/components/common/FloatingCTA'
+import { Providers } from '@/components/providers'
 
-const inter = Inter({ subsets: ['latin', 'cyrillic'] })
+const Header = dynamic(() => import('@/components/Header').then(mod => mod.Header), { ssr: false });
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: {
-    default: 'BS - Создавайте и делитесь страницами',
-    template: '%s | BS',
-  },
-  description: 'Создавайте красивые страницы и делитесь ими с миром',
+  title: 'BS - Создавайте и публикуйте веб-страницы',
+  description: 'Платформа для создания и публикации веб-страниц с аналитикой и монетизацией',
   keywords: ['страницы', 'блог', 'контент', 'публикации'],
   authors: [{ name: 'BS Team' }],
   creator: 'BS Team',
@@ -66,7 +69,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Providers>
+          <Header />
+          <main className="min-h-screen pt-16">
+            {children}
+          </main>
+          <FloatingCTA />
+        </Providers>
+      </body>
     </html>
   )
 } 

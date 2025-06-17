@@ -1,87 +1,76 @@
+'use client';
+
 import React from 'react';
-import { Link } from 'react-router-dom';
-import {
-  BasisLogoParts,
-  DesktopViewIcon,
-  MobileViewIcon,
-} from './icons/IconComponents';
-import { Tooltip } from './Tooltip';
-import { useViewMode } from '../contexts/ViewModeContext';
+import Link from 'next/link';
+import { useViewMode } from '@/contexts/ViewModeContext';
+import { 
+  HomeIcon, 
+  DocumentTextIcon, 
+  ChartBarIcon, 
+  Cog6ToothIcon, 
+  UserGroupIcon, 
+  CreditCardIcon,
+  ArrowLeftOnRectangleIcon,
+  ArrowRightOnRectangleIcon
+} from '@heroicons/react/24/outline';
 
-export const Header = () => {
-  const { isDesktopView, setIsDesktopView } = useViewMode();
+const navigation = [
+  { name: 'Главная', href: '/', icon: HomeIcon },
+  { name: 'Страницы', href: '/pages', icon: DocumentTextIcon },
+  { name: 'Аналитика', href: '/analytics', icon: ChartBarIcon },
+  { name: 'Команда', href: '/team', icon: UserGroupIcon },
+  { name: 'Настройки', href: '/settings', icon: Cog6ToothIcon },
+  { name: 'Оплата', href: '/billing', icon: CreditCardIcon },
+];
+
+export function Header() {
+  const { viewMode, setViewMode } = useViewMode();
+
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between h-[48px]">
-        {/* Left: Logo */}
-        <Link
-          to="/"
-          aria-label="На главную"
-          className="flex items-center p-[6px] bg-gradient-to-r from-gray-50 to-white rounded-[16px] space-x-3 hover:shadow-md transition-all duration-300 border border-gray-100"
-        >
-          <div className="flex items-center gap-[2px] px-[6px] py-[4px]">
-            <BasisLogoParts />
+    <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16">
+          <div className="flex">
+            <div className="flex-shrink-0 flex items-center">
+              <Link href="/" className="text-2xl font-bold text-gray-900">
+                BS
+              </Link>
+            </div>
+            <nav className="ml-6 flex space-x-8">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="inline-flex items-center px-1 pt-1 text-sm font-medium text-gray-500 hover:text-gray-900"
+                >
+                  <item.icon className="h-5 w-5 mr-1" />
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
           </div>
-          <span className="font-pragmatica text-gray-900 text-[28px] font-[700] leading-[28px] tracking-tight">
-            Basis
-          </span>
-        </Link>
-
-        {/* Center: View Icons */}
-        <div className="flex items-center space-x-1 bg-gray-100 rounded-[12px] p-[3px] shadow-inner">
-          <Tooltip text="Десктопный режим">
+          <div className="flex items-center">
             <button
-              id="view-toggle-desktop"
-              aria-label="Desktop view"
-              aria-pressed={isDesktopView}
-              className={`p-[10px] rounded-[9px] transition-all duration-300 ${
-                isDesktopView
-                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                  : 'text-gray-500 hover:bg-white/50 hover:text-gray-700'
-              }`}
+              onClick={() => setViewMode(viewMode === 'edit' ? 'preview' : 'edit')}
+              className="ml-4 inline-flex items-center px-3 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
             >
-              <DesktopViewIcon className="w-[18px] h-[19px]" />
+              {viewMode === 'edit' ? (
+                <>
+                  <ArrowRightOnRectangleIcon className="h-5 w-5 mr-1" />
+                  Предпросмотр
+                </>
+              ) : (
+                <>
+                  <ArrowLeftOnRectangleIcon className="h-5 w-5 mr-1" />
+                  Редактировать
+                </>
+              )}
             </button>
-          </Tooltip>
-          <Tooltip text="Мобильный режим">
-            <button
-              aria-label="Mobile view"
-              aria-pressed={!isDesktopView}
-              className={`p-[10px] rounded-[9px] transition-all duration-300 ${
-                !isDesktopView
-                  ? 'bg-white text-gray-900 shadow-sm border border-gray-200'
-                  : 'text-gray-500 hover:bg-white/50 hover:text-gray-700'
-              }`}
-            >
-              <MobileViewIcon className="w-[19px] h-[19px]" />
-            </button>
-          </Tooltip>
-        </div>
-
-        {/* Right: Auth Buttons */}
-        <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-[16px] p-[10px] flex items-center space-x-2 border border-gray-200 shadow-sm">
-          <Tooltip text="Войти в аккаунт">
-            <Link
-              to="/auth?action=login"
-              aria-label="Войти в аккаунт"
-              className="px-[16px] py-[8px] text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 rounded-[10px] transition-all duration-300 leading-[20px] shadow-sm border border-gray-200 hover:shadow-md"
-            >
-              Войти
-            </Link>
-          </Tooltip>
-          <Tooltip text="Создать новый аккаунт">
-            <Link
-              to="/auth?action=signup"
-              aria-label="Создать аккаунт"
-              className="px-[16px] py-[8px] text-sm font-semibold text-white bg-gradient-to-r from-blue-700 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-[10px] transition-all duration-300 leading-[20px] shadow-md hover:shadow-lg"
-            >
-              Регистрация
-            </Link>
-          </Tooltip>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   );
-};
+}
 
 // Шапка сайта с логотипом и переключателем режимов просмотра

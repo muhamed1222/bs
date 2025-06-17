@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 const FloatingCTA: React.FC = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -22,7 +24,7 @@ const FloatingCTA: React.FC = () => {
       }`}
     >
       <Link
-        to="/signup"
+        href="/signup"
         className={`flex items-center space-x-3 px-6 py-3 rounded-full shadow-lg transform transition-all duration-300 ${
           isHovered
             ? 'scale-105 shadow-xl'

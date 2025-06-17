@@ -1,5 +1,7 @@
+'use client';
+
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Modal from '../common/Modal';
 import { typography, spacing, borderRadius, shadows } from '../../styles/typography';
@@ -61,7 +63,7 @@ export const HeroSection: React.FC = () => {
             className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
           >
             <Link
-              to="/signup"
+              href="/signup"
               className="inline-flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-200"
               style={{ ...typography.button, borderRadius: borderRadius.md }}
             >
