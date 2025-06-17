@@ -1,9 +1,12 @@
 import { saveData, loadData } from './cloud';
+import type { PageView, PageStats } from '@/types/analytics';
+import prisma from '@/lib/prisma';
 
 export interface Comment {
   id: string;
   text: string;
-  createdAt: string;
+  author: string;
+  timestamp: number;
 }
 
 export interface AnalyticsData {
@@ -95,7 +98,8 @@ export function addComment(text: string): void {
   data.comments.push({
     id: Math.random().toString(36).slice(2),
     text,
-    createdAt: new Date().toISOString(),
+    author: '',
+    timestamp: Date.now(),
   });
   save(data);
   void syncToCloud(data);
@@ -118,3 +122,70 @@ export function clearAnalytics(): void {
 
 // Initial load from cloud
 void syncFromCloud();
+
+/**
+ * Получает статистику просмотров страницы
+ * @param {string} pageId - ID страницы
+ * @returns {Promise<PageStats>} Объект со статистикой
+ * @throws {Error} Если произошла ошибка при получении данных
+ */
+export async function getPageStats(pageId: string): Promise<PageStats> {
+  const views = await prisma.pageView.findMany({
+    where: { pageId },
+  });
+
+  const uniqueIPs = new Set(views.map((view: PageView) => view.ip));
+  const uniqueCountries = new Set(views.map((view: PageView) => view.country).filter(Boolean));
+
+  return {
+    total: views.length,
+    unique: uniqueIPs.size,
+    countries: uniqueCountries.size,
+  };
+}
+
+/**
+ * Получает последние просмотры страницы
+ * @param {string} pageId - ID страницы
+ * @param {number} limit - Максимальное количество записей
+ * @returns {Promise<PageView[]>} Массив просмотров страницы
+ * @throws {Error} Если произошла ошибка при получении данных
+ */
+export async function getRecentViews(pageId: string, limit = 100) {
+  return prisma.pageView.findMany({
+    where: { pageId },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+  });
+}
+
+/**
+ * Регистрирует новый просмотр страницы
+ * @param {string} pageId - ID страницы
+ * @param {string} ip - IP адрес посетителя
+ * @param {string} userAgent - User-Agent посетителя
+ * @param {string} [referer] - Referer запроса
+ * @param {string} [country] - Страна посетителя
+ * @param {string} [city] - Город посетителя
+ * @returns {Promise<PageView>} Созданная запись о просмотре
+ * @throws {Error} Если произошла ошибка при создании записи
+ */
+export async function registerPageView(
+  pageId: string,
+  ip: string,
+  userAgent: string,
+  referer?: string,
+  country?: string,
+  city?: string
+) {
+  return prisma.pageView.create({
+    data: {
+      pageId,
+      ip,
+      userAgent,
+      referer,
+      country,
+      city,
+    },
+  });
+}
