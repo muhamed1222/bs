@@ -34,7 +34,7 @@
     "csurf": "^1.11.0",
     "date-fns": "^3.3.1",
     "express-rate-limit": "^7.5.0",
-    "framer-motion": "^11.0.3",
+    "framer-motion": "^12.18.1",
     "helmet": "^8.1.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.323.0",
