@@ -5,6 +5,7 @@ import './globals.css'
 import dynamic from 'next/dynamic'
 import FloatingCTA from '@/components/common/FloatingCTA'
 import { Providers } from '@/components/providers'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
 
 const Header = dynamic(() => import('@/components/Header').then(mod => mod.Header), { ssr: false });
 
@@ -71,11 +72,13 @@ export default function RootLayout({
     <html lang="ru">
       <body className={inter.className}>
         <Providers>
-          <Header />
-          <main className="min-h-screen pt-16">
-            {children}
-          </main>
-          <FloatingCTA />
+          <ErrorBoundary>
+            <Header />
+            <main className="min-h-screen pt-16">
+              {children}
+            </main>
+            <FloatingCTA />
+          </ErrorBoundary>
         </Providers>
       </body>
     </html>

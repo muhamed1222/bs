@@ -1,3 +1,5 @@
+'use client';
+
 // Провайдер уведомлений
 import React, {
   createContext,

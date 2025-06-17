@@ -1,6 +1,6 @@
 import React from 'react';
 import { LanguageSwitcher } from '../components/LanguageSwitcher';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export interface Breadcrumb {
   label: string;
@@ -31,7 +31,7 @@ const StandardPageLayout: React.FC<StandardPageLayoutProps> = ({
       <nav className="text-sm text-gray-500 mb-2" aria-label="Breadcrumb">
         {breadcrumbs.map((crumb, idx) => (
           <span key={crumb.href}>
-            <Link to={crumb.href} className="hover:underline">
+            <Link href={crumb.href} className="hover:underline">
               {crumb.label}
             </Link>
             {idx < breadcrumbs.length - 1 && ' / '}
@@ -46,22 +46,22 @@ const StandardPageLayout: React.FC<StandardPageLayoutProps> = ({
       <h2 className="text-xl font-semibold mb-2">Quick Navigation:</h2>
       <ul className="list-disc list-inside">
         <li>
-          <Link to="/" className="text-blue-600 hover:underline">
+          <Link href="/" className="text-blue-600 hover:underline">
             Home (Landing)
           </Link>
         </li>
         <li>
-          <Link to="/public-profile/demo" className="text-blue-600 hover:underline">
+          <Link href="/public-profile/demo" className="text-blue-600 hover:underline">
             Public Profile (Current Design)
           </Link>
         </li>
         <li>
-          <Link to="/auth" className="text-blue-600 hover:underline">
+          <Link href="/auth" className="text-blue-600 hover:underline">
             Authentication
           </Link>
         </li>
         <li>
-          <Link to="/dashboard" className="text-blue-600 hover:underline">
+          <Link href="/dashboard" className="text-blue-600 hover:underline">
             Dashboard
           </Link>
         </li>

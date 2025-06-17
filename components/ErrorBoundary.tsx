@@ -1,3 +1,5 @@
+'use client';
+
 // Граница ошибок
 import React, { Component, ErrorInfo, ReactNode } from 'react';
 import { errorService } from '../services/error/ErrorService';

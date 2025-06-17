@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
-const GA_ID = import.meta.env.VITE_GA_ID;
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
 
 declare global {
   interface Window {
@@ -10,12 +10,20 @@ declare global {
 }
 
 export function useGATracking() {
-  const location = useLocation();
+  const router = useRouter();
 
   useEffect(() => {
     if (!GA_ID || typeof window.gtag !== 'function') return;
-    window.gtag('config', GA_ID, {
-      page_path: location.pathname + location.search,
-    });
-  }, [location]);
+    
+    const handleRouteChange = (url: string) => {
+      window.gtag?.('config', GA_ID, {
+        page_path: url,
+      });
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router.events]);
 }

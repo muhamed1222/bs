@@ -1,7 +1,6 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { useRouter } from 'next/router';
 import { useAuth } from '../hooks/useAuth';
-import { AuthService } from '../services/auth/types';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -16,19 +15,30 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   requiredPermission,
   fallback
 }) => {
+  const router = useRouter();
   const auth = useAuth();
-  const location = useLocation();
 
-  if (!auth.isAuthenticated()) {
-    return <Navigate to="/auth" state={{ from: location }} replace />;
-  }
+  React.useEffect(() => {
+    if (!auth.isAuthenticated()) {
+      router.push('/auth');
+      return;
+    }
 
-  if (requiredRole && !auth.hasRole(requiredRole)) {
-    return fallback || <Navigate to="/" replace />;
-  }
+    if (requiredRole && !auth.hasRole(requiredRole)) {
+      router.push('/');
+      return;
+    }
 
-  if (requiredPermission && !auth.hasPermission(requiredPermission)) {
-    return fallback || <Navigate to="/" replace />;
+    if (requiredPermission && !auth.hasPermission(requiredPermission)) {
+      router.push('/');
+      return;
+    }
+  }, [auth, router, requiredRole, requiredPermission]);
+
+  if (!auth.isAuthenticated() || 
+      (requiredRole && !auth.hasRole(requiredRole)) || 
+      (requiredPermission && !auth.hasPermission(requiredPermission))) {
+    return fallback || null;
   }
 
   return <>{children}</>;
