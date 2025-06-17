@@ -1,0 +1,106 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(59, 130, 246, 0.1);
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+
+.block-enter {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.block-exit {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.block-highlight {
+  animation: highlight 1s ease-out;
+}
+
+/* Фокусные стили для доступности */
+.focus-visible:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Стили для недоступных функций */
+.pro-feature {
+  position: relative;
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pro-feature::after {
+  content: 'PRO';
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #3b82f6;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+/* Адаптивные стили */
+@media (max-width: 640px) {
+  .block-content {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .block-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+/* Стили для тёмной темы */
+.dark .block-enter {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.dark .block-exit {
+  animation: fadeOut 0.3s ease-out forwards;
+}
+
+.dark .block-highlight {
+  animation: highlight 1s ease-out;
+}
+
+.dark .focus-visible:focus-visible {
+  outline-color: #60a5fa;
+}
+
+.dark .pro-feature {
+  opacity: 0.4;
+}
+
+.dark .pro-feature::after {
+  background-color: #60a5fa;
+} 

@@ -1,97 +1,187 @@
-# Run and deploy your AI Studio app
+# Builder Studio - Конструктор сайтов
 
-Это минимальный шаблон приложения на React/Vite. Ниже приведена информация о запуске и краткое описание структуры.
+Современный конструктор сайтов на Next.js с поддержкой drag-and-drop редактора и аналитикой.
 
-## Run Locally
+## Технологии
 
-**Prerequisites:** Node.js (поддерживаются версии 16 и выше)
+- **Frontend**: Next.js 14, React 18, TailwindCSS
+- **Backend**: Next.js API Routes, Supabase
+- **База данных**: PostgreSQL (через Supabase)
+- **Аутентификация**: NextAuth.js
+- **Редактор**: React DnD, Slate.js
+- **Аналитика**: Google Analytics, Custom Events
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. (Optional) Set the `VITE_GA_ID` in `.env.local` for Google Analytics
-4. Run the app:
-   `npm run dev`
-5. Запустите API сервер:
-   `npm run server`
+## Быстрый старт
 
-   Или используйте одну команду для одновременного запуска клиента и сервера:
-   `npm run dev:all`
-
-## Структура проекта
-
-```
-components/      // переиспользуемые элементы и контейнеры
-hooks/           // общие React hooks
-services/        // запросы к внешним API
-contexts/        // React контексты
-ui/              // простые UI-компоненты (кнопки и т.д.)
-pages/           // страницы приложения
-layouts/         // компоненты раскладки
-routes/          // конфигурация маршрутов
+1. Клонируйте репозиторий:
+```bash
+git clone https://github.com/yourusername/builder-studio.git
+cd builder-studio
 ```
 
-## API сервер
-
-В каталоге `server/` расположен простой сервер на Express с поддержкой OAuth2, GraphQL и документацией Swagger. Запуск сервера:
-
-```
-npm run server
+2. Установите зависимости:
+```bash
+npm install
 ```
 
-REST‑эндпоинт `/api/profile` и GraphQL‑точка `/graphql` предоставляют базовый доступ к профилю пользователя. Токен можно получить через `/oauth/token`. Пример документации доступен на `/docs` после запуска сервера.
+3. Создайте файл `.env.local`:
+```env
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 
-Для тестирования предусмотрен аккаунт: **test@example.com** с паролем **testpass**.
+# NextAuth
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=your_nextauth_secret
 
-## Запуск тестов
+# Redis (для rate limiting)
+REDIS_URL=your_redis_url
 
-После установки зависимостей можно запустить простые тесты командой:
+# Google Analytics
+NEXT_PUBLIC_GA_ID=your_ga_id
 
-`npm test`
-
-Для режима наблюдения используйте:
-
-`npm run test:watch`
-
-## Линтинг и форматирование
-
-В проекте настроены ESLint и Prettier. Запуск проверки:
-
-```
-npx eslint .
-```
-
-Форматирование файлов:
-
-```
-npx prettier -w .
+# Gemini AI (опционально)
+GEMINI_API_KEY=your_gemini_key
 ```
 
-## Платные планы
+4. Запустите миграции базы данных:
+```bash
+npm run db:migrate
+```
 
-Платформа поддерживает три тарифа:
+5. Запустите сервер разработки:
+```bash
+npm run dev
+```
 
-### Free (бесплатно)
+Приложение будет доступно по адресу [http://localhost:3000](http://localhost:3000)
 
-- 1 страница и до 5–10 ссылок
-- Базовые блоки (текст, ссылка, один медиа-блок)
-- Базовая аналитика
-- Субдомен вида `basis.site/slug`
-- Ограниченные темы оформления
-- Обязательный брендинг «Made with Basis»
+## Деплой
 
-### Pro (~499₽/мес)
+### Локальный деплой
 
-- До 10 страниц
-- Все типы блоков (формы, видео, карты)
-- Кастомный домен
-- Расширенная аналитика (география, время, источники)
-- Возможность скрыть брендинг
+1. Соберите приложение:
+```bash
+npm run build
+```
+
+2. Запустите продакшен-сервер:
+```bash
+npm start
+```
+
+### Деплой на Vercel
+
+1. Подключите репозиторий к Vercel
+2. Настройте переменные окружения в панели Vercel
+3. Деплой произойдет автоматически при пуше в main
+
+## API Документация
+
+Полная документация API доступна через Swagger UI:
+- Разработка: [http://localhost:3000/api/docs](http://localhost:3000/api/docs)
+- Продакшен: [https://your-domain.com/api/docs](https://your-domain.com/api/docs)
+
+### Примеры API запросов
+
+#### Регистрация пользователя
+```bash
+curl -X POST http://localhost:3000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "user@example.com",
+    "password": "securepassword",
+    "name": "John Doe"
+  }'
+```
+
+#### Создание страницы
+```bash
+curl -X POST http://localhost:3000/api/pages \
+  -H "Authorization: Bearer YOUR_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "My Page",
+    "description": "Page description"
+  }'
+```
+
+## Тарифы и ограничения
+
+### Free
+- До 3 страниц
+- Базовые блоки
+- Публичный доступ
+
+### Pro
+- До 20 страниц
+- Все блоки
+- Приватные страницы
+- Расширенная аналитика
+- 2FA
+
+### Business
+- Неограниченное количество страниц
+- Все функции Pro
+- API доступ
 - Приоритетная поддержка
 
-### Business (~1499₽/мес)
+## Разработка
 
-- Безлимит страниц
-- Командный доступ
-- API‑доступ, интеграции и A/B тесты
-- Персональный менеджер и помощь в переносе данных
+### Структура проекта
+```
+src/
+  ├── app/                 # Next.js App Router
+  ├── features/           # Функциональные модули
+  │   ├── auth/          # Аутентификация
+  │   ├── blocks/        # Блоки страниц
+  │   ├── pages/         # Управление страницами
+  │   └── analytics/     # Аналитика
+  ├── shared/            # Общие компоненты и утилиты
+  └── pages/             # API роуты
+```
+
+### Тесты
+```bash
+# Запуск всех тестов
+npm test
+
+# Запуск тестов с покрытием
+npm run test:coverage
+```
+
+### Линтинг
+```bash
+npm run lint
+```
+
+## Безопасность
+
+- CSRF защита
+- Rate limiting
+- 2FA для Pro/Business
+- Безопасные куки
+- CSP заголовки
+- XSS защита
+
+## Аналитика
+
+### Google Analytics
+1. Создайте проект в Google Analytics
+2. Получите ID отслеживания
+3. Добавьте его в `.env.local`:
+```env
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
+```
+
+### События аналитики
+- `page_view` - просмотр страницы
+- `block_add` - добавление блока
+- `page_publish` - публикация страницы
+- `user_signup` - регистрация
+- `user_login` - вход
+
+## Лицензия
+
+MIT

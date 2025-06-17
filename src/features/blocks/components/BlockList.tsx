@@ -1,63 +1,92 @@
 import React from 'react';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable';
 import { Block } from '@/shared/types';
 import { BlockRenderer } from './BlockRenderer';
+import { useUser } from '@/features/auth/hooks/useUser';
+import { toast } from 'react-hot-toast';
 
 interface BlockListProps {
   blocks: Block[];
-  layout?: 'grid' | 'list';
-  theme?: 'light' | 'dark';
+  onUpdate: (blocks: Block[]) => void;
+  onDelete: (blockId: string) => void;
   isEditing?: boolean;
-  onDelete?: (blockId: string) => void;
-  onReorder?: (index: number, direction: number) => void;
 }
 
 export const BlockList: React.FC<BlockListProps> = ({
   blocks,
-  layout = 'list',
-  theme = 'light',
-  isEditing = false,
+  onUpdate,
   onDelete,
-  onReorder,
+  isEditing = false,
 }) => {
-  const containerClasses = [
-    'blocks-container',
-    layout === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4' : 'space-y-4',
-    `theme-${theme}`,
-  ].join(' ');
+  const { user } = useUser();
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = blocks.findIndex((block) => block.id === active.id);
+      const newIndex = blocks.findIndex((block) => block.id === over.id);
+
+      const newBlocks = arrayMove(blocks, oldIndex, newIndex).map(
+        (block, index) => ({
+          ...block,
+          order: index,
+        })
+      );
+
+      onUpdate(newBlocks);
+      toast.success('Порядок блоков обновлен');
+    }
+  };
+
+  const handleUpdate = (blockId: string, content: any) => {
+    const newBlocks = blocks.map((block) =>
+      block.id === blockId ? { ...block, content } : block
+    );
+    onUpdate(newBlocks);
+  };
 
   return (
-    <div className={containerClasses} data-testid="blocks-container">
-      {blocks.map((block, index) => (
-        <div key={block.id} className="relative">
-          <BlockRenderer
-            block={block}
-            isEditing={isEditing}
-            onDelete={onDelete}
-          />
-          {isEditing && onReorder && (
-            <div className="absolute right-2 top-2 flex space-x-2">
-              {index > 0 && (
-                <button
-                  data-testid="reorder-button"
-                  onClick={() => onReorder(index, -1)}
-                  className="p-1 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                  ↑
-                </button>
-              )}
-              {index < blocks.length - 1 && (
-                <button
-                  data-testid="reorder-button"
-                  onClick={() => onReorder(index, 1)}
-                  className="p-1 bg-gray-200 rounded hover:bg-gray-300"
-                >
-                  ↓
-                </button>
-              )}
-            </div>
-          )}
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext
+        items={blocks.map((block) => block.id)}
+        strategy={verticalListSortingStrategy}
+      >
+        <div className="space-y-4">
+          {blocks.map((block) => (
+            <BlockRenderer
+              key={block.id}
+              block={block}
+              isEditing={isEditing}
+              onUpdate={handleUpdate}
+              onDelete={onDelete}
+            />
+          ))}
         </div>
-      ))}
-    </div>
+      </SortableContext>
+    </DndContext>
   );
 }; 
